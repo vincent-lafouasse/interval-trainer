@@ -1,4 +1,5 @@
 use rand::Rng;
+use std::io;
 
 pub const NOTES: [&str; 12] = [
     "C", "Db", "D", "Eb", "E", "F", "F#", "G", "Ab", "A", "Bb", "B",
@@ -30,17 +31,28 @@ impl Note {
             distance: random_distance,
         }
     }
+
+    fn get_from_user() -> Note {
+        let mut input_note_name = String::new();
+        io::stdin()
+            .read_line(&mut input_note_name)
+            .expect("Failed to read line");
+        let distance: usize = match distance_from_note_name(input_note_name.trim()) {
+            Ok(num) => num,
+            Err(msg) => panic!("{}", msg),
+        };
+        Note { distance: distance }
+    }
 }
 
 fn main() {
     let random_note = Note::get_random();
     println!("You can have {}", random_note.to_string());
     println!("Your note is {} semitones from C", random_note.distance);
-    let note = "Ab";
-    let distance_result = distance_from_note_name(note);
-    let distance = match distance_result {
-        Ok(distance) => distance,
-        Err(msg) => panic!("{}", msg),
-    };
-    println!("The note {} is {} semitones from C", note, distance);
+    let user_note = Note::get_from_user();
+    println!(
+        "Your note {} is {} semitones from C",
+        user_note.to_string(),
+        user_note.distance
+    );
 }
