@@ -47,12 +47,11 @@ impl Note {
 
 fn main() {
     let random_note = Note::get_random();
-    println!("You can have {}", random_note.to_string());
-    println!("Your note is {} semitones from C", random_note.distance);
+    println!("Whate note is a fifth above {}?", random_note.to_string());
     let user_note = Note::get_from_user();
-    println!(
-        "Your note {} is {} semitones from C",
-        user_note.to_string(),
-        user_note.distance
-    );
+    let distance = (user_note.distance + 12 - random_note.distance) % 12;
+    match distance {
+        7 => println!("ding ding you win"),
+        _ => println!("[EXTREMELY LOUD INCORRECT BUZZER]"),
+    }
 }
