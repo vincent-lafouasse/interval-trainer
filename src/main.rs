@@ -5,15 +5,6 @@ pub const NOTES: [&str; 12] = [
     "C", "Db", "D", "Eb", "E", "F", "F#", "G", "Ab", "A", "Bb", "B",
 ];
 
-fn distance_from_note_name(name: &str) -> Result<usize, &'static str> {
-    for i in 0..12 {
-        if name == NOTES[i] {
-            return Ok(i);
-        }
-    }
-    return Err("Not a note");
-}
-
 struct Note {
     distance: usize,
 }
@@ -37,11 +28,40 @@ impl Note {
         io::stdin()
             .read_line(&mut input_note_name)
             .expect("Failed to read line");
-        let distance: usize = match distance_from_note_name(input_note_name.trim()) {
-            Ok(num) => num,
-            Err(msg) => panic!("{}", msg),
+
+        Note::parse_from_name(&input_note_name.trim())
+    }
+
+    fn parse_from_name(name: &str) -> Note {
+        if name.len() == 0 || name.len() > 3 {
+            panic!("Invalid note");
+        }
+
+        let mut distance = 0;
+
+        for (index, token) in name.chars().enumerate() {
+            if index == 0 {
+                distance = match token {
+                    'C' => 0,
+                    'D' => 2,
+                    'E' => 4,
+                    'F' => 5,
+                    'G' => 7,
+                    'A' => 9,
+                    'B' => 11,
+                    _ => panic!("Invalid note"),
+                };
+            } else {
+                match token {
+                    '#' => distance += 1,
+                    'b' => distance -= 1,
+                    _ => panic!("Invalid alteration"),
+                }
+            }
+        }
+        return Note {
+            distance: (distance + 12) % 12,
         };
-        Note { distance: distance }
     }
 }
 
