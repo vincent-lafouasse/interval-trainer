@@ -68,12 +68,17 @@ pub struct Note {
 }
 
 impl Note {
+    pub fn is_a_fifth_above(&self, other: &Note) -> bool {
+        (self.distance + 12 - other.distance) % 12 == 7
+    }
+
     pub fn to_string(&self) -> &str {
         match self.distance {
             0..=12 => return NOTES[self.distance % 12],
             _ => return "wtf",
         }
     }
+
     pub fn get_random() -> Note {
         let random_distance = rand::thread_rng().gen_range(0, 12);
         Note {
