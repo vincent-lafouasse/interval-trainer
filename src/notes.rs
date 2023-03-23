@@ -15,6 +15,20 @@ enum NoteName {
     B,
 }
 
+impl NoteName {
+    pub fn to_string(&self) -> &str {
+        match &self {
+            C => "C",
+            D => "D",
+            E => "E",
+            F => "F",
+            G => "G",
+            A => "A",
+            B => "B",
+        }
+    }
+}
+
 enum IntervalQuality {
     MAJOR,
     MINOR,
@@ -26,6 +40,16 @@ enum Alteration {
     NATURAL,
     FLAT,
     SHARP,
+}
+
+impl Alteration {
+    pub fn to_string(&self) -> &str {
+        match &self {
+            NATURAL => "",
+            FLAT => "b",
+            SHARP => "#",
+        }
+    }
 }
 
 struct AltNote {
