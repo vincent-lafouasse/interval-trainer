@@ -1,9 +1,40 @@
 use rand::Rng;
 use std::io;
+#[allow(dead_code)]
 
 pub const NOTES: [&str; 12] = [
     "C", "Db", "D", "Eb", "E", "F", "F#", "G", "Ab", "A", "Bb", "B",
 ];
+
+enum NoteName {
+    C,
+    D,
+    E,
+    F,
+    G,
+    A,
+    B,
+}
+
+enum IntervalQuality {
+    MAJOR,
+    MINOR,
+    DIMINISHED,
+    AUGMENTED,
+}
+
+enum Alteration {
+    NATURAL,
+    FLAT,
+    SHARP,
+}
+
+struct AltNote {
+    name: NoteName,
+    alteration: Option<Alteration>,
+}
+
+impl AltNote {}
 
 struct Note {
     distance: usize,
