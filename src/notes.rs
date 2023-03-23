@@ -5,7 +5,7 @@ pub const NOTES: [&str; 12] = [
     "C", "Db", "D", "Eb", "E", "F", "F#", "G", "Ab", "A", "Bb", "B",
 ];
 
-enum NoteName {
+pub enum NoteName {
     C,
     D,
     E,
@@ -16,15 +16,15 @@ enum NoteName {
 }
 
 impl NoteName {
-    pub fn to_string(&self) -> &str {
+    pub fn repr(&self) -> &str {
         match &self {
-            C => "C",
-            D => "D",
-            E => "E",
-            F => "F",
-            G => "G",
-            A => "A",
-            B => "B",
+            NoteName::C => "C",
+            NoteName::D => "D",
+            NoteName::E => "E",
+            NoteName::F => "F",
+            NoteName::G => "G",
+            NoteName::A => "A",
+            NoteName::B => "B",
         }
     }
 }
@@ -36,28 +36,32 @@ enum IntervalQuality {
     AUGMENTED,
 }
 
-enum Alteration {
+pub enum Alteration {
     NATURAL,
     FLAT,
     SHARP,
 }
 
 impl Alteration {
-    pub fn to_string(&self) -> &str {
+    pub fn repr(&self) -> &str {
         match &self {
-            NATURAL => "",
-            FLAT => "b",
-            SHARP => "#",
+            Alteration::NATURAL => "",
+            Alteration::FLAT => "b",
+            Alteration::SHARP => "#",
         }
     }
 }
 
-struct AltNote {
-    name: NoteName,
-    alteration: Option<Alteration>,
+pub struct AltNote {
+    pub name: NoteName,
+    pub alteration: Alteration,
 }
 
-impl AltNote {}
+impl AltNote {
+    pub fn repr(&self) -> String {
+        format!("{}{}", self.name.repr(), self.alteration.repr())
+    }
+}
 
 pub struct Note {
     pub distance: usize,

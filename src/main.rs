@@ -12,4 +12,10 @@ fn main() {
         true => println!("ding ding you win"),
         false => println!("[EXTREMELY LOUD INCORRECT BUZZER]"),
     }
+
+    let fave_key = notes::AltNote {
+        name: notes::NoteName::D,
+        alteration: notes::Alteration::FLAT,
+    };
+    println!("My favorite key is {}", fave_key.repr());
 }
