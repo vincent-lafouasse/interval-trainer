@@ -5,6 +5,7 @@ pub const NOTES: [&str; 12] = [
     "C", "Db", "D", "Eb", "E", "F", "F#", "G", "Ab", "A", "Bb", "B",
 ];
 
+#[allow(dead_code)]
 pub enum NoteName {
     C,
     D,
@@ -13,6 +14,13 @@ pub enum NoteName {
     G,
     A,
     B,
+}
+
+#[allow(dead_code)]
+pub enum Alteration {
+    NATURAL,
+    FLAT,
+    SHARP,
 }
 
 impl NoteName {
@@ -27,19 +35,6 @@ impl NoteName {
             NoteName::B => "B",
         }
     }
-}
-
-enum IntervalQuality {
-    MAJOR,
-    MINOR,
-    DIMINISHED,
-    AUGMENTED,
-}
-
-pub enum Alteration {
-    NATURAL,
-    FLAT,
-    SHARP,
 }
 
 impl Alteration {
