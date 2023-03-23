@@ -8,6 +8,7 @@ fn main() {
         alteration: notes::Alteration::FLAT,
     };
     println!("My favorite key is {}\n", fave_key.repr());
+    println!("It's {} semitones from C", fave_key.distance_from_c());
 
     if quizing {
         let random_note = notes::Note::get_random();

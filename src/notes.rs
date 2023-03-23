@@ -56,6 +56,26 @@ impl AltNote {
     pub fn repr(&self) -> String {
         format!("{}{}", self.name.repr(), self.alteration.repr())
     }
+
+    pub fn distance_from_c(&self) -> i8 {
+        let base_distance = match self.name {
+            NoteName::C => 0,
+            NoteName::D => 2,
+            NoteName::E => 4,
+            NoteName::F => 5,
+            NoteName::G => 7,
+            NoteName::A => 9,
+            NoteName::B => 11,
+        };
+
+        let increment = match self.alteration {
+            Alteration::NATURAL => 0,
+            Alteration::FLAT => -1,
+            Alteration::SHARP => 1,
+        };
+
+        (12 + base_distance + increment) % 12
+    }
 }
 
 pub struct Note {
