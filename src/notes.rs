@@ -33,6 +33,30 @@ impl NoteName {
             NoteName::B => "B",
         }
     }
+
+    pub fn next(&self) -> NoteName {
+        match &self {
+            NoteName::A => NoteName::B,
+            NoteName::B => NoteName::C,
+            NoteName::C => NoteName::D,
+            NoteName::D => NoteName::E,
+            NoteName::E => NoteName::F,
+            NoteName::F => NoteName::G,
+            NoteName::G => NoteName::A,
+        }
+    }
+
+    pub fn previous(&self) -> NoteName {
+        match &self {
+            NoteName::A => NoteName::G,
+            NoteName::B => NoteName::A,
+            NoteName::C => NoteName::B,
+            NoteName::D => NoteName::C,
+            NoteName::E => NoteName::D,
+            NoteName::F => NoteName::E,
+            NoteName::G => NoteName::F,
+        }
+    }
 }
 
 impl Alteration {

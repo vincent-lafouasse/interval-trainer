@@ -1,6 +1,27 @@
 mod notes;
 
 fn main() {
+    let note_name = notes::NoteName::A;
+    println!(
+        "{}{}{}{}{}{}{}{}",
+        note_name.repr(),
+        note_name.next().repr(),
+        note_name.next().next().repr(),
+        note_name.next().next().next().repr(),
+        note_name.next().next().next().next().repr(),
+        note_name.next().next().next().next().next().repr(),
+        note_name.next().next().next().next().next().next().repr(),
+        note_name
+            .next()
+            .next()
+            .next()
+            .next()
+            .next()
+            .next()
+            .next()
+            .repr(),
+    );
+
     let fave_key = notes::Note {
         name: notes::NoteName::D,
         alteration: notes::Alteration::FLAT,
