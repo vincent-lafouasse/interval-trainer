@@ -76,6 +76,35 @@ impl AltNote {
 
         (12 + base_distance + increment) % 12
     }
+
+    pub fn parse_from_string(string: &str) -> AltNote {
+        if string.len() == 0 || string.len() > 2 {
+            panic!("Invalid note");
+        }
+        let note_name = match &string[0..1] {
+            "A" => NoteName::A,
+            "B" => NoteName::B,
+            "C" => NoteName::C,
+            "D" => NoteName::D,
+            "E" => NoteName::E,
+            "F" => NoteName::F,
+            "G" => NoteName::G,
+            _ => panic!("Invalid note"),
+        };
+
+        let mut alteration = Alteration::NATURAL;
+        if string.len() == 2 {
+            alteration = match &string[1..2] {
+                "b" => Alteration::FLAT,
+                "#" => Alteration::SHARP,
+                _ => panic!("Invalid alteration"),
+            };
+        }
+        AltNote {
+            name: note_name,
+            alteration: alteration,
+        }
+    }
 }
 
 pub struct Note {

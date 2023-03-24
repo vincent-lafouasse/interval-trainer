@@ -8,7 +8,14 @@ fn main() {
     println!("My favorite key is {}", fave_key.repr());
     println!("It's {} semitones from C\n", fave_key.distance_from_c());
 
-    let quizing = true;
+    let other_key = notes::AltNote::parse_from_string("B#");
+    println!(
+        "Another good one is {}, which is {} semitones from C\n",
+        other_key.repr(),
+        other_key.distance_from_c()
+    );
+
+    let quizing = false;
     if quizing {
         quiz();
     }
