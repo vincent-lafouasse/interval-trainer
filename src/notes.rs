@@ -57,6 +57,34 @@ impl AltNote {
         format!("{}{}", self.name.repr(), self.alteration.repr())
     }
 
+    pub fn get_random() -> AltNote {
+        let rn_note_name = rand::thread_rng().gen_range(0, 7) % 7;
+        let rn_alteration = rand::thread_rng().gen_range(0, 3) % 3;
+
+        let note_name = match rn_note_name {
+            0 => NoteName::A,
+            1 => NoteName::B,
+            2 => NoteName::C,
+            3 => NoteName::D,
+            4 => NoteName::E,
+            5 => NoteName::F,
+            6 => NoteName::G,
+            _ => panic!(""),
+        };
+
+        let alteration = match rn_alteration {
+            0 => Alteration::NATURAL,
+            1 => Alteration::FLAT,
+            2 => Alteration::SHARP,
+            _ => panic!(""),
+        };
+
+        AltNote {
+            name: note_name,
+            alteration: alteration,
+        }
+    }
+
     pub fn distance_from_c(&self) -> i8 {
         let base_distance = match self.name {
             NoteName::C => 0,

@@ -15,6 +15,9 @@ fn main() {
         other_key.distance_from_c()
     );
 
+    let random_note = notes::AltNote::get_random();
+    println!("Here's a random note: {}", random_note.repr());
+
     let quizing = false;
     if quizing {
         quiz();
