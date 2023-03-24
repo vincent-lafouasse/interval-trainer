@@ -1,4 +1,5 @@
 use rand::Rng;
+use std::fmt;
 use std::io;
 
 pub const N_NOTES: i8 = 12;
@@ -34,6 +35,7 @@ impl NoteName {
         }
     }
 
+    #[allow(dead_code)]
     pub fn next(&self) -> NoteName {
         match &self {
             NoteName::A => NoteName::B,
@@ -46,6 +48,7 @@ impl NoteName {
         }
     }
 
+    #[allow(dead_code)]
     pub fn previous(&self) -> NoteName {
         match &self {
             NoteName::A => NoteName::G,
@@ -177,5 +180,11 @@ impl Note {
 
     pub fn repr(&self) -> String {
         format!("{}{}", self.name.repr(), self.alteration.repr())
+    }
+}
+
+impl fmt::Display for Note {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        write!(f, "{}{}", self.name.repr(), self.alteration.repr())
     }
 }

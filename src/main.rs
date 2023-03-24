@@ -29,6 +29,8 @@ fn main() {
     println!("My favorite key is {}", fave_key.repr());
     println!("It's {} semitones from C\n", fave_key.distance_from_c());
 
+    println!("Cool new way to print Notes: {}", fave_key);
+
     let other_key = notes::Note::parse_from_string("Eb").expect("Huh oh that's not a good note");
     println!(
         "Another good one is {}, which is {} semitones from C\n",
@@ -39,7 +41,7 @@ fn main() {
     let random_note = notes::Note::get_random();
     println!("Here's a random note: {}\n", random_note.repr());
 
-    let quizing = true;
+    let quizing = false;
     if quizing {
         quiz();
     }
