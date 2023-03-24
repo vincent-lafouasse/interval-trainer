@@ -11,6 +11,20 @@ pub enum BaseInterval {
     Seventh,
 }
 
+impl BaseInterval {
+    pub fn size(&self) -> i8 {
+        match &self {
+            BaseInterval::Unison => 0,
+            BaseInterval::Second => 2,
+            BaseInterval::Third => 4,
+            BaseInterval::Fourth => 5,
+            BaseInterval::Fifth => 7,
+            BaseInterval::Sixth => 9,
+            BaseInterval::Seventh => 11,
+        }
+    }
+}
+
 #[allow(dead_code)]
 pub enum IntervalQualifier {
     Major,
@@ -25,6 +39,15 @@ pub enum IntervalQualifier {
 pub struct Interval {
     pub base_interval: BaseInterval,
     pub qualifier: IntervalQualifier,
+}
+
+impl Interval {
+    pub fn size(&self) -> i8 {
+        let mut distance = self.base_interval.size();
+        distance += 1;
+        distance -= 1;
+        distance
+    }
 }
 
 impl fmt::Display for Interval {

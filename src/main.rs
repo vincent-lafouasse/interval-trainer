@@ -43,6 +43,7 @@ fn main() {
     };
 
     println!("Here's an interval : {}", an_interval);
+    println!("Its size is {} semitones", an_interval.size());
 
     let quizing = false;
     if quizing {
