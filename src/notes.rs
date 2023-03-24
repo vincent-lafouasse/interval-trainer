@@ -23,18 +23,6 @@ pub enum Alteration {
 }
 
 impl NoteName {
-    pub fn repr(&self) -> &str {
-        match &self {
-            NoteName::C => "C",
-            NoteName::D => "D",
-            NoteName::E => "E",
-            NoteName::F => "F",
-            NoteName::G => "G",
-            NoteName::A => "A",
-            NoteName::B => "B",
-        }
-    }
-
     #[allow(dead_code)]
     pub fn next(&self) -> NoteName {
         match &self {
@@ -58,16 +46,6 @@ impl NoteName {
             NoteName::E => NoteName::D,
             NoteName::F => NoteName::E,
             NoteName::G => NoteName::F,
-        }
-    }
-}
-
-impl Alteration {
-    pub fn repr(&self) -> &str {
-        match &self {
-            Alteration::NATURAL => "",
-            Alteration::FLAT => "b",
-            Alteration::SHARP => "#",
         }
     }
 }
@@ -176,10 +154,6 @@ impl Note {
             name: note_name,
             alteration: alteration,
         })
-    }
-
-    pub fn repr(&self) -> String {
-        format!("{}{}", self.name.repr(), self.alteration.repr())
     }
 }
 
