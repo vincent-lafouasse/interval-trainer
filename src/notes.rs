@@ -1,6 +1,8 @@
 use rand::Rng;
 use std::io;
 
+const N_NOTES: i8 = 12;
+
 #[allow(dead_code)]
 pub enum NoteName {
     C,
@@ -49,10 +51,6 @@ pub struct Note {
 }
 
 impl Note {
-    pub fn repr(&self) -> String {
-        format!("{}{}", self.name.repr(), self.alteration.repr())
-    }
-
     pub fn get_from_user() -> Note {
         println!("Please input a note:");
         let mut note: Note;
@@ -105,7 +103,7 @@ impl Note {
     }
 
     pub fn distance_from_c(&self) -> i8 {
-        let base_distance = match self.name {
+        let base_distance: i8 = match self.name {
             NoteName::C => 0,
             NoteName::D => 2,
             NoteName::E => 4,
@@ -115,13 +113,13 @@ impl Note {
             NoteName::B => 11,
         };
 
-        let increment = match self.alteration {
+        let increment: i8 = match self.alteration {
             Alteration::NATURAL => 0,
             Alteration::FLAT => -1,
             Alteration::SHARP => 1,
         };
 
-        (12 + base_distance + increment) % 12
+        (base_distance + increment).rem_euclid(N_NOTES)
     }
 
     pub fn parse_from_string(string: &str) -> Result<Note, &str> {
@@ -151,5 +149,9 @@ impl Note {
             name: note_name,
             alteration: alteration,
         })
+    }
+
+    pub fn repr(&self) -> String {
+        format!("{}{}", self.name.repr(), self.alteration.repr())
     }
 }
