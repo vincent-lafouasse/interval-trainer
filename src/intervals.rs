@@ -2,24 +2,24 @@ use std::fmt;
 
 #[allow(dead_code)]
 pub enum BaseInterval {
-    UNISON,
-    SECOND,
-    THIRD,
-    FOURTH,
-    FIFTH,
-    SIXTH,
-    SEVENTH,
+    Unison,
+    Second,
+    Third,
+    Fourth,
+    Fifth,
+    Sixth,
+    Seventh,
 }
 
 #[allow(dead_code)]
 pub enum IntervalQualifier {
-    MAJOR,
-    MINOR,
-    PERFECT,
-    AUGMENTED,
-    DIMINISHED,
-    DOUBLY_AUGMENTED,
-    DOUBLY_DIMINISHED,
+    Major,
+    Minor,
+    Perfect,
+    Augmented,
+    Diminished,
+    DoublyAugmented,
+    DoublyDiminished,
 }
 
 pub struct Interval {
@@ -35,13 +35,13 @@ impl fmt::Display for Interval {
 impl fmt::Display for BaseInterval {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         let repr = match &self {
-            BaseInterval::UNISON => "Unison",
-            BaseInterval::SECOND => "Second",
-            BaseInterval::THIRD => "Third",
-            BaseInterval::FOURTH => "Fourth",
-            BaseInterval::FIFTH => "Fifth",
-            BaseInterval::SIXTH => "Sixth",
-            BaseInterval::SEVENTH => "Seventh",
+            BaseInterval::Unison => "Unison",
+            BaseInterval::Second => "Second",
+            BaseInterval::Third => "Third",
+            BaseInterval::Fourth => "Fourth",
+            BaseInterval::Fifth => "Fifth",
+            BaseInterval::Sixth => "Sixth",
+            BaseInterval::Seventh => "Seventh",
         };
         write!(f, "{}", repr)
     }
@@ -50,13 +50,13 @@ impl fmt::Display for BaseInterval {
 impl fmt::Display for IntervalQualifier {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         let repr = match &self {
-            IntervalQualifier::MAJOR => "Major",
-            IntervalQualifier::MINOR => "Minor",
-            IntervalQualifier::PERFECT => "Perfect",
-            IntervalQualifier::DIMINISHED => "Diminished",
-            IntervalQualifier::AUGMENTED => "Augmented",
-            IntervalQualifier::DOUBLY_DIMINISHED => "Doubly Diminished",
-            IntervalQualifier::DOUBLY_AUGMENTED => "Doubly Augmented",
+            IntervalQualifier::Major => "Major",
+            IntervalQualifier::Minor => "Minor",
+            IntervalQualifier::Perfect => "Perfect",
+            IntervalQualifier::Diminished => "Diminished",
+            IntervalQualifier::Augmented => "Augmented",
+            IntervalQualifier::DoublyDiminished => "Doubly Diminished",
+            IntervalQualifier::DoublyAugmented => "Doubly Augmented",
         };
         write!(f, "{}", repr)
     }

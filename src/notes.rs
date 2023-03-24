@@ -17,9 +17,9 @@ pub enum NoteName {
 
 #[allow(dead_code)]
 pub enum Alteration {
-    NATURAL,
-    FLAT,
-    SHARP,
+    Natural,
+    Flat,
+    Sharp,
 }
 
 impl NoteName {
@@ -95,9 +95,9 @@ impl Note {
         };
 
         let alteration = match rn_alteration {
-            0 => Alteration::NATURAL,
-            1 => Alteration::FLAT,
-            2 => Alteration::SHARP,
+            0 => Alteration::Natural,
+            1 => Alteration::Flat,
+            2 => Alteration::Sharp,
             _ => panic!(""),
         };
 
@@ -119,9 +119,9 @@ impl Note {
         };
 
         let increment: i8 = match self.alteration {
-            Alteration::NATURAL => 0,
-            Alteration::FLAT => -1,
-            Alteration::SHARP => 1,
+            Alteration::Natural => 0,
+            Alteration::Flat => -1,
+            Alteration::Sharp => 1,
         };
 
         (base_distance + increment).rem_euclid(N_NOTES)
@@ -142,11 +142,11 @@ impl Note {
             _ => return Err("Invalid note"),
         };
 
-        let mut alteration = Alteration::NATURAL;
+        let mut alteration = Alteration::Natural;
         if string.len() == 2 {
             alteration = match &string[1..2] {
-                "b" => Alteration::FLAT,
-                "#" => Alteration::SHARP,
+                "b" => Alteration::Flat,
+                "#" => Alteration::Sharp,
                 _ => return Err("Invalid alteration"),
             };
         }
@@ -181,9 +181,9 @@ impl fmt::Display for NoteName {
 impl fmt::Display for Alteration {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         let repr = match &self {
-            Alteration::NATURAL => "",
-            Alteration::FLAT => "b",
-            Alteration::SHARP => "#",
+            Alteration::Natural => "",
+            Alteration::Flat => "b",
+            Alteration::Sharp => "#",
         };
         write!(f, "{}", repr)
     }

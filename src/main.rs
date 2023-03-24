@@ -20,7 +20,7 @@ fn main() {
 
     let fave_key = Note {
         name: NoteName::D,
-        alteration: Alteration::FLAT,
+        alteration: Alteration::Flat,
     };
     println!("My favorite key is {}", fave_key);
     println!("It's {} semitones from C\n", fave_key.distance_from_c());
@@ -38,8 +38,8 @@ fn main() {
     println!("Here's a random note: {}\n", random_note);
 
     let an_interval = Interval {
-        base_interval: BaseInterval::FIFTH,
-        qualifier: IntervalQualifier::PERFECT,
+        base_interval: BaseInterval::Fifth,
+        qualifier: IntervalQualifier::Perfect,
     };
 
     println!("Here's an interval : {}", an_interval);
