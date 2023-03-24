@@ -18,6 +18,8 @@ pub enum IntervalQualifier {
     PERFECT,
     AUGMENTED,
     DIMINISHED,
+    DOUBLY_AUGMENTED,
+    DOUBLY_DIMINISHED,
 }
 
 pub struct Interval {
@@ -53,6 +55,8 @@ impl fmt::Display for IntervalQualifier {
             IntervalQualifier::PERFECT => "Perfect",
             IntervalQualifier::DIMINISHED => "Diminished",
             IntervalQualifier::AUGMENTED => "Augmented",
+            IntervalQualifier::DOUBLY_DIMINISHED => "Doubly Diminished",
+            IntervalQualifier::DOUBLY_AUGMENTED => "Doubly Augmented",
         };
         write!(f, "{}", repr)
     }
