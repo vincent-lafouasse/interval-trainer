@@ -57,6 +57,15 @@ impl AltNote {
         format!("{}{}", self.name.repr(), self.alteration.repr())
     }
 
+    pub fn get_from_user() -> AltNote {
+        let mut input = String::new();
+        io::stdin()
+            .read_line(&mut input)
+            .expect("Failed to read line");
+
+        AltNote::parse_from_string(&input.trim()).expect("Huh oh that's not a good note")
+    }
+
     pub fn get_random() -> AltNote {
         let rn_note_name = rand::thread_rng().gen_range(0, 7) % 7;
         let rn_alteration = rand::thread_rng().gen_range(0, 3) % 3;
