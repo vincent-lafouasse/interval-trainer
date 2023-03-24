@@ -27,7 +27,7 @@ impl BaseInterval {
 }
 
 #[allow(dead_code)]
-pub enum IntervalQualifier {
+pub enum Quality {
     Major,
     Minor,
     Perfect,
@@ -39,7 +39,7 @@ pub enum IntervalQualifier {
 
 pub struct Interval {
     pub base_interval: BaseInterval,
-    pub qualifier: IntervalQualifier,
+    pub quality: Quality,
 }
 
 impl Interval {
@@ -50,24 +50,24 @@ impl Interval {
                 || self.base_interval == BaseInterval::Third
                 || self.base_interval == BaseInterval::Sixth
             {
-                match &self.qualifier {
-                    IntervalQualifier::Major => 0,
-                    IntervalQualifier::Minor => -1,
-                    IntervalQualifier::Perfect => panic!("Interval can't be perfect"),
-                    IntervalQualifier::Diminished => -2,
-                    IntervalQualifier::Augmented => 1,
-                    IntervalQualifier::DoublyDiminished => -3,
-                    IntervalQualifier::DoublyAugmented => 2,
+                match &self.quality {
+                    Quality::Major => 0,
+                    Quality::Minor => -1,
+                    Quality::Perfect => panic!("Interval can't be perfect"),
+                    Quality::Diminished => -2,
+                    Quality::Augmented => 1,
+                    Quality::DoublyDiminished => -3,
+                    Quality::DoublyAugmented => 2,
                 }
             } else {
-                match &self.qualifier {
-                    IntervalQualifier::Major => panic!("Interval can't be major"),
-                    IntervalQualifier::Minor => panic!("Interval can't be minor"),
-                    IntervalQualifier::Perfect => 0,
-                    IntervalQualifier::Diminished => -1,
-                    IntervalQualifier::Augmented => 1,
-                    IntervalQualifier::DoublyDiminished => -2,
-                    IntervalQualifier::DoublyAugmented => 2,
+                match &self.quality {
+                    Quality::Major => panic!("Interval can't be major"),
+                    Quality::Minor => panic!("Interval can't be minor"),
+                    Quality::Perfect => 0,
+                    Quality::Diminished => -1,
+                    Quality::Augmented => 1,
+                    Quality::DoublyDiminished => -2,
+                    Quality::DoublyAugmented => 2,
                 }
             }
         };
@@ -77,7 +77,7 @@ impl Interval {
 
 impl fmt::Display for Interval {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "{} {}", self.qualifier, self.base_interval)
+        write!(f, "{} {}", self.quality, self.base_interval)
     }
 }
 impl fmt::Display for BaseInterval {
@@ -95,16 +95,16 @@ impl fmt::Display for BaseInterval {
     }
 }
 
-impl fmt::Display for IntervalQualifier {
+impl fmt::Display for Quality {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         let repr = match &self {
-            IntervalQualifier::Major => "Major",
-            IntervalQualifier::Minor => "Minor",
-            IntervalQualifier::Perfect => "Perfect",
-            IntervalQualifier::Diminished => "Diminished",
-            IntervalQualifier::Augmented => "Augmented",
-            IntervalQualifier::DoublyDiminished => "Doubly Diminished",
-            IntervalQualifier::DoublyAugmented => "Doubly Augmented",
+            Quality::Major => "Major",
+            Quality::Minor => "Minor",
+            Quality::Perfect => "Perfect",
+            Quality::Diminished => "Diminished",
+            Quality::Augmented => "Augmented",
+            Quality::DoublyDiminished => "Doubly Diminished",
+            Quality::DoublyAugmented => "Doubly Augmented",
         };
         write!(f, "{}", repr)
     }

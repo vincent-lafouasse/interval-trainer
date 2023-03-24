@@ -1,7 +1,7 @@
 mod intervals;
 mod notes;
 
-use crate::intervals::{BaseInterval, Interval, IntervalQualifier};
+use crate::intervals::{BaseInterval, Interval, Quality};
 use crate::notes::{Alteration, Note, NoteName, N_NOTES};
 
 fn main() {
@@ -51,7 +51,7 @@ fn debug() {
 
     let an_interval = Interval {
         base_interval: BaseInterval::Third,
-        qualifier: IntervalQualifier::Diminished,
+        quality: Quality::Diminished,
     };
 
     println!("Here's an interval : {}", an_interval);
