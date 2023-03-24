@@ -1,7 +1,7 @@
 use rand::Rng;
 use std::io;
 
-const N_NOTES: i8 = 12;
+pub const N_NOTES: i8 = 12;
 
 #[allow(dead_code)]
 pub enum NoteName {

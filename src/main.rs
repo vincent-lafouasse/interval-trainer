@@ -31,7 +31,9 @@ fn quiz() {
         random_note.repr()
     );
     let user_note = notes::Note::get_from_user();
-    match (user_note.distance_from_c() + 12 - random_note.distance_from_c()) % 12 == 7 {
+    match (user_note.distance_from_c() - random_note.distance_from_c()).rem_euclid(notes::N_NOTES)
+        == 7
+    {
         true => println!("ding ding you win"),
         false => println!("[EXTREMELY LOUD INCORRECT BUZZER]"),
     }
