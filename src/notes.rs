@@ -58,7 +58,7 @@ pub struct Note {
 impl Note {
     pub fn get_from_user() -> Note {
         println!("Please input a note:");
-        let mut note: Note;
+        let note: Note;
         loop {
             let mut input = String::new();
             io::stdin()
