@@ -5,6 +5,18 @@ use crate::intervals::{BaseInterval, Interval, IntervalQualifier};
 use crate::notes::{Alteration, Note, NoteName, N_NOTES};
 
 fn main() {
+    let debugging = false;
+    if debugging {
+        debug();
+    }
+
+    let quizing = true;
+    if quizing {
+        quiz();
+    }
+}
+
+fn debug() {
     let note_name = NoteName::A;
     println!(
         "{}{}{}{}{}{}{}{}",
@@ -44,11 +56,6 @@ fn main() {
 
     println!("Here's an interval : {}", an_interval);
     println!("Its size is {} semitones", an_interval.size());
-
-    let quizing = false;
-    if quizing {
-        quiz();
-    }
 }
 
 fn quiz() {
