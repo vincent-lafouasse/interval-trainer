@@ -185,6 +185,32 @@ impl Note {
 
 impl fmt::Display for Note {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "{}{}", self.name.repr(), self.alteration.repr())
+        write!(f, "{}{}", self.name, self.alteration)
+    }
+}
+
+impl fmt::Display for NoteName {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let repr = match &self {
+            NoteName::C => "C",
+            NoteName::D => "D",
+            NoteName::E => "E",
+            NoteName::F => "F",
+            NoteName::G => "G",
+            NoteName::A => "A",
+            NoteName::B => "B",
+        };
+        write!(f, "{}", repr)
+    }
+}
+
+impl fmt::Display for Alteration {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let repr = match &self {
+            Alteration::NATURAL => "",
+            Alteration::FLAT => "b",
+            Alteration::SHARP => "#",
+        };
+        write!(f, "{}", repr)
     }
 }

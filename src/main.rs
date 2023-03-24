@@ -45,10 +45,12 @@ fn main() {
     let random_note = Note::get_random();
     println!("Here's a random note: {}\n", random_note.repr());
 
-    let _an_interval = Interval {
+    let an_interval = Interval {
         base_interval: BaseInterval::FIFTH,
         qualifier: IntervalQualifier::PERFECT,
     };
+
+    println!("Here's an interval : {}", an_interval);
 
     let quizing = false;
     if quizing {
