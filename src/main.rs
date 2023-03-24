@@ -1,3 +1,4 @@
+mod intervals;
 mod notes;
 
 fn main() {
@@ -40,6 +41,11 @@ fn main() {
 
     let random_note = notes::Note::get_random();
     println!("Here's a random note: {}\n", random_note.repr());
+
+    let an_interval = intervals::Interval {
+        base_interval: intervals::BaseInterval::FIFTH,
+        qualifier: intervals::IntervalQualifier::PERFECT,
+    };
 
     let quizing = false;
     if quizing {
