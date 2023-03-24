@@ -38,8 +38,8 @@ fn main() {
     println!("Here's a random note: {}\n", random_note);
 
     let an_interval = Interval {
-        base_interval: BaseInterval::Fifth,
-        qualifier: IntervalQualifier::Perfect,
+        base_interval: BaseInterval::Third,
+        qualifier: IntervalQualifier::Diminished,
     };
 
     println!("Here's an interval : {}", an_interval);

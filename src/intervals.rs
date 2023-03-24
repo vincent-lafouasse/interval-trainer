@@ -1,6 +1,7 @@
 use std::fmt;
 
 #[allow(dead_code)]
+#[derive(PartialEq)]
 pub enum BaseInterval {
     Unison,
     Second,
@@ -43,10 +44,34 @@ pub struct Interval {
 
 impl Interval {
     pub fn size(&self) -> i8 {
-        let mut distance = self.base_interval.size();
-        distance += 1;
-        distance -= 1;
-        distance
+        let distance = self.base_interval.size();
+        let increment = {
+            if self.base_interval == BaseInterval::Second
+                || self.base_interval == BaseInterval::Third
+                || self.base_interval == BaseInterval::Sixth
+            {
+                match &self.qualifier {
+                    IntervalQualifier::Major => 0,
+                    IntervalQualifier::Minor => -1,
+                    IntervalQualifier::Perfect => panic!("Interval can't be perfect"),
+                    IntervalQualifier::Diminished => -2,
+                    IntervalQualifier::Augmented => 1,
+                    IntervalQualifier::DoublyDiminished => -3,
+                    IntervalQualifier::DoublyAugmented => 2,
+                }
+            } else {
+                match &self.qualifier {
+                    IntervalQualifier::Major => panic!("Interval can't be major"),
+                    IntervalQualifier::Minor => panic!("Interval can't be minor"),
+                    IntervalQualifier::Perfect => 0,
+                    IntervalQualifier::Diminished => -1,
+                    IntervalQualifier::Augmented => 1,
+                    IntervalQualifier::DoublyDiminished => -2,
+                    IntervalQualifier::DoublyAugmented => 2,
+                }
+            }
+        };
+        distance + increment
     }
 }
 
