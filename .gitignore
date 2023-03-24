@@ -1,3 +1,7 @@
 /target
-**/**.pdf
+
+# sheet music
 **/**.ly
+**/**.pdf
+**/**.eps
+**/**.png
