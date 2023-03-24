@@ -54,12 +54,26 @@ impl Note {
     }
 
     pub fn get_from_user() -> Note {
-        let mut input = String::new();
-        io::stdin()
-            .read_line(&mut input)
-            .expect("Failed to read line");
-
-        Note::parse_from_string(&input.trim()).expect("Huh oh that's not a good note")
+        println!("Please input a note:");
+        let mut note: Note;
+        loop {
+            let mut input = String::new();
+            io::stdin()
+                .read_line(&mut input)
+                .expect("Failed to read line");
+            let parsing_result = Note::parse_from_string(&input.trim());
+            match parsing_result {
+                Ok(parsed_note) => {
+                    note = parsed_note;
+                    break;
+                }
+                Err(message) => {
+                    println!("{}", message);
+                    continue;
+                }
+            }
+        }
+        note
     }
 
     pub fn get_random() -> Note {
