@@ -188,3 +188,18 @@ impl fmt::Display for Alteration {
         write!(f, "{}", repr)
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    const A_FLAT: Note = Note {
+        name: NoteName::A,
+        alteration: Alteration::Flat,
+    };
+
+    #[test]
+    fn test_distance_from_c() {
+        assert_eq!(A_FLAT.distance_from_c(), 8);
+    }
+}
