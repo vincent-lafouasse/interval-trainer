@@ -77,9 +77,9 @@ impl AltNote {
         (12 + base_distance + increment) % 12
     }
 
-    pub fn parse_from_string(string: &str) -> AltNote {
+    pub fn parse_from_string(string: &str) -> Result<AltNote, &str> {
         if string.len() == 0 || string.len() > 2 {
-            panic!("Invalid note");
+            return Err("Invalid note");
         }
         let note_name = match &string[0..1] {
             "A" => NoteName::A,
@@ -89,7 +89,7 @@ impl AltNote {
             "E" => NoteName::E,
             "F" => NoteName::F,
             "G" => NoteName::G,
-            _ => panic!("Invalid note"),
+            _ => return Err("Invalid note"),
         };
 
         let mut alteration = Alteration::NATURAL;
@@ -97,13 +97,13 @@ impl AltNote {
             alteration = match &string[1..2] {
                 "b" => Alteration::FLAT,
                 "#" => Alteration::SHARP,
-                _ => panic!("Invalid alteration"),
+                _ => return Err("Invalid alteration"),
             };
         }
-        AltNote {
+        Ok(AltNote {
             name: note_name,
             alteration: alteration,
-        }
+        })
     }
 }
 

@@ -8,7 +8,7 @@ fn main() {
     println!("My favorite key is {}", fave_key.repr());
     println!("It's {} semitones from C\n", fave_key.distance_from_c());
 
-    let other_key = notes::AltNote::parse_from_string("B#");
+    let other_key = notes::AltNote::parse_from_string("Eb").expect("Huh oh that's not a good note");
     println!(
         "Another good one is {}, which is {} semitones from C\n",
         other_key.repr(),
