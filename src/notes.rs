@@ -104,7 +104,7 @@ impl Note {
 
     pub fn parse_from_string(string: &str) -> Result<Note, &str> {
         if string.len() == 0 || string.len() > 2 {
-            return Err("Invalid note");
+            return Err("Note is a notename (A, B, etc) and an optional alteration (b or #)");
         }
         let note_name = match &string[0..1] {
             "A" => NoteName::A,
@@ -114,7 +114,7 @@ impl Note {
             "E" => NoteName::E,
             "F" => NoteName::F,
             "G" => NoteName::G,
-            _ => return Err("Invalid note"),
+            _ => return Err("Invalid note name"),
         };
 
         let mut alteration = Alteration::Natural;
@@ -275,5 +275,82 @@ mod tests {
         assert_eq!(NoteName::shift(note_name, -4), NoteName::D);
         assert_eq!(NoteName::shift(note_name, -6), NoteName::B);
         assert_eq!(NoteName::shift(note_name, -8), NoteName::G);
+    }
+
+    #[test]
+    fn test_parse_note_from_str_ok() {
+        let b_flat = Note::parse_from_string("Bb");
+        assert!(b_flat.is_ok());
+        assert_eq!(
+            b_flat.unwrap(),
+            Note {
+                name: NoteName::B,
+                alteration: Alteration::Flat
+            }
+        );
+
+        let a_sharp = Note::parse_from_string("A#");
+        assert!(a_sharp.is_ok());
+        assert_eq!(
+            a_sharp.unwrap(),
+            Note {
+                name: NoteName::A,
+                alteration: Alteration::Sharp
+            }
+        );
+
+        let g_sharp = Note::parse_from_string("G#");
+        assert!(g_sharp.is_ok());
+        assert_eq!(
+            g_sharp.unwrap(),
+            Note {
+                name: NoteName::G,
+                alteration: Alteration::Sharp
+            }
+        );
+
+        let c_flat = Note::parse_from_string("Cb");
+        assert!(c_flat.is_ok());
+        assert_eq!(
+            c_flat.unwrap(),
+            Note {
+                name: NoteName::C,
+                alteration: Alteration::Flat
+            }
+        );
+
+        let d_natural = Note::parse_from_string("D");
+        assert!(d_natural.is_ok());
+        assert_eq!(
+            d_natural.unwrap(),
+            Note {
+                name: NoteName::D,
+                alteration: Alteration::Natural
+            }
+        );
+    }
+
+    #[test]
+    fn test_parse_note_from_str_err() {
+        let invalid_length = Note::parse_from_string("420");
+        match invalid_length {
+            Err(msg) => assert_eq!(
+                msg,
+                "Note is a notename (A, B, etc) and an optional alteration (b or #)"
+            ),
+            Ok(_) => panic!("Poorly written tests"),
+        }
+
+        let invalid_note_name = Note::parse_from_string("H");
+        match invalid_note_name {
+            Err(msg) => assert_eq!(msg, "Invalid note name"),
+            Ok(_) => panic!("Poorly written tests"),
+        }
+
+        let invalid_alteration = Note::parse_from_string("C+");
+        match invalid_alteration {
+            Err(msg) => assert_eq!(msg, "Invalid alteration"),
+            Ok(_) => panic!("Poorly written tests"),
+        }
     }
 }
