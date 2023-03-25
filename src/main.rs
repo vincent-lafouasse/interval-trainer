@@ -24,17 +24,10 @@ fn main() -> Result<()> {
 }
 
 fn debug() {
-    let other_key = Note::parse_from_string("Eb").expect("Huh oh that's not a good note");
-    println!(
-        "Another good one is {}, which is {} semitones from C\n",
-        other_key,
-        other_key.distance_from_c()
-    );
+    let random_interval = Interval::get_random_diatonic();
 
-    let an_interval = Interval::get_random_diatonic();
-
-    println!("Here's an interval : {}", an_interval);
-    println!("Its size is {} semitones", an_interval.size());
+    println!("Here's a random interval : {}", random_interval);
+    println!("Its size is {} semitones", random_interval.size());
 }
 
 fn quiz() {
