@@ -67,7 +67,7 @@ impl Interval {
         let rough_distance =
             (natural_note.distance_from_c() - start.distance_from_c()).rem_euclid(12);
 
-        let alteration: Alteration = match rough_distance - self.size() {
+        let alteration: Alteration = match self.size() - rough_distance {
             0 => Alteration::Natural,
             1 => Alteration::Sharp,
             -1 => Alteration::Flat,
