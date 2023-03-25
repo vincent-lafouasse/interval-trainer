@@ -111,3 +111,18 @@ impl fmt::Display for Quality {
         write!(f, "{}", repr)
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    const PERFECT_UNISON: Interval = Interval {
+        base_interval: BaseInterval::Unison,
+        quality: Quality::Perfect,
+    };
+
+    #[test]
+    fn test_interval_size() {
+        assert_eq!(PERFECT_UNISON.size(), 0);
+    }
+}
