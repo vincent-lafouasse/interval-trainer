@@ -193,13 +193,43 @@ impl fmt::Display for Alteration {
 mod tests {
     use super::*;
 
+    const C: Note = Note {
+        name: NoteName::C,
+        alteration: Alteration::Natural,
+    };
     const A_FLAT: Note = Note {
         name: NoteName::A,
         alteration: Alteration::Flat,
     };
+    const D_FLAT: Note = Note {
+        name: NoteName::D,
+        alteration: Alteration::Flat,
+    };
+    const F_SHARP: Note = Note {
+        name: NoteName::F,
+        alteration: Alteration::Sharp,
+    };
+    const C_SHARP: Note = Note {
+        name: NoteName::C,
+        alteration: Alteration::Sharp,
+    };
+    const F_FLAT: Note = Note {
+        name: NoteName::F,
+        alteration: Alteration::Flat,
+    };
+    const B_SHARP: Note = Note {
+        name: NoteName::B,
+        alteration: Alteration::Sharp,
+    };
 
     #[test]
     fn test_distance_from_c() {
+        assert_eq!(C.distance_from_c(), 0);
         assert_eq!(A_FLAT.distance_from_c(), 8);
+        assert_eq!(D_FLAT.distance_from_c(), 1);
+        assert_eq!(F_SHARP.distance_from_c(), 6);
+        assert_eq!(C_SHARP.distance_from_c(), 1);
+        assert_eq!(F_FLAT.distance_from_c(), 4);
+        assert_eq!(B_SHARP.distance_from_c(), 0);
     }
 }
