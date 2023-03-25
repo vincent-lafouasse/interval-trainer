@@ -270,5 +270,12 @@ mod tests {
         let note_name = NoteName::A;
         assert_eq!(NoteName::shift(note_name, 2), NoteName::C);
         assert_eq!(NoteName::shift(note_name, 4), NoteName::E);
+        assert_eq!(NoteName::shift(note_name, 6), NoteName::G);
+        assert_eq!(NoteName::shift(note_name, 8), NoteName::B);
+
+        assert_eq!(NoteName::shift(note_name, -2), NoteName::F);
+        assert_eq!(NoteName::shift(note_name, -4), NoteName::D);
+        assert_eq!(NoteName::shift(note_name, -6), NoteName::B);
+        assert_eq!(NoteName::shift(note_name, -8), NoteName::G);
     }
 }
