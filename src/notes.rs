@@ -104,7 +104,7 @@ impl Note {
 
     pub fn parse_from_string(string: &str) -> Result<Note, &str> {
         if string.len() == 0 || string.len() > 2 {
-            return Err("Note is a notename (A, B, etc) and an optional alteration (b or #)");
+            return Err("Note is a note name (A, B, etc) and an optional alteration (b or #)");
         }
         let note_name = match &string[0..1] {
             "A" => NoteName::A,
