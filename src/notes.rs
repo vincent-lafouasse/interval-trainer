@@ -232,4 +232,15 @@ mod tests {
         assert_eq!(F_FLAT.distance_from_c(), 4);
         assert_eq!(B_SHARP.distance_from_c(), 0);
     }
+
+    #[test]
+    fn test_note_display() {
+        assert_eq!(format!("{}", C), "C");
+        assert_eq!(format!("{}", A_FLAT), "Ab");
+        assert_eq!(format!("{}", D_FLAT), "Db");
+        assert_eq!(format!("{}", F_SHARP), "F#");
+        assert_eq!(format!("{}", C_SHARP), "C#");
+        assert_eq!(format!("{}", F_FLAT), "Fb");
+        assert_eq!(format!("{}", B_SHARP), "B#");
+    }
 }
