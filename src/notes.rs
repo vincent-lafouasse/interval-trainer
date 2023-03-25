@@ -5,7 +5,6 @@ use std::io;
 pub const CHROMATIC_NOTES_PER_OCTAVE: i8 = 12;
 pub const DIATONIC_NOTES_PER_OCTAVE: i8 = 7;
 
-#[allow(dead_code)]
 #[derive(Copy, Clone, Debug, PartialEq)]
 pub enum NoteName {
     C,
@@ -17,7 +16,6 @@ pub enum NoteName {
     B,
 }
 
-#[allow(dead_code)]
 #[derive(Copy, Clone, Debug, PartialEq)]
 pub enum Alteration {
     Natural,
@@ -135,7 +133,6 @@ impl Note {
 }
 
 impl NoteName {
-    #[allow(dead_code)]
     pub fn next(&self) -> NoteName {
         match &self {
             NoteName::A => NoteName::B,
@@ -148,7 +145,6 @@ impl NoteName {
         }
     }
 
-    #[allow(dead_code)]
     pub fn previous(&self) -> NoteName {
         match &self {
             NoteName::A => NoteName::G,
@@ -161,7 +157,6 @@ impl NoteName {
         }
     }
 
-    #[allow(dead_code)]
     pub fn shift(note_name: NoteName, distance: i8) -> NoteName {
         let mut new_note = note_name;
         let actual_distance = distance.rem_euclid(DIATONIC_NOTES_PER_OCTAVE);

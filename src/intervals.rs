@@ -3,7 +3,6 @@ use std::fmt;
 
 use crate::notes::{Alteration, Note, NoteName};
 
-#[allow(dead_code)]
 #[derive(Copy, Clone, Debug, PartialEq)]
 pub enum BaseInterval {
     Unison,
@@ -29,7 +28,6 @@ impl BaseInterval {
     }
 }
 
-#[allow(dead_code)]
 #[derive(Copy, Clone, Debug, PartialEq)]
 pub enum Quality {
     Major,

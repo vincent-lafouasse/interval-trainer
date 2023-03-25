@@ -1,11 +1,12 @@
+#![allow(unused_imports)]
+#![allow(dead_code)]
+
 mod intervals;
 mod notes;
 
 use color_eyre::eyre::Result;
 
-#[allow(unused_imports)]
 use crate::intervals::{BaseInterval, Interval, Quality};
-#[allow(unused_imports)]
 use crate::notes::{Alteration, Note, NoteName, CHROMATIC_NOTES_PER_OCTAVE};
 
 fn main() -> Result<()> {
