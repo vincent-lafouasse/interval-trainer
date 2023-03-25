@@ -2,7 +2,7 @@ use rand::Rng;
 use std::fmt;
 use std::io;
 
-pub const N_NOTES: i8 = 12;
+pub const NOTES_PER_OCTAVE: i8 = 12;
 
 #[allow(dead_code)]
 pub enum NoteName {
@@ -20,34 +20,6 @@ pub enum Alteration {
     Natural,
     Flat,
     Sharp,
-}
-
-impl NoteName {
-    #[allow(dead_code)]
-    pub fn next(&self) -> NoteName {
-        match &self {
-            NoteName::A => NoteName::B,
-            NoteName::B => NoteName::C,
-            NoteName::C => NoteName::D,
-            NoteName::D => NoteName::E,
-            NoteName::E => NoteName::F,
-            NoteName::F => NoteName::G,
-            NoteName::G => NoteName::A,
-        }
-    }
-
-    #[allow(dead_code)]
-    pub fn previous(&self) -> NoteName {
-        match &self {
-            NoteName::A => NoteName::G,
-            NoteName::B => NoteName::A,
-            NoteName::C => NoteName::B,
-            NoteName::D => NoteName::C,
-            NoteName::E => NoteName::D,
-            NoteName::F => NoteName::E,
-            NoteName::G => NoteName::F,
-        }
-    }
 }
 
 pub struct Note {
@@ -124,7 +96,7 @@ impl Note {
             Alteration::Sharp => 1,
         };
 
-        (base_distance + increment).rem_euclid(N_NOTES)
+        (base_distance + increment).rem_euclid(NOTES_PER_OCTAVE)
     }
 
     pub fn parse_from_string(string: &str) -> Result<Note, &str> {
@@ -154,6 +126,34 @@ impl Note {
             name: note_name,
             alteration: alteration,
         })
+    }
+}
+
+impl NoteName {
+    #[allow(dead_code)]
+    pub fn next(&self) -> NoteName {
+        match &self {
+            NoteName::A => NoteName::B,
+            NoteName::B => NoteName::C,
+            NoteName::C => NoteName::D,
+            NoteName::D => NoteName::E,
+            NoteName::E => NoteName::F,
+            NoteName::F => NoteName::G,
+            NoteName::G => NoteName::A,
+        }
+    }
+
+    #[allow(dead_code)]
+    pub fn previous(&self) -> NoteName {
+        match &self {
+            NoteName::A => NoteName::G,
+            NoteName::B => NoteName::A,
+            NoteName::C => NoteName::B,
+            NoteName::D => NoteName::C,
+            NoteName::E => NoteName::D,
+            NoteName::F => NoteName::E,
+            NoteName::G => NoteName::F,
+        }
     }
 }
 

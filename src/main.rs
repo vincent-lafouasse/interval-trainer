@@ -4,7 +4,7 @@ mod notes;
 use color_eyre::eyre::Result;
 
 use crate::intervals::{BaseInterval, Interval, Quality};
-use crate::notes::{Alteration, Note, NoteName, N_NOTES};
+use crate::notes::{Alteration, Note, NoteName, NOTES_PER_OCTAVE};
 
 fn main() -> Result<()> {
     color_eyre::install()?;
@@ -67,7 +67,9 @@ fn quiz() {
     let random_note = Note::get_random();
     println!("Whate note is \na perfect fifth above {}?", random_note);
     let user_note = Note::get_from_user();
-    match (user_note.distance_from_c() - random_note.distance_from_c()).rem_euclid(N_NOTES) == 7 {
+    match (user_note.distance_from_c() - random_note.distance_from_c()).rem_euclid(NOTES_PER_OCTAVE)
+        == 7
+    {
         true => println!("ding ding you win"),
         false => println!("[EXTREMELY LOUD INCORRECT BUZZER]"),
     }
