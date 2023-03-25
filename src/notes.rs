@@ -162,17 +162,9 @@ impl NoteName {
     #[allow(dead_code)]
     pub fn shift(note_name: NoteName, distance: i8) -> NoteName {
         let mut new_note = note_name;
-        match distance > 0 {
-            true => {
-                for _ in 0..distance {
-                    new_note = new_note.next();
-                }
-            }
-            false => {
-                for _ in 0..(-distance) {
-                    new_note = new_note.previous();
-                }
-            }
+        let actual_distance = distance.rem_euclid(7);
+        for _ in 0..actual_distance {
+            new_note = new_note.next();
         }
         new_note
     }
