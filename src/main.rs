@@ -41,6 +41,11 @@ fn quiz() {
         println!("ding ding you win");
     } else {
         println!("[EXTREMELY LOUD INCORRECT BUZZER]");
+        println!(
+            "That is not a {}, that is a {}\n",
+            random_interval,
+            Interval::between(random_start_note, user_note)
+        );
     }
 }
 
