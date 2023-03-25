@@ -1,7 +1,5 @@
 #!/usr/bin/env sh
 
-MAIN=main
-
 generate_lilypond_file () {
 	cat > "$1.ly" <<- EOM
 \version "2.22.2"
@@ -18,6 +16,8 @@ generate_lilypond_file () {
 }
 
 #################################################################################
+
+MAIN=main
 
 generate_lilypond_file "${MAIN}"
 lilypond "${MAIN}.ly"
