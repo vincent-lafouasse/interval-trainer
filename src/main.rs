@@ -3,6 +3,7 @@ mod notes;
 
 use color_eyre::eyre::Result;
 
+#[allow(unused_imports)]
 use crate::intervals::{BaseInterval, Interval, Quality};
 #[allow(unused_imports)]
 use crate::notes::{Alteration, Note, NoteName, CHROMATIC_NOTES_PER_OCTAVE};
@@ -10,12 +11,12 @@ use crate::notes::{Alteration, Note, NoteName, CHROMATIC_NOTES_PER_OCTAVE};
 fn main() -> Result<()> {
     color_eyre::install()?;
 
-    let debugging = false;
+    let debugging = true;
     if debugging {
         debug();
     }
 
-    let quizing = true;
+    let quizing = false;
     if quizing {
         quiz();
     }
@@ -30,10 +31,7 @@ fn debug() {
         other_key.distance_from_c()
     );
 
-    let an_interval = Interval {
-        base_interval: BaseInterval::Third,
-        quality: Quality::Diminished,
-    };
+    let an_interval = Interval::get_random_diatonic();
 
     println!("Here's an interval : {}", an_interval);
     println!("Its size is {} semitones", an_interval.size());
