@@ -260,10 +260,12 @@ mod tests {
     #[test]
     fn test_note_name_shift() {
         let note_name = NoteName::A;
+        assert_eq!(NoteName::shift(note_name, 0), NoteName::A);
         assert_eq!(NoteName::shift(note_name, 7 * 3), NoteName::A);
         assert_eq!(NoteName::shift(note_name, 7 * 7), NoteName::A);
         assert_eq!(NoteName::shift(note_name, 7 * 12), NoteName::A);
 
+        assert_eq!(NoteName::shift(note_name, 0), NoteName::A);
         assert_eq!(NoteName::shift(note_name, 2), NoteName::C);
         assert_eq!(NoteName::shift(note_name, 4), NoteName::E);
         assert_eq!(NoteName::shift(note_name, 6), NoteName::G);
