@@ -52,6 +52,7 @@ impl Interval {
             if self.base_interval == BaseInterval::Second
                 || self.base_interval == BaseInterval::Third
                 || self.base_interval == BaseInterval::Sixth
+                || self.base_interval == BaseInterval::Seventh
             {
                 match &self.quality {
                     Quality::Major => 0,
