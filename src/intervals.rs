@@ -1,7 +1,7 @@
 use std::fmt;
 
 #[allow(dead_code)]
-#[derive(PartialEq)]
+#[derive(Copy, Clone, Debug, PartialEq)]
 pub enum BaseInterval {
     Unison,
     Second,
@@ -27,6 +27,7 @@ impl BaseInterval {
 }
 
 #[allow(dead_code)]
+#[derive(Copy, Clone, Debug, PartialEq)]
 pub enum Quality {
     Major,
     Minor,
@@ -37,6 +38,7 @@ pub enum Quality {
     DoublyDiminished,
 }
 
+#[derive(Copy, Clone, Debug, PartialEq)]
 pub struct Interval {
     pub base_interval: BaseInterval,
     pub quality: Quality,

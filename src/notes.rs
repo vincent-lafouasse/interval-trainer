@@ -5,6 +5,7 @@ use std::io;
 pub const NOTES_PER_OCTAVE: i8 = 12;
 
 #[allow(dead_code)]
+#[derive(Copy, Clone, Debug, PartialEq)]
 pub enum NoteName {
     C,
     D,
@@ -16,12 +17,14 @@ pub enum NoteName {
 }
 
 #[allow(dead_code)]
+#[derive(Copy, Clone, Debug, PartialEq)]
 pub enum Alteration {
     Natural,
     Flat,
     Sharp,
 }
 
+#[derive(Copy, Clone, Debug, PartialEq)]
 pub struct Note {
     pub name: NoteName,
     pub alteration: Alteration,
@@ -155,6 +158,24 @@ impl NoteName {
             NoteName::G => NoteName::F,
         }
     }
+
+    #[allow(dead_code)]
+    pub fn shift(note_name: NoteName, distance: i8) -> NoteName {
+        let mut new_note = note_name;
+        match distance > 0 {
+            true => {
+                for _ in 0..distance {
+                    new_note = new_note.next();
+                }
+            }
+            false => {
+                for _ in 0..(-distance) {
+                    new_note = new_note.previous();
+                }
+            }
+        }
+        new_note
+    }
 }
 
 impl fmt::Display for Note {
@@ -242,5 +263,12 @@ mod tests {
         assert_eq!(format!("{}", C_SHARP), "C#");
         assert_eq!(format!("{}", F_FLAT), "Fb");
         assert_eq!(format!("{}", B_SHARP), "B#");
+    }
+
+    #[test]
+    fn test_note_name_shift() {
+        let note_name = NoteName::A;
+        assert_eq!(NoteName::shift(note_name, 2), NoteName::C);
+        assert_eq!(NoteName::shift(note_name, 4), NoteName::E);
     }
 }
