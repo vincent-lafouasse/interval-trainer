@@ -31,7 +31,7 @@ fn quiz() {
     let computed_end_note = random_interval.note_up_from(random_start_note);
 
     println!(
-        "What note is \na {} above {}?",
+        "What note is a {} above {}?",
         random_interval, random_start_note
     );
 
