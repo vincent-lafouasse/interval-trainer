@@ -16,7 +16,7 @@ fn main() -> Result<()> {
         debug();
     }
 
-    let quizing = false;
+    let quizing = true;
     if quizing {
         quiz();
     }
@@ -24,19 +24,27 @@ fn main() -> Result<()> {
 }
 
 fn quiz() {
-    let random_note = Note::get_random();
-    println!("What note is \na perfect fifth above {}?", random_note);
+    println!("-----------------------------------------------------------");
+    let random_interval = Interval::get_random_diatonic();
+    let random_start_note = Note::get_random();
+    let computed_end_note = random_interval.note_up_from(random_start_note);
+
+    println!(
+        "What note is \na {} above {}?",
+        random_interval, random_start_note
+    );
+
     let user_note = Note::get_from_user();
-    match (user_note.distance_from_c() - random_note.distance_from_c())
-        .rem_euclid(CHROMATIC_NOTES_PER_OCTAVE)
-        == 7
-    {
-        true => println!("ding ding you win"),
-        false => println!("[EXTREMELY LOUD INCORRECT BUZZER]"),
+
+    if user_note == computed_end_note {
+        println!("ding ding you win");
+    } else {
+        println!("[EXTREMELY LOUD INCORRECT BUZZER]");
     }
 }
 
 fn debug() {
+    println!("-----------------------------------------------------------");
     let random_interval = Interval::get_random_diatonic();
 
     println!("Here's a random interval :\n\t{}", random_interval);
