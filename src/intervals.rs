@@ -1,7 +1,7 @@
 use rand::Rng;
 use std::fmt;
 
-use crate::notes::{Note, NoteName};
+use crate::notes::{Alteration, Note, NoteName};
 
 #[allow(dead_code)]
 #[derive(Copy, Clone, Debug, PartialEq)]
@@ -48,6 +48,37 @@ pub struct Interval {
 }
 
 impl Interval {
+    pub fn note_up_from(&self, start: Note) -> Note {
+        let note_name_distance = match self.base_interval {
+            BaseInterval::Unison => 0,
+            BaseInterval::Second => 1,
+            BaseInterval::Third => 2,
+            BaseInterval::Fourth => 3,
+            BaseInterval::Fifth => 4,
+            BaseInterval::Sixth => 5,
+            BaseInterval::Seventh => 6,
+        };
+
+        let note_name: NoteName = NoteName::shift(start.name, note_name_distance);
+        let natural_note: Note = Note {
+            name: note_name,
+            alteration: Alteration::Natural,
+        };
+        let rough_distance =
+            (natural_note.distance_from_c() - start.distance_from_c()).rem_euclid(12);
+
+        let alteration: Alteration = match rough_distance - self.size() {
+            0 => Alteration::Natural,
+            1 => Alteration::Sharp,
+            -1 => Alteration::Flat,
+            _ => panic!("too many alterations"),
+        };
+        Note {
+            name: note_name,
+            alteration: alteration,
+        }
+    }
+
     pub fn between(start: Note, end: Note) -> Interval {
         let diatonic_notes_up_from_start: Vec<NoteName> =
             (0..7).map(|i| NoteName::shift(start.name, i)).collect();

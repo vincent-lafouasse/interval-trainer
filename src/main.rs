@@ -26,8 +26,16 @@ fn main() -> Result<()> {
 fn debug() {
     let random_interval = Interval::get_random_diatonic();
 
-    println!("Here's a random interval : {}", random_interval);
-    println!("Its size is {} semitones", random_interval.size());
+    println!("Here's a random interval :\n\t{}", random_interval);
+    println!("Its size is {} semitones\n", random_interval.size());
+
+    let c = Note {
+        name: NoteName::C,
+        alteration: Alteration::Natural,
+    };
+
+    let up_from_c: Note = random_interval.note_up_from(c);
+    println!("{} is a {} up from C\n", up_from_c, random_interval);
 
     let note1 = Note::get_random();
     let note2 = Note::get_random();
