@@ -4,6 +4,7 @@ mod notes;
 use color_eyre::eyre::Result;
 
 use crate::intervals::{BaseInterval, Interval, Quality};
+#[allow(unused_imports)]
 use crate::notes::{Alteration, Note, NoteName, NOTES_PER_OCTAVE};
 
 fn main() -> Result<()> {
