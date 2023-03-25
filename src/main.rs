@@ -1,10 +1,14 @@
 mod intervals;
 mod notes;
 
+use color_eyre::eyre::Result;
+
 use crate::intervals::{BaseInterval, Interval, Quality};
 use crate::notes::{Alteration, Note, NoteName, N_NOTES};
 
-fn main() {
+fn main() -> Result<()> {
+    color_eyre::install()?;
+
     let debugging = false;
     if debugging {
         debug();
@@ -14,6 +18,7 @@ fn main() {
     if quizing {
         quiz();
     }
+    Ok(())
 }
 
 fn debug() {
