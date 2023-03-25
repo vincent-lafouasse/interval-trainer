@@ -79,10 +79,12 @@ impl Interval {
                 || base_interval == BaseInterval::Seventh
             {
                 match distance_from_diatonic {
+                    2 => Quality::DoublyAugmented,
                     1 => Quality::Augmented,
                     0 => Quality::Major,
                     -1 => Quality::Minor,
                     -2 => Quality::Diminished,
+                    -3 => Quality::DoublyDiminished,
                     _ => panic!("intense interval"),
                 }
             } else {
