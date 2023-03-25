@@ -1,6 +1,8 @@
 use rand::Rng;
 use std::fmt;
 
+use crate::notes::{Note, NoteName};
+
 #[allow(dead_code)]
 #[derive(Copy, Clone, Debug, PartialEq)]
 pub enum BaseInterval {
@@ -46,6 +48,61 @@ pub struct Interval {
 }
 
 impl Interval {
+    pub fn between(start: Note, end: Note) -> Interval {
+        let diatonic_notes_up_from_start: Vec<NoteName> =
+            (0..7).map(|i| NoteName::shift(start.name, i)).collect();
+        let interval_index: usize = diatonic_notes_up_from_start
+            .iter()
+            .enumerate()
+            .filter(|(_, &note_name)| note_name == end.name)
+            .map(|(index, _)| index)
+            .collect::<Vec<_>>()[0];
+        let base_interval = match interval_index {
+            0 => BaseInterval::Unison,
+            1 => BaseInterval::Second,
+            2 => BaseInterval::Third,
+            3 => BaseInterval::Fourth,
+            4 => BaseInterval::Fifth,
+            5 => BaseInterval::Sixth,
+            6 => BaseInterval::Seventh,
+            _ => panic!(""),
+        };
+
+        let interval_size = (end.distance_from_c() - start.distance_from_c()).rem_euclid(12);
+        let base_size = base_interval.size();
+        let distance_from_diatonic = interval_size - base_size;
+
+        let quality = {
+            if base_interval == BaseInterval::Second
+                || base_interval == BaseInterval::Third
+                || base_interval == BaseInterval::Sixth
+                || base_interval == BaseInterval::Seventh
+            {
+                match distance_from_diatonic {
+                    1 => Quality::Augmented,
+                    0 => Quality::Major,
+                    -1 => Quality::Minor,
+                    -2 => Quality::Diminished,
+                    _ => panic!("intense interval"),
+                }
+            } else {
+                match distance_from_diatonic {
+                    2 => Quality::DoublyAugmented,
+                    1 => Quality::Augmented,
+                    0 => Quality::Perfect,
+                    -1 => Quality::Diminished,
+                    -2 => Quality::DoublyDiminished,
+                    _ => panic!("intense interval"),
+                }
+            }
+        };
+
+        Interval {
+            base_interval: base_interval,
+            quality: quality,
+        }
+    }
+
     pub fn size(&self) -> i8 {
         let distance = self.base_interval.size();
         let increment = {

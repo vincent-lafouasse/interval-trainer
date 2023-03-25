@@ -28,6 +28,15 @@ fn debug() {
 
     println!("Here's a random interval : {}", random_interval);
     println!("Its size is {} semitones", random_interval.size());
+
+    let note1 = Note::get_random();
+    let note2 = Note::get_random();
+    println!(
+        "Between {} and {} there is a {}",
+        note1,
+        note2,
+        Interval::between(note1, note2)
+    );
 }
 
 fn quiz() {
