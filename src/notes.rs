@@ -245,13 +245,13 @@ mod tests {
 
     #[test]
     fn test_distance_from_c() {
-        assert_eq!(C.distance_from_c(), 0);
-        assert_eq!(A_FLAT.distance_from_c(), 8);
-        assert_eq!(D_FLAT.distance_from_c(), 1);
-        assert_eq!(F_SHARP.distance_from_c(), 6);
-        assert_eq!(C_SHARP.distance_from_c(), 1);
-        assert_eq!(F_FLAT.distance_from_c(), 4);
-        assert_eq!(B_SHARP.distance_from_c(), 0);
+        assert_eq!(0, C.distance_from_c());
+        assert_eq!(8, A_FLAT.distance_from_c());
+        assert_eq!(1, D_FLAT.distance_from_c());
+        assert_eq!(6, F_SHARP.distance_from_c());
+        assert_eq!(1, C_SHARP.distance_from_c());
+        assert_eq!(4, F_FLAT.distance_from_c());
+        assert_eq!(0, B_SHARP.distance_from_c());
     }
 
     #[test]
@@ -268,6 +268,10 @@ mod tests {
     #[test]
     fn test_note_name_shift() {
         let note_name = NoteName::A;
+        assert_eq!(NoteName::shift(note_name, 7 * 3), NoteName::A);
+        assert_eq!(NoteName::shift(note_name, 7 * 7), NoteName::A);
+        assert_eq!(NoteName::shift(note_name, 7 * 12), NoteName::A);
+
         assert_eq!(NoteName::shift(note_name, 2), NoteName::C);
         assert_eq!(NoteName::shift(note_name, 4), NoteName::E);
         assert_eq!(NoteName::shift(note_name, 6), NoteName::G);
