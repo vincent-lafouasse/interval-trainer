@@ -2,7 +2,8 @@ use rand::Rng;
 use std::fmt;
 use std::io;
 
-pub const NOTES_PER_OCTAVE: i8 = 12;
+pub const CHROMATIC_NOTES_PER_OCTAVE: i8 = 12;
+pub const DIATONIC_NOTES_PER_OCTAVE: i8 = 7;
 
 #[allow(dead_code)]
 #[derive(Copy, Clone, Debug, PartialEq)]
@@ -55,7 +56,8 @@ impl Note {
     }
 
     pub fn get_random() -> Note {
-        let rn_note_name = rand::thread_rng().gen_range(0, 7) % 7;
+        let rn_note_name =
+            rand::thread_rng().gen_range(0, DIATONIC_NOTES_PER_OCTAVE) % DIATONIC_NOTES_PER_OCTAVE;
         let rn_alteration = rand::thread_rng().gen_range(0, 3) % 3;
 
         let note_name = match rn_note_name {
@@ -99,7 +101,7 @@ impl Note {
             Alteration::Sharp => 1,
         };
 
-        (base_distance + increment).rem_euclid(NOTES_PER_OCTAVE)
+        (base_distance + increment).rem_euclid(CHROMATIC_NOTES_PER_OCTAVE)
     }
 
     pub fn parse_from_string(string: &str) -> Result<Note, &str> {
@@ -162,7 +164,7 @@ impl NoteName {
     #[allow(dead_code)]
     pub fn shift(note_name: NoteName, distance: i8) -> NoteName {
         let mut new_note = note_name;
-        let actual_distance = distance.rem_euclid(7);
+        let actual_distance = distance.rem_euclid(DIATONIC_NOTES_PER_OCTAVE);
         for _ in 0..actual_distance {
             new_note = new_note.next();
         }
