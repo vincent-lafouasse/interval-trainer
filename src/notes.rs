@@ -54,9 +54,8 @@ impl Note {
     }
 
     pub fn get_random() -> Note {
-        let rn_note_name =
-            rand::thread_rng().gen_range(0, DIATONIC_NOTES_PER_OCTAVE) % DIATONIC_NOTES_PER_OCTAVE;
-        let rn_alteration = rand::thread_rng().gen_range(0, 3) % 3;
+        let rn_note_name = rand::thread_rng().gen_range(0, DIATONIC_NOTES_PER_OCTAVE);
+        let rn_alteration = rand::thread_rng().gen_range(0, 3);
 
         let note_name = match rn_note_name {
             0 => NoteName::A,
