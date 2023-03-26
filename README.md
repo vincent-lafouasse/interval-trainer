@@ -1,6 +1,6 @@
 # The Amazing Interval Trainer
 
-Train your musical intervals
+Train your ears to recognize musical intervals
 
 ## License 
 ```
