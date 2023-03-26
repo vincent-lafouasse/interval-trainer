@@ -28,12 +28,13 @@ fn quiz() {
     println!("-----------------------------------------------------------");
     let random_interval = Interval::get_random_diatonic();
     let random_start_note = Note::get_random();
-    let computed_end_note = random_interval.note_up_from(random_start_note);
 
     println!(
         "What note is a {} above {}?",
         random_interval, random_start_note
     );
+
+    let computed_end_note = random_interval.note_up_from(random_start_note);
 
     let user_note = Note::get_from_user();
 

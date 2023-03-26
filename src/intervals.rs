@@ -69,7 +69,7 @@ impl Interval {
             0 => Alteration::Natural,
             1 => Alteration::Sharp,
             -1 => Alteration::Flat,
-            _ => panic!("too many alterations"),
+            _ => panic!("Can only handle 1 alteration for the moment"),
         };
         Note {
             name: note_name,
@@ -114,7 +114,7 @@ impl Interval {
                     -1 => Quality::Minor,
                     -2 => Quality::Diminished,
                     -3 => Quality::DoublyDiminished,
-                    _ => panic!("intense interval"),
+                    _ => panic!("Interval too diminished or augmented to handle for now"),
                 }
             } else {
                 match distance_from_diatonic {
@@ -123,7 +123,7 @@ impl Interval {
                     0 => Quality::Perfect,
                     -1 => Quality::Diminished,
                     -2 => Quality::DoublyDiminished,
-                    _ => panic!("intense interval"),
+                    _ => panic!("Interval too diminished or augmented to handle for now"),
                 }
             }
         };
@@ -145,7 +145,7 @@ impl Interval {
                 match &self.quality {
                     Quality::Major => 0,
                     Quality::Minor => -1,
-                    Quality::Perfect => panic!("Interval can't be perfect"),
+                    Quality::Perfect => panic!("Interval {} can't be perfect", self.base_interval),
                     Quality::Diminished => -2,
                     Quality::Augmented => 1,
                     Quality::DoublyDiminished => -3,
@@ -153,8 +153,8 @@ impl Interval {
                 }
             } else {
                 match &self.quality {
-                    Quality::Major => panic!("Interval can't be major"),
-                    Quality::Minor => panic!("Interval can't be minor"),
+                    Quality::Major => panic!("Interval {} can't be major", self.base_interval),
+                    Quality::Minor => panic!("Interval {} can't be minor", self.base_interval),
                     Quality::Perfect => 0,
                     Quality::Diminished => -1,
                     Quality::Augmented => 1,
