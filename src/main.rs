@@ -43,10 +43,13 @@ fn quiz() {
     } else {
         println!("[EXTREMELY LOUD INCORRECT BUZZER]");
         println!(
-            "That is not a {}, that is a {}\n",
+            "{} to {} is not a {}, that is a {}\n",
+            random_start_note,
+            user_note,
             random_interval,
             Interval::between(random_start_note, user_note)
         );
+        println!("The correct answer was {}", computed_end_note);
     }
 }
 
