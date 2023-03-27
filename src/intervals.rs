@@ -367,4 +367,40 @@ mod tests {
         assert_eq!(Interval::between(A_FLAT, D_FLAT), PERFECT_FOURTH);
         assert_eq!(Interval::between(D_FLAT, A_FLAT), PERFECT_FIFTH);
     }
+
+    #[test]
+    fn test_interval_between_intense_intervals() {
+        assert_eq!(
+            Interval::between(C, B_SHARP),
+            Interval {
+                base_interval: BaseInterval::Seventh,
+                quality: Quality::Augmented
+            }
+        );
+        assert_eq!(
+            Interval::between(B_SHARP, C),
+            Interval {
+                base_interval: BaseInterval::Second,
+                quality: Quality::Diminished
+            }
+        );
+
+        assert_eq!(
+            Interval::between(C_SHARP, C),
+            Interval {
+                base_interval: BaseInterval::Unison,
+                quality: Quality::Diminished
+            }
+        );
+        assert_eq!(
+            Interval::between(C, C_SHARP),
+            Interval {
+                base_interval: BaseInterval::Unison,
+                quality: Quality::Augmented
+            }
+        );
+
+        // B# -> Fb is a triply diminished fifth (eq to major third), implem of bbb intervals todo
+        // Fb -> B# is triply augmented fourth (eq to minor sixth)
+    }
 }
