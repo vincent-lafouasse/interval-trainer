@@ -355,4 +355,16 @@ mod tests {
         assert_eq!(10, MINOR_SEVENTH.size());
         assert_eq!(11, MAJOR_SEVENTH.size());
     }
+
+    #[test]
+    fn test_interval_between_common_intervals() {
+        assert_eq!(Interval::between(C, D_FLAT), MINOR_SECOND);
+        assert_eq!(Interval::between(C, A_FLAT), MINOR_SIXTH);
+        assert_eq!(Interval::between(C, F_SHARP), AUGMENTED_FOURTH);
+        assert_eq!(Interval::between(D_FLAT, C), MAJOR_SEVENTH);
+        assert_eq!(Interval::between(A_FLAT, C), MAJOR_THIRD);
+        assert_eq!(Interval::between(F_SHARP, C), DIMINISHED_FIFTH);
+        assert_eq!(Interval::between(A_FLAT, D_FLAT), PERFECT_FOURTH);
+        assert_eq!(Interval::between(D_FLAT, A_FLAT), PERFECT_FIFTH);
+    }
 }
