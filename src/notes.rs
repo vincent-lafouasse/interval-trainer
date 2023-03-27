@@ -331,7 +331,7 @@ mod tests {
         match invalid_length {
             Err(msg) => assert_eq!(
                 msg,
-                "Note is a notename (A, B, etc) and an optional alteration (b or #)"
+                "Note is a note name (A, B, etc) and an optional alteration (b or #)"
             ),
             Ok(_) => panic!("Poorly written tests"),
         }
