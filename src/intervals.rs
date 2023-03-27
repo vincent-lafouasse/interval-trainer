@@ -256,13 +256,103 @@ impl fmt::Display for Quality {
 mod tests {
     use super::*;
 
+    // Intervals
     const PERFECT_UNISON: Interval = Interval {
         base_interval: BaseInterval::Unison,
         quality: Quality::Perfect,
     };
+    const MINOR_SECOND: Interval = Interval {
+        base_interval: BaseInterval::Second,
+        quality: Quality::Minor,
+    };
+    const MAJOR_SECOND: Interval = Interval {
+        base_interval: BaseInterval::Second,
+        quality: Quality::Major,
+    };
+    const MINOR_THIRD: Interval = Interval {
+        base_interval: BaseInterval::Third,
+        quality: Quality::Minor,
+    };
+    const MAJOR_THIRD: Interval = Interval {
+        base_interval: BaseInterval::Third,
+        quality: Quality::Major,
+    };
+    const PERFECT_FOURTH: Interval = Interval {
+        base_interval: BaseInterval::Fourth,
+        quality: Quality::Perfect,
+    };
+    const AUGMENTED_FOURTH: Interval = Interval {
+        base_interval: BaseInterval::Fourth,
+        quality: Quality::Augmented,
+    };
+    const DIMINISHED_FIFTH: Interval = Interval {
+        base_interval: BaseInterval::Fifth,
+        quality: Quality::Diminished,
+    };
+    const PERFECT_FIFTH: Interval = Interval {
+        base_interval: BaseInterval::Fifth,
+        quality: Quality::Perfect,
+    };
+    const MINOR_SIXTH: Interval = Interval {
+        base_interval: BaseInterval::Sixth,
+        quality: Quality::Minor,
+    };
+    const MAJOR_SIXTH: Interval = Interval {
+        base_interval: BaseInterval::Sixth,
+        quality: Quality::Major,
+    };
+    const MINOR_SEVENTH: Interval = Interval {
+        base_interval: BaseInterval::Seventh,
+        quality: Quality::Minor,
+    };
+    const MAJOR_SEVENTH: Interval = Interval {
+        base_interval: BaseInterval::Seventh,
+        quality: Quality::Major,
+    };
 
+    // Notes
+    const C: Note = Note {
+        name: NoteName::C,
+        alteration: Alteration::Natural,
+    };
+    const A_FLAT: Note = Note {
+        name: NoteName::A,
+        alteration: Alteration::Flat,
+    };
+    const D_FLAT: Note = Note {
+        name: NoteName::D,
+        alteration: Alteration::Flat,
+    };
+    const F_SHARP: Note = Note {
+        name: NoteName::F,
+        alteration: Alteration::Sharp,
+    };
+    const C_SHARP: Note = Note {
+        name: NoteName::C,
+        alteration: Alteration::Sharp,
+    };
+    const F_FLAT: Note = Note {
+        name: NoteName::F,
+        alteration: Alteration::Flat,
+    };
+    const B_SHARP: Note = Note {
+        name: NoteName::B,
+        alteration: Alteration::Sharp,
+    };
     #[test]
     fn test_interval_size() {
-        assert_eq!(PERFECT_UNISON.size(), 0);
+        assert_eq!(0, PERFECT_UNISON.size());
+        assert_eq!(1, MINOR_SECOND.size());
+        assert_eq!(2, MAJOR_SECOND.size());
+        assert_eq!(3, MINOR_THIRD.size());
+        assert_eq!(4, MAJOR_THIRD.size());
+        assert_eq!(5, PERFECT_FOURTH.size());
+        assert_eq!(6, AUGMENTED_FOURTH.size());
+        assert_eq!(6, DIMINISHED_FIFTH.size());
+        assert_eq!(7, PERFECT_FIFTH.size());
+        assert_eq!(8, MINOR_SIXTH.size());
+        assert_eq!(9, MAJOR_SIXTH.size());
+        assert_eq!(10, MINOR_SEVENTH.size());
+        assert_eq!(11, MAJOR_SEVENTH.size());
     }
 }
