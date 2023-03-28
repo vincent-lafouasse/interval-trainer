@@ -57,6 +57,7 @@ impl Note {
         let mut rng = thread_rng();
         let nat_bias = 2;
         let notes = [
+            // All 0 or 1 alteration notes except Cb Fb E# and B#
             (
                 Note { name: NoteName::C, alteration: Alteration::Natural },
                 nat_bias,
