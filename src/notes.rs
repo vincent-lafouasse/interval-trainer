@@ -124,29 +124,32 @@ impl Note {
     }
 
     pub fn parse_from_string(string: &str) -> Result<Note, &str> {
-        if string.len() == 0 || string.len() > 2 {
-            return Err("Note is a note name (A, B, etc) and an optional alteration (b or #)");
-        }
-        let note_name = match &string[0..1] {
-            "A" => NoteName::A,
-            "B" => NoteName::B,
-            "C" => NoteName::C,
-            "D" => NoteName::D,
-            "E" => NoteName::E,
-            "F" => NoteName::F,
-            "G" => NoteName::G,
-            _ => return Err("Invalid note name"),
+        let mut chars = string.chars();
+
+        let name = match chars.next() {
+            None => return Err("No note has been inputed"),
+            Some(note_name) => match note_name {
+                'A' => NoteName::A,
+                'B' => NoteName::B,
+                'C' => NoteName::C,
+                'D' => NoteName::D,
+                'E' => NoteName::E,
+                'F' => NoteName::F,
+                'G' => NoteName::G,
+                _ => return Err("Invalid note name"),
+            },
         };
 
-        let mut alteration = Alteration::Natural;
-        if string.len() == 2 {
-            alteration = match &string[1..2] {
-                "b" => Alteration::Flat,
-                "#" => Alteration::Sharp,
+        let alteration = match chars.next() {
+            None => return Ok(Note { name, alteration: Alteration::Natural }),
+            Some(_alteration) => match _alteration {
+                '#' => Alteration::Sharp,
+                'b' => Alteration::Flat,
                 _ => return Err("Invalid alteration"),
-            };
-        }
-        Ok(Note { name: note_name, alteration: alteration })
+            },
+        };
+
+        Ok(Note { name, alteration })
     }
 }
 
