@@ -160,40 +160,19 @@ impl Interval {
         use rand::prelude::*;
         let mut rng = thread_rng();
         let diatonic_intervals = [
-            Interval {
-                base_interval: BaseInterval::Unison,
-                quality: Quality::Perfect,
-            },
+            Interval { base_interval: BaseInterval::Unison, quality: Quality::Perfect },
             Interval { base_interval: BaseInterval::Second, quality: Quality::Major },
             Interval { base_interval: BaseInterval::Second, quality: Quality::Minor },
             Interval { base_interval: BaseInterval::Third, quality: Quality::Major },
             Interval { base_interval: BaseInterval::Third, quality: Quality::Minor },
-            Interval {
-                base_interval: BaseInterval::Fourth,
-                quality: Quality::Perfect,
-            },
-            Interval {
-                base_interval: BaseInterval::Fourth,
-                quality: Quality::Augmented,
-            },
-            Interval {
-                base_interval: BaseInterval::Fifth,
-                quality: Quality::Perfect,
-            },
-            Interval {
-                base_interval: BaseInterval::Fifth,
-                quality: Quality::Diminished,
-            },
+            Interval { base_interval: BaseInterval::Fourth, quality: Quality::Perfect },
+            Interval { base_interval: BaseInterval::Fourth, quality: Quality::Augmented },
+            Interval { base_interval: BaseInterval::Fifth, quality: Quality::Perfect },
+            Interval { base_interval: BaseInterval::Fifth, quality: Quality::Diminished },
             Interval { base_interval: BaseInterval::Sixth, quality: Quality::Major },
             Interval { base_interval: BaseInterval::Sixth, quality: Quality::Minor },
-            Interval {
-                base_interval: BaseInterval::Seventh,
-                quality: Quality::Major,
-            },
-            Interval {
-                base_interval: BaseInterval::Seventh,
-                quality: Quality::Minor,
-            },
+            Interval { base_interval: BaseInterval::Seventh, quality: Quality::Major },
+            Interval { base_interval: BaseInterval::Seventh, quality: Quality::Minor },
         ];
 
         *diatonic_intervals.choose(&mut rng).unwrap()
@@ -240,10 +219,8 @@ mod tests {
     use super::*;
 
     // Intervals
-    const PERFECT_UNISON: Interval = Interval {
-        base_interval: BaseInterval::Unison,
-        quality: Quality::Perfect,
-    };
+    const PERFECT_UNISON: Interval =
+        Interval { base_interval: BaseInterval::Unison, quality: Quality::Perfect };
     const MINOR_SECOND: Interval =
         Interval { base_interval: BaseInterval::Second, quality: Quality::Minor };
     const MAJOR_SECOND: Interval =
@@ -252,34 +229,22 @@ mod tests {
         Interval { base_interval: BaseInterval::Third, quality: Quality::Minor };
     const MAJOR_THIRD: Interval =
         Interval { base_interval: BaseInterval::Third, quality: Quality::Major };
-    const PERFECT_FOURTH: Interval = Interval {
-        base_interval: BaseInterval::Fourth,
-        quality: Quality::Perfect,
-    };
-    const AUGMENTED_FOURTH: Interval = Interval {
-        base_interval: BaseInterval::Fourth,
-        quality: Quality::Augmented,
-    };
-    const DIMINISHED_FIFTH: Interval = Interval {
-        base_interval: BaseInterval::Fifth,
-        quality: Quality::Diminished,
-    };
-    const PERFECT_FIFTH: Interval = Interval {
-        base_interval: BaseInterval::Fifth,
-        quality: Quality::Perfect,
-    };
+    const PERFECT_FOURTH: Interval =
+        Interval { base_interval: BaseInterval::Fourth, quality: Quality::Perfect };
+    const AUGMENTED_FOURTH: Interval =
+        Interval { base_interval: BaseInterval::Fourth, quality: Quality::Augmented };
+    const DIMINISHED_FIFTH: Interval =
+        Interval { base_interval: BaseInterval::Fifth, quality: Quality::Diminished };
+    const PERFECT_FIFTH: Interval =
+        Interval { base_interval: BaseInterval::Fifth, quality: Quality::Perfect };
     const MINOR_SIXTH: Interval =
         Interval { base_interval: BaseInterval::Sixth, quality: Quality::Minor };
     const MAJOR_SIXTH: Interval =
         Interval { base_interval: BaseInterval::Sixth, quality: Quality::Major };
-    const MINOR_SEVENTH: Interval = Interval {
-        base_interval: BaseInterval::Seventh,
-        quality: Quality::Minor,
-    };
-    const MAJOR_SEVENTH: Interval = Interval {
-        base_interval: BaseInterval::Seventh,
-        quality: Quality::Major,
-    };
+    const MINOR_SEVENTH: Interval =
+        Interval { base_interval: BaseInterval::Seventh, quality: Quality::Minor };
+    const MAJOR_SEVENTH: Interval =
+        Interval { base_interval: BaseInterval::Seventh, quality: Quality::Major };
 
     // Notes
     const C: Note = Note { name: NoteName::C, alteration: Alteration::Natural };
@@ -322,32 +287,20 @@ mod tests {
     fn test_interval_between_intense_intervals() {
         assert_eq!(
             Interval::between(C, B_SHARP),
-            Interval {
-                base_interval: BaseInterval::Seventh,
-                quality: Quality::Augmented
-            }
+            Interval { base_interval: BaseInterval::Seventh, quality: Quality::Augmented }
         );
         assert_eq!(
             Interval::between(B_SHARP, C),
-            Interval {
-                base_interval: BaseInterval::Second,
-                quality: Quality::Diminished
-            }
+            Interval { base_interval: BaseInterval::Second, quality: Quality::Diminished }
         );
 
         assert_eq!(
             Interval::between(C_SHARP, C),
-            Interval {
-                base_interval: BaseInterval::Unison,
-                quality: Quality::Diminished
-            }
+            Interval { base_interval: BaseInterval::Unison, quality: Quality::Diminished }
         );
         assert_eq!(
             Interval::between(C, C_SHARP),
-            Interval {
-                base_interval: BaseInterval::Unison,
-                quality: Quality::Augmented
-            }
+            Interval { base_interval: BaseInterval::Unison, quality: Quality::Augmented }
         );
 
         // B# -> Fb is a triply diminished fifth (eq to major third), implem of bbb intervals todo
