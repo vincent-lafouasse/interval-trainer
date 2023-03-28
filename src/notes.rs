@@ -1,18 +1,20 @@
+use int_enum::IntEnum;
 use std::fmt;
 use std::io;
 
-pub const CHROMATIC_NOTES_PER_OCTAVE: isize = 12;
-pub const DIATONIC_NOTES_PER_OCTAVE: isize = 7;
+pub const CHROMATIC_NOTES_PER_OCTAVE: usize = 12;
+pub const DIATONIC_NOTES_PER_OCTAVE: usize = 7;
 
-#[derive(Copy, Clone, Debug, PartialEq)]
+#[derive(Copy, Clone, Debug, PartialEq, IntEnum)]
+#[repr(usize)]
 pub enum NoteName {
-    C,
-    D,
-    E,
-    F,
-    G,
-    A,
-    B,
+    C = 0,
+    D = 1,
+    E = 2,
+    F = 3,
+    G = 4,
+    A = 5,
+    B = 6,
 }
 
 #[derive(Copy, Clone, Debug, PartialEq)]
@@ -118,7 +120,7 @@ impl Note {
             Alteration::Sharp => 1,
         };
 
-        (base_distance + increment).rem_euclid(CHROMATIC_NOTES_PER_OCTAVE)
+        (base_distance + increment).rem_euclid(CHROMATIC_NOTES_PER_OCTAVE as isize)
     }
 
     pub fn parse_from_string(string: &str) -> Result<Note, &str> {
@@ -149,33 +151,14 @@ impl Note {
 }
 
 impl NoteName {
-    pub fn next(&self) -> NoteName {
-        match &self {
-            NoteName::A => NoteName::B,
-            NoteName::B => NoteName::C,
-            NoteName::C => NoteName::D,
-            NoteName::D => NoteName::E,
-            NoteName::E => NoteName::F,
-            NoteName::F => NoteName::G,
-            NoteName::G => NoteName::A,
-        }
-    }
-
-    pub fn previous(&self) -> NoteName {
-        match &self {
-            NoteName::A => NoteName::G,
-            NoteName::B => NoteName::A,
-            NoteName::C => NoteName::B,
-            NoteName::D => NoteName::C,
-            NoteName::E => NoteName::D,
-            NoteName::F => NoteName::E,
-            NoteName::G => NoteName::F,
-        }
+    pub fn next(&self) -> Self {
+        let new_int_value = (self.int_value() + 1).rem_euclid(DIATONIC_NOTES_PER_OCTAVE);
+        NoteName::from_int(new_int_value).expect("couldn't make new NoteName from int")
     }
 
     pub fn shift(note_name: NoteName, distance: isize) -> NoteName {
         let mut new_note = note_name;
-        let actual_distance = distance.rem_euclid(DIATONIC_NOTES_PER_OCTAVE);
+        let actual_distance = distance.rem_euclid(DIATONIC_NOTES_PER_OCTAVE as isize);
         for _ in 0..actual_distance {
             new_note = new_note.next();
         }
