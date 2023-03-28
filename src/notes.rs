@@ -1,4 +1,3 @@
-use rand::Rng;
 use std::fmt;
 use std::io;
 
@@ -54,27 +53,51 @@ impl Note {
     }
 
     pub fn get_random() -> Note {
-        let rn_note_name = rand::thread_rng().gen_range(0..DIATONIC_NOTES_PER_OCTAVE);
-        let note_name = match rn_note_name {
-            0 => NoteName::A,
-            1 => NoteName::B,
-            2 => NoteName::C,
-            3 => NoteName::D,
-            4 => NoteName::E,
-            5 => NoteName::F,
-            6 => NoteName::G,
-            _ => panic!(""),
-        };
+        use rand::prelude::*;
+        let mut rng = thread_rng();
+        let nat_bias = 2;
+        let notes = [
+            (
+                Note { name: NoteName::C, alteration: Alteration::Natural },
+                nat_bias,
+            ),
+            (
+                Note { name: NoteName::D, alteration: Alteration::Natural },
+                nat_bias,
+            ),
+            (
+                Note { name: NoteName::E, alteration: Alteration::Natural },
+                nat_bias,
+            ),
+            (
+                Note { name: NoteName::F, alteration: Alteration::Natural },
+                nat_bias,
+            ),
+            (
+                Note { name: NoteName::G, alteration: Alteration::Natural },
+                nat_bias,
+            ),
+            (
+                Note { name: NoteName::A, alteration: Alteration::Natural },
+                nat_bias,
+            ),
+            (
+                Note { name: NoteName::B, alteration: Alteration::Natural },
+                nat_bias,
+            ),
+            (Note { name: NoteName::D, alteration: Alteration::Flat }, 1),
+            (Note { name: NoteName::E, alteration: Alteration::Flat }, 1),
+            (Note { name: NoteName::G, alteration: Alteration::Flat }, 1),
+            (Note { name: NoteName::A, alteration: Alteration::Flat }, 1),
+            (Note { name: NoteName::B, alteration: Alteration::Flat }, 1),
+            (Note { name: NoteName::C, alteration: Alteration::Sharp }, 1),
+            (Note { name: NoteName::D, alteration: Alteration::Sharp }, 1),
+            (Note { name: NoteName::F, alteration: Alteration::Sharp }, 1),
+            (Note { name: NoteName::G, alteration: Alteration::Sharp }, 1),
+            (Note { name: NoteName::A, alteration: Alteration::Sharp }, 1),
+        ];
 
-        let rn_alteration = rand::thread_rng().gen_range(0..3);
-        let alteration = match rn_alteration {
-            0 => Alteration::Natural,
-            1 => Alteration::Flat,
-            2 => Alteration::Sharp,
-            _ => panic!(""),
-        };
-
-        Note { name: note_name, alteration: alteration }
+        notes.choose_weighted(&mut rng, |item| item.1).unwrap().0
     }
 
     pub fn distance_from_c(&self) -> isize {
