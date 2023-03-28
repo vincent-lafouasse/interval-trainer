@@ -167,7 +167,7 @@ impl Interval {
     }
 
     pub fn get_random_diatonic() -> Interval {
-        let rn_base_interval = rand::thread_rng().gen_range(1, 8);
+        let rn_base_interval = rand::thread_rng().gen_range(1..8);
         let base_interval = match rn_base_interval {
             1 => BaseInterval::Unison,
             2 => BaseInterval::Second,
@@ -179,7 +179,7 @@ impl Interval {
             _ => panic!(""),
         };
 
-        let rn_alteration = rand::thread_rng().gen_range(0, 2);
+        let rn_alteration = rand::thread_rng().gen_range(0..2);
         let quality = match base_interval {
             BaseInterval::Unison => Quality::Perfect,
             BaseInterval::Second => match rn_alteration {
