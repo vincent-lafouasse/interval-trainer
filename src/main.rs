@@ -27,7 +27,7 @@ fn main() -> Result<()> {
 fn quiz() {
     println!("-----------------------------------------------------------");
     let random_interval = Interval::get_random_diatonic();
-    let random_start_note = Note::get_random();
+    let random_start_note = Note::get_random_biased();
 
     println!(
         "What note is a {} above {}?",
@@ -65,8 +65,8 @@ fn debug() {
     let up_from_c: Note = random_interval.note_up_from(c);
     println!("{} is a {} up from C\n", up_from_c, random_interval);
 
-    let note1 = Note::get_random();
-    let note2 = Note::get_random();
+    let note1 = Note::get_random_biased();
+    let note2 = Note::get_random_biased();
     println!("Here are two random notes: {} and {}", note1, note2);
     println!("Between them is a {}", Interval::between(note1, note2));
 }

@@ -54,7 +54,7 @@ impl Note {
         note
     }
 
-    pub fn get_random() -> Note {
+    pub fn get_random_biased() -> Note {
         use rand::prelude::*;
         let mut rng = thread_rng();
         let nat_bias = 2;
