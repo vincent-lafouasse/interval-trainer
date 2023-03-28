@@ -1,4 +1,3 @@
-use rand::Rng;
 use std::fmt;
 
 use crate::notes::{Alteration, Note, NoteName};
@@ -158,50 +157,46 @@ impl Interval {
     }
 
     pub fn get_random_diatonic() -> Interval {
-        let rn_base_interval = rand::thread_rng().gen_range(1..8);
-        let base_interval = match rn_base_interval {
-            1 => BaseInterval::Unison,
-            2 => BaseInterval::Second,
-            3 => BaseInterval::Third,
-            4 => BaseInterval::Fourth,
-            5 => BaseInterval::Fifth,
-            6 => BaseInterval::Sixth,
-            7 => BaseInterval::Seventh,
-            _ => panic!(""),
-        };
+        use rand::prelude::*;
+        let mut rng = thread_rng();
+        let diatonic_intervals = [
+            Interval {
+                base_interval: BaseInterval::Unison,
+                quality: Quality::Perfect,
+            },
+            Interval { base_interval: BaseInterval::Second, quality: Quality::Major },
+            Interval { base_interval: BaseInterval::Second, quality: Quality::Minor },
+            Interval { base_interval: BaseInterval::Third, quality: Quality::Major },
+            Interval { base_interval: BaseInterval::Third, quality: Quality::Minor },
+            Interval {
+                base_interval: BaseInterval::Fourth,
+                quality: Quality::Perfect,
+            },
+            Interval {
+                base_interval: BaseInterval::Fourth,
+                quality: Quality::Augmented,
+            },
+            Interval {
+                base_interval: BaseInterval::Fifth,
+                quality: Quality::Perfect,
+            },
+            Interval {
+                base_interval: BaseInterval::Fifth,
+                quality: Quality::Diminished,
+            },
+            Interval { base_interval: BaseInterval::Sixth, quality: Quality::Major },
+            Interval { base_interval: BaseInterval::Sixth, quality: Quality::Minor },
+            Interval {
+                base_interval: BaseInterval::Seventh,
+                quality: Quality::Major,
+            },
+            Interval {
+                base_interval: BaseInterval::Seventh,
+                quality: Quality::Minor,
+            },
+        ];
 
-        let rn_alteration = rand::thread_rng().gen_range(0..2);
-        let quality = match base_interval {
-            BaseInterval::Unison => Quality::Perfect,
-            BaseInterval::Second => match rn_alteration {
-                0 => Quality::Major,
-                1 => Quality::Minor,
-                _ => panic!(""),
-            },
-            BaseInterval::Third => match rn_alteration {
-                0 => Quality::Major,
-                1 => Quality::Minor,
-                _ => panic!(""),
-            },
-            BaseInterval::Fourth => match rn_alteration {
-                0 => Quality::Perfect,
-                1 => Quality::Augmented,
-                _ => panic!(""),
-            },
-            BaseInterval::Fifth => Quality::Perfect,
-            BaseInterval::Sixth => match rn_alteration {
-                0 => Quality::Major,
-                1 => Quality::Minor,
-                _ => panic!(""),
-            },
-            BaseInterval::Seventh => match rn_alteration {
-                0 => Quality::Major,
-                1 => Quality::Minor,
-                _ => panic!(""),
-            },
-        };
-
-        Interval { base_interval: base_interval, quality: quality }
+        *diatonic_intervals.choose(&mut rng).unwrap()
     }
 }
 
