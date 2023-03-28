@@ -60,10 +60,7 @@ fn debug() {
     println!("Here's a random interval :\n\t{}", random_interval);
     println!("Its size is {} semitones\n", random_interval.size());
 
-    let c = Note {
-        name: NoteName::C,
-        alteration: Alteration::Natural,
-    };
+    let c = Note { name: NoteName::C, alteration: Alteration::Natural };
 
     let up_from_c: Note = random_interval.note_up_from(c);
     println!("{} is a {} up from C\n", up_from_c, random_interval);

@@ -74,10 +74,7 @@ impl Note {
             _ => panic!(""),
         };
 
-        Note {
-            name: note_name,
-            alteration: alteration,
-        }
+        Note { name: note_name, alteration: alteration }
     }
 
     pub fn distance_from_c(&self) -> isize {
@@ -123,10 +120,7 @@ impl Note {
                 _ => return Err("Invalid alteration"),
             };
         }
-        Ok(Note {
-            name: note_name,
-            alteration: alteration,
-        })
+        Ok(Note { name: note_name, alteration: alteration })
     }
 }
 
@@ -201,34 +195,13 @@ impl fmt::Display for Alteration {
 mod tests {
     use super::*;
 
-    const C: Note = Note {
-        name: NoteName::C,
-        alteration: Alteration::Natural,
-    };
-    const A_FLAT: Note = Note {
-        name: NoteName::A,
-        alteration: Alteration::Flat,
-    };
-    const D_FLAT: Note = Note {
-        name: NoteName::D,
-        alteration: Alteration::Flat,
-    };
-    const F_SHARP: Note = Note {
-        name: NoteName::F,
-        alteration: Alteration::Sharp,
-    };
-    const C_SHARP: Note = Note {
-        name: NoteName::C,
-        alteration: Alteration::Sharp,
-    };
-    const F_FLAT: Note = Note {
-        name: NoteName::F,
-        alteration: Alteration::Flat,
-    };
-    const B_SHARP: Note = Note {
-        name: NoteName::B,
-        alteration: Alteration::Sharp,
-    };
+    const C: Note = Note { name: NoteName::C, alteration: Alteration::Natural };
+    const A_FLAT: Note = Note { name: NoteName::A, alteration: Alteration::Flat };
+    const D_FLAT: Note = Note { name: NoteName::D, alteration: Alteration::Flat };
+    const F_SHARP: Note = Note { name: NoteName::F, alteration: Alteration::Sharp };
+    const C_SHARP: Note = Note { name: NoteName::C, alteration: Alteration::Sharp };
+    const F_FLAT: Note = Note { name: NoteName::F, alteration: Alteration::Flat };
+    const B_SHARP: Note = Note { name: NoteName::B, alteration: Alteration::Sharp };
 
     #[test]
     fn test_distance_from_c() {
@@ -278,50 +251,35 @@ mod tests {
         assert!(b_flat.is_ok());
         assert_eq!(
             b_flat.unwrap(),
-            Note {
-                name: NoteName::B,
-                alteration: Alteration::Flat
-            }
+            Note { name: NoteName::B, alteration: Alteration::Flat }
         );
 
         let a_sharp = Note::parse_from_string("A#");
         assert!(a_sharp.is_ok());
         assert_eq!(
             a_sharp.unwrap(),
-            Note {
-                name: NoteName::A,
-                alteration: Alteration::Sharp
-            }
+            Note { name: NoteName::A, alteration: Alteration::Sharp }
         );
 
         let g_sharp = Note::parse_from_string("G#");
         assert!(g_sharp.is_ok());
         assert_eq!(
             g_sharp.unwrap(),
-            Note {
-                name: NoteName::G,
-                alteration: Alteration::Sharp
-            }
+            Note { name: NoteName::G, alteration: Alteration::Sharp }
         );
 
         let c_flat = Note::parse_from_string("Cb");
         assert!(c_flat.is_ok());
         assert_eq!(
             c_flat.unwrap(),
-            Note {
-                name: NoteName::C,
-                alteration: Alteration::Flat
-            }
+            Note { name: NoteName::C, alteration: Alteration::Flat }
         );
 
         let d_natural = Note::parse_from_string("D");
         assert!(d_natural.is_ok());
         assert_eq!(
             d_natural.unwrap(),
-            Note {
-                name: NoteName::D,
-                alteration: Alteration::Natural
-            }
+            Note { name: NoteName::D, alteration: Alteration::Natural }
         );
     }
 

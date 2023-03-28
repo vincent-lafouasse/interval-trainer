@@ -58,10 +58,7 @@ impl Interval {
         };
 
         let note_name: NoteName = NoteName::shift(start.name, note_name_distance);
-        let natural_note: Note = Note {
-            name: note_name,
-            alteration: Alteration::Natural,
-        };
+        let natural_note: Note = Note { name: note_name, alteration: Alteration::Natural };
         let rough_distance =
             (natural_note.distance_from_c() - start.distance_from_c()).rem_euclid(12);
 
@@ -71,10 +68,7 @@ impl Interval {
             -1 => Alteration::Flat,
             _ => panic!("Can only handle 1 alteration for the moment"),
         };
-        Note {
-            name: note_name,
-            alteration: alteration,
-        }
+        Note { name: note_name, alteration: alteration }
     }
 
     pub fn between(start: Note, end: Note) -> Interval {
@@ -128,10 +122,7 @@ impl Interval {
             }
         };
 
-        Interval {
-            base_interval: base_interval,
-            quality: quality,
-        }
+        Interval { base_interval: base_interval, quality: quality }
     }
 
     pub fn size(&self) -> isize {
@@ -210,10 +201,7 @@ impl Interval {
             },
         };
 
-        Interval {
-            base_interval: base_interval,
-            quality: quality,
-        }
+        Interval { base_interval: base_interval, quality: quality }
     }
 }
 
@@ -261,22 +249,14 @@ mod tests {
         base_interval: BaseInterval::Unison,
         quality: Quality::Perfect,
     };
-    const MINOR_SECOND: Interval = Interval {
-        base_interval: BaseInterval::Second,
-        quality: Quality::Minor,
-    };
-    const MAJOR_SECOND: Interval = Interval {
-        base_interval: BaseInterval::Second,
-        quality: Quality::Major,
-    };
-    const MINOR_THIRD: Interval = Interval {
-        base_interval: BaseInterval::Third,
-        quality: Quality::Minor,
-    };
-    const MAJOR_THIRD: Interval = Interval {
-        base_interval: BaseInterval::Third,
-        quality: Quality::Major,
-    };
+    const MINOR_SECOND: Interval =
+        Interval { base_interval: BaseInterval::Second, quality: Quality::Minor };
+    const MAJOR_SECOND: Interval =
+        Interval { base_interval: BaseInterval::Second, quality: Quality::Major };
+    const MINOR_THIRD: Interval =
+        Interval { base_interval: BaseInterval::Third, quality: Quality::Minor };
+    const MAJOR_THIRD: Interval =
+        Interval { base_interval: BaseInterval::Third, quality: Quality::Major };
     const PERFECT_FOURTH: Interval = Interval {
         base_interval: BaseInterval::Fourth,
         quality: Quality::Perfect,
@@ -293,14 +273,10 @@ mod tests {
         base_interval: BaseInterval::Fifth,
         quality: Quality::Perfect,
     };
-    const MINOR_SIXTH: Interval = Interval {
-        base_interval: BaseInterval::Sixth,
-        quality: Quality::Minor,
-    };
-    const MAJOR_SIXTH: Interval = Interval {
-        base_interval: BaseInterval::Sixth,
-        quality: Quality::Major,
-    };
+    const MINOR_SIXTH: Interval =
+        Interval { base_interval: BaseInterval::Sixth, quality: Quality::Minor };
+    const MAJOR_SIXTH: Interval =
+        Interval { base_interval: BaseInterval::Sixth, quality: Quality::Major };
     const MINOR_SEVENTH: Interval = Interval {
         base_interval: BaseInterval::Seventh,
         quality: Quality::Minor,
@@ -311,34 +287,13 @@ mod tests {
     };
 
     // Notes
-    const C: Note = Note {
-        name: NoteName::C,
-        alteration: Alteration::Natural,
-    };
-    const A_FLAT: Note = Note {
-        name: NoteName::A,
-        alteration: Alteration::Flat,
-    };
-    const D_FLAT: Note = Note {
-        name: NoteName::D,
-        alteration: Alteration::Flat,
-    };
-    const F_SHARP: Note = Note {
-        name: NoteName::F,
-        alteration: Alteration::Sharp,
-    };
-    const C_SHARP: Note = Note {
-        name: NoteName::C,
-        alteration: Alteration::Sharp,
-    };
-    const F_FLAT: Note = Note {
-        name: NoteName::F,
-        alteration: Alteration::Flat,
-    };
-    const B_SHARP: Note = Note {
-        name: NoteName::B,
-        alteration: Alteration::Sharp,
-    };
+    const C: Note = Note { name: NoteName::C, alteration: Alteration::Natural };
+    const A_FLAT: Note = Note { name: NoteName::A, alteration: Alteration::Flat };
+    const D_FLAT: Note = Note { name: NoteName::D, alteration: Alteration::Flat };
+    const F_SHARP: Note = Note { name: NoteName::F, alteration: Alteration::Sharp };
+    const C_SHARP: Note = Note { name: NoteName::C, alteration: Alteration::Sharp };
+    const F_FLAT: Note = Note { name: NoteName::F, alteration: Alteration::Flat };
+    const B_SHARP: Note = Note { name: NoteName::B, alteration: Alteration::Sharp };
     #[test]
     fn test_interval_size() {
         assert_eq!(0, PERFECT_UNISON.size());
