@@ -2,8 +2,8 @@ use rand::Rng;
 use std::fmt;
 use std::io;
 
-pub const CHROMATIC_NOTES_PER_OCTAVE: i8 = 12;
-pub const DIATONIC_NOTES_PER_OCTAVE: i8 = 7;
+pub const CHROMATIC_NOTES_PER_OCTAVE: isize = 12;
+pub const DIATONIC_NOTES_PER_OCTAVE: isize = 7;
 
 #[derive(Copy, Clone, Debug, PartialEq)]
 pub enum NoteName {
@@ -80,8 +80,8 @@ impl Note {
         }
     }
 
-    pub fn distance_from_c(&self) -> i8 {
-        let base_distance: i8 = match self.name {
+    pub fn distance_from_c(&self) -> isize {
+        let base_distance: isize = match self.name {
             NoteName::C => 0,
             NoteName::D => 2,
             NoteName::E => 4,
@@ -91,7 +91,7 @@ impl Note {
             NoteName::B => 11,
         };
 
-        let increment: i8 = match self.alteration {
+        let increment: isize = match self.alteration {
             Alteration::Natural => 0,
             Alteration::Flat => -1,
             Alteration::Sharp => 1,
@@ -155,7 +155,7 @@ impl NoteName {
         }
     }
 
-    pub fn shift(note_name: NoteName, distance: i8) -> NoteName {
+    pub fn shift(note_name: NoteName, distance: isize) -> NoteName {
         let mut new_note = note_name;
         let actual_distance = distance.rem_euclid(DIATONIC_NOTES_PER_OCTAVE);
         for _ in 0..actual_distance {

@@ -15,7 +15,7 @@ pub enum BaseInterval {
 }
 
 impl BaseInterval {
-    pub fn size(&self) -> i8 {
+    pub fn size(&self) -> isize {
         match &self {
             BaseInterval::Unison => 0,
             BaseInterval::Second => 2,
@@ -134,7 +134,7 @@ impl Interval {
         }
     }
 
-    pub fn size(&self) -> i8 {
+    pub fn size(&self) -> isize {
         let distance = self.base_interval.size();
         let increment = {
             if self.base_interval == BaseInterval::Second
