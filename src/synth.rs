@@ -14,6 +14,14 @@ impl Oscillator {
         self.index_increment = frequency * (self.wavetable.len() as f32) / self.sample_rate;
     }
 
+    pub fn get_sample(&mut self) -> f32 {
+        let sample = self.linear_interpolation();
+        self.index += self.index_increment;
+        self.index %= self.wavetable.len() as f32;
+
+        sample
+    }
+
     fn linear_interpolation(&self) -> f32 {
         let truncated_index = self.index as usize;
         let next_index = (truncated_index + 1) % self.wavetable.len();
