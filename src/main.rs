@@ -6,6 +6,9 @@ mod notes;
 mod synth;
 
 use color_eyre::eyre::Result;
+use core::time::Duration;
+use rodio::source::Source;
+use rodio::OutputStream;
 
 use crate::intervals::{BaseInterval, Interval, Quality};
 use crate::notes::{Alteration, Note, NoteName, CHROMATIC_NOTES_PER_OCTAVE};
@@ -27,14 +30,15 @@ fn main() -> Result<()> {
     }
 
     if synth {
-        let sample_size: usize = 10;
-        let wavetable_type = WavetableType::Square;
-        let square_wave: Wavetable = Wavetable::new(sample_size, wavetable_type);
-        println!("{:?}", square_wave.plot);
-        let sine_wave = Wavetable::new(sample_size, WavetableType::Sine);
-        println!("{:?}", sine_wave.plot);
-        let mut sine_oscillator = Oscillator::new(44000, sine_wave);
+        let sample_size: usize = 64;
+        let wavetable = Wavetable::new(sample_size, WavetableType::Sine);
+
+        let mut sine_oscillator = Oscillator::new(44000, wavetable);
         sine_oscillator.set_frequency(420.0);
+
+        let (_stream, stream_handle) = OutputStream::try_default().unwrap();
+        let _result = stream_handle.play_raw(sine_oscillator.convert_samples());
+        std::thread::sleep(std::time::Duration::from_secs(5))
     }
 
     Ok(())
