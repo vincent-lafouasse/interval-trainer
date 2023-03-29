@@ -33,7 +33,7 @@ fn main() -> Result<()> {
         println!("{:?}", square_wave.plot);
         let sine_wave = Wavetable::new(sample_size, WavetableType::Sine);
         println!("{:?}", sine_wave.plot);
-        let mut sine_oscillator = Oscillator::new(44000.0, sine_wave);
+        let mut sine_oscillator = Oscillator::new(44000, sine_wave);
         sine_oscillator.set_frequency(420.0);
     }
 
