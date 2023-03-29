@@ -71,14 +71,10 @@ impl Interval {
     }
 
     pub fn between(start: Note, end: Note) -> Interval {
-        let diatonic_notes_up_from_start: Vec<NoteName> =
-            (0..7).map(|i| NoteName::shift(start.name, i)).collect();
-        let interval_index: usize = diatonic_notes_up_from_start
-            .iter()
-            .enumerate()
-            .filter(|(_, &note_name)| note_name == end.name)
-            .map(|(index, _)| index)
-            .collect::<Vec<_>>()[0];
+        let mut interval_index = 0;
+        while NoteName::shift(start.name, interval_index) != end.name {
+            interval_index += 1;
+        }
         let base_interval = match interval_index {
             0 => BaseInterval::Unison,
             1 => BaseInterval::Second,
@@ -92,7 +88,7 @@ impl Interval {
 
         let interval_size = (end.distance_from_c() - start.distance_from_c()).rem_euclid(12);
         let base_size = base_interval.size();
-        let distance_from_diatonic = interval_size - base_size;
+        let distance_from_diatonic = (interval_size - base_size).rem_euclid(12);
 
         let quality = {
             if base_interval == BaseInterval::Second
@@ -104,9 +100,9 @@ impl Interval {
                     2 => Quality::DoublyAugmented,
                     1 => Quality::Augmented,
                     0 => Quality::Major,
-                    -1 => Quality::Minor,
-                    -2 => Quality::Diminished,
-                    -3 => Quality::DoublyDiminished,
+                    11 => Quality::Minor,
+                    10 => Quality::Diminished,
+                    19 => Quality::DoublyDiminished,
                     _ => panic!("Interval too diminished or augmented to handle for now"),
                 }
             } else {
@@ -114,8 +110,8 @@ impl Interval {
                     2 => Quality::DoublyAugmented,
                     1 => Quality::Augmented,
                     0 => Quality::Perfect,
-                    -1 => Quality::Diminished,
-                    -2 => Quality::DoublyDiminished,
+                    11 => Quality::Diminished,
+                    10 => Quality::DoublyDiminished,
                     _ => panic!("Interval too diminished or augmented to handle for now"),
                 }
             }
@@ -283,7 +279,7 @@ mod tests {
         assert_eq!(Interval::between(D_FLAT, A_FLAT), PERFECT_FIFTH);
     }
 
-    // #[test]
+    #[test]
     fn test_interval_between_intense_intervals() {
         assert_eq!(
             Interval::between(C, B_SHARP),
