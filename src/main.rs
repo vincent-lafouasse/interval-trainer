@@ -27,9 +27,12 @@ fn main() -> Result<()> {
     }
 
     if synth {
-        let sample_size: usize = 64;
-        let wavetable_type = WavetableType::Sin;
-        let _sine_wave: Wavetable = Wavetable::new(sample_size, wavetable_type);
+        let sample_size: usize = 10;
+        let wavetable_type = WavetableType::Square;
+        let square_wave: Wavetable = Wavetable::new(sample_size, wavetable_type);
+        println!("{:?}", square_wave.plot);
+        let sine_wave = Wavetable::new(sample_size, WavetableType::Sine);
+        println!("{:?}", sine_wave.plot);
     }
 
     Ok(())

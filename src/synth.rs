@@ -3,16 +3,23 @@ pub struct Wavetable {
 }
 
 pub enum WavetableType {
-    Sin,
+    Sine,
+    Square,
 }
 
 impl Wavetable {
     pub fn new(size: usize, wavetable_type: WavetableType) -> Self {
         use std::f32::consts::PI;
         let plot: Vec<f32> = match wavetable_type {
-            WavetableType::Sin => (0..size)
+            WavetableType::Sine => (0..size)
                 .map(|n| 2.0 * (n as f32) * PI / (size as f32))
                 .map(|n| n.sin())
+                .collect(),
+            WavetableType::Square => (0..size)
+                .map(|n| match 2 * n >= size {
+                    true => 1.,
+                    false => -1.,
+                })
                 .collect(),
         };
         Wavetable { plot }
