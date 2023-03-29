@@ -1,4 +1,3 @@
-use color_eyre::eyre::{eyre, Result};
 use int_enum::IntEnum;
 use std::fmt;
 use std::io;
@@ -124,11 +123,11 @@ impl Note {
         (base_distance + increment).rem_euclid(CHROMATIC_NOTES_PER_OCTAVE as isize)
     }
 
-    pub fn parse_from_string(string: &str) -> Result<Note> {
+    pub fn parse_from_string(string: &str) -> Result<Note, &str> {
         let mut chars = string.chars();
 
         let name = match chars.next() {
-            None => return Err(eyre!("No note has been inputed")),
+            None => return Err("No note has been inputed"),
             Some(note_name) => match note_name {
                 'A' => NoteName::A,
                 'B' => NoteName::B,
@@ -137,7 +136,7 @@ impl Note {
                 'E' => NoteName::E,
                 'F' => NoteName::F,
                 'G' => NoteName::G,
-                _ => return Err(eyre!("Invalid note name")),
+                _ => return Err("Invalid note name"),
             },
         };
 
@@ -146,7 +145,7 @@ impl Note {
             Some(_alteration) => match _alteration {
                 '#' => Alteration::Sharp,
                 'b' => Alteration::Flat,
-                _ => return Err(eyre!("Invalid alteration")),
+                _ => return Err("Invalid alteration"),
             },
         };
 
@@ -296,12 +295,9 @@ mod tests {
 
     #[test]
     fn test_parse_note_from_str_err() {
-        let invalid_length = Note::parse_from_string("420");
+        let invalid_length = Note::parse_from_string("");
         match invalid_length {
-            Err(msg) => assert_eq!(
-                msg,
-                "Note is a note name (A, B, etc) and an optional alteration (b or #)"
-            ),
+            Err(msg) => assert_eq!(msg, "No note has been inputed"),
             Ok(_) => panic!("Poorly written tests"),
         }
 
