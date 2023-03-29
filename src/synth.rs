@@ -33,6 +33,14 @@ impl Oscillator {
     }
 }
 
+impl Iterator for Oscillator {
+    type Item = f32;
+
+    fn next(&mut self) -> Option<Self::Item> {
+        Some(self.get_sample())
+    }
+}
+
 pub struct Wavetable {
     pub plot: Vec<f32>,
 }
