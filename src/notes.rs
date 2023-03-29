@@ -152,8 +152,10 @@ impl Note {
                 _ => return Err("Invalid alteration"),
             },
         };
-
-        Ok(Note { name, alteration })
+        match chars.next() {
+            None => Ok(Note { name, alteration }),
+            Some(_) => Err("can only parse one alteration (for now)"),
+        }
     }
 }
 
