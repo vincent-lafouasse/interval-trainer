@@ -3,24 +3,33 @@
 
 mod intervals;
 mod notes;
+mod synth;
 
 use color_eyre::eyre::Result;
 
 use crate::intervals::{BaseInterval, Interval, Quality};
 use crate::notes::{Alteration, Note, NoteName, CHROMATIC_NOTES_PER_OCTAVE};
+use crate::synth::Wavetable;
 
 fn main() -> Result<()> {
     color_eyre::install()?;
 
-    let debugging = true;
+    let quizing = false;
+    let debugging = false;
+    let synth = true;
+
     if debugging {
         debug();
     }
 
-    let quizing = true;
     if quizing {
         quiz();
     }
+
+    if synth {
+        let _sine_wave: Wavetable = Wavetable::new(64);
+    }
+
     Ok(())
 }
 
