@@ -22,6 +22,8 @@ pub enum Alteration {
     Natural,
     Flat,
     Sharp,
+    DoubleFlat,
+    DoubleSharp,
 }
 
 #[derive(Copy, Clone, Debug, PartialEq)]
@@ -118,6 +120,8 @@ impl Note {
             Alteration::Natural => 0,
             Alteration::Flat => -1,
             Alteration::Sharp => 1,
+            Alteration::DoubleFlat => -2,
+            Alteration::DoubleSharp => 2,
         };
 
         (base_distance + increment).rem_euclid(CHROMATIC_NOTES_PER_OCTAVE as isize)
@@ -196,6 +200,8 @@ impl fmt::Display for Alteration {
             Alteration::Natural => "",
             Alteration::Flat => "b",
             Alteration::Sharp => "#",
+            Alteration::DoubleFlat => "bb",
+            Alteration::DoubleSharp => "##",
         };
         write!(f, "{}", repr)
     }
