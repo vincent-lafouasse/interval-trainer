@@ -13,6 +13,16 @@ impl Oscillator {
     pub fn set_frequency(&mut self, frequency: f32) {
         self.index_increment = frequency * (self.wavetable.len() as f32) / self.sample_rate;
     }
+
+    fn linear_interpolation(&self) -> f32 {
+        let truncated_index = self.index as usize;
+        let next_index = (truncated_index + 1) % self.wavetable.len();
+        let next_index_weight = self.index - (truncated_index as f32);
+        let truncated_index_weight = 1.0 - next_index_weight;
+
+        truncated_index_weight * self.wavetable.at(truncated_index)
+            + next_index_weight * self.wavetable.at(next_index)
+    }
 }
 
 pub struct Wavetable {
@@ -40,6 +50,10 @@ impl Wavetable {
                 .collect(),
         };
         Wavetable { plot }
+    }
+
+    pub fn at(&self, index: usize) -> f32 {
+        self.plot[index]
     }
 
     pub fn len(&self) -> usize {
