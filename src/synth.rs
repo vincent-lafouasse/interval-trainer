@@ -2,12 +2,19 @@ pub struct Wavetable {
     pub plot: Vec<f32>,
 }
 
+pub enum WavetableType {
+    Sin,
+}
+
 impl Wavetable {
-    pub fn new(size: usize) -> Self {
-        let mut plot: Vec<f32> = Vec::with_capacity(size);
-        for n in 0..size {
-            plot.push((2.0 * std::f32::consts::PI * (n as f32) / (size as f32)).sin());
-        }
+    pub fn new(size: usize, wavetable_type: WavetableType) -> Self {
+        use std::f32::consts::PI;
+        let plot: Vec<f32> = match wavetable_type {
+            WavetableType::Sin => (0..size)
+                .map(|n| 2.0 * (n as f32) * PI / (size as f32))
+                .map(|n| n.sin())
+                .collect(),
+        };
         Wavetable { plot }
     }
 }

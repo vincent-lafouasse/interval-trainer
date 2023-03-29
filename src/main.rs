@@ -9,7 +9,7 @@ use color_eyre::eyre::Result;
 
 use crate::intervals::{BaseInterval, Interval, Quality};
 use crate::notes::{Alteration, Note, NoteName, CHROMATIC_NOTES_PER_OCTAVE};
-use crate::synth::Wavetable;
+use crate::synth::{Wavetable, WavetableType};
 
 fn main() -> Result<()> {
     color_eyre::install()?;
@@ -27,7 +27,9 @@ fn main() -> Result<()> {
     }
 
     if synth {
-        let _sine_wave: Wavetable = Wavetable::new(64);
+        let sample_size: usize = 64;
+        let wavetable_type = WavetableType::Sin;
+        let _sine_wave: Wavetable = Wavetable::new(sample_size, wavetable_type);
     }
 
     Ok(())
