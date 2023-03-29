@@ -9,7 +9,7 @@ use color_eyre::eyre::Result;
 
 use crate::intervals::{BaseInterval, Interval, Quality};
 use crate::notes::{Alteration, Note, NoteName, CHROMATIC_NOTES_PER_OCTAVE};
-use crate::synth::{Wavetable, WavetableType};
+use crate::synth::{Oscillator, Wavetable, WavetableType};
 
 fn main() -> Result<()> {
     color_eyre::install()?;
@@ -33,6 +33,7 @@ fn main() -> Result<()> {
         println!("{:?}", square_wave.plot);
         let sine_wave = Wavetable::new(sample_size, WavetableType::Sine);
         println!("{:?}", sine_wave.plot);
+        let _sine_oscillator = Oscillator::new(44000.0, sine_wave);
     }
 
     Ok(())
