@@ -15,20 +15,20 @@ impl Oscillator {
 
     pub fn set_frequency(&mut self, frequency: f32) {
         self.index_increment =
-            frequency * (self.wavetable.len() as f32) / (self.sample_rate as f32);
+            frequency * (self.wavetable.resolution as f32) / (self.sample_rate as f32);
     }
 
     pub fn get_sample(&mut self) -> f32 {
         let sample = self.linear_interpolation();
         self.index += self.index_increment;
-        self.index %= self.wavetable.len() as f32;
+        self.index %= self.wavetable.resolution as f32;
 
         sample
     }
 
     fn linear_interpolation(&self) -> f32 {
         let truncated_index = self.index as usize;
-        let next_index = (truncated_index + 1) % self.wavetable.len();
+        let next_index = (truncated_index + 1) % self.wavetable.resolution;
         let next_index_weight = self.index - (truncated_index as f32);
         let truncated_index_weight = 1.0 - next_index_weight;
 
@@ -62,6 +62,7 @@ impl Source for Oscillator {
 
 pub struct Wavetable {
     pub plot: Vec<f32>,
+    pub resolution: usize,
 }
 
 pub enum WavetableType {
@@ -70,28 +71,28 @@ pub enum WavetableType {
 }
 
 impl Wavetable {
-    pub fn new(size: usize, wavetable_type: WavetableType) -> Self {
+    pub fn new(resolution: usize, wavetable_type: WavetableType) -> Self {
         use std::f32::consts::PI;
         let plot: Vec<f32> = match wavetable_type {
-            WavetableType::Sine => (0..size)
-                .map(|n| 2.0 * (n as f32) * PI / (size as f32))
+            WavetableType::Sine => (0..resolution)
+                .map(|n| 2.0 * (n as f32) * PI / (resolution as f32))
                 .map(|n| n.sin())
                 .collect(),
-            WavetableType::Square => (0..size)
-                .map(|n| match 2 * n >= size {
+            WavetableType::Square => (0..resolution)
+                .map(|n| match 2 * n >= resolution {
                     true => 1.,
                     false => -1.,
                 })
                 .collect(),
         };
-        Wavetable { plot }
+        Wavetable { plot, resolution }
     }
 
     pub fn at(&self, index: usize) -> f32 {
         self.plot[index]
     }
 
-    pub fn len(&self) -> usize {
+    pub fn resolution(&self) -> usize {
         self.plot.len()
     }
 }
