@@ -22,18 +22,17 @@ impl Oscillator {
         let sample = self.linear_interpolation();
         self.index += self.index_increment;
         self.index %= self.wavetable.resolution as f32;
-
-        sample
+        return sample;
     }
 
     fn linear_interpolation(&self) -> f32 {
-        let truncated_index = self.index as usize;
-        let next_index = (truncated_index + 1) % self.wavetable.resolution;
-        let next_index_weight = self.index - (truncated_index as f32);
-        let truncated_index_weight = 1.0 - next_index_weight;
+        let left_index = self.index as usize;
+        let right_index = (left_index + 1) % self.wavetable.resolution;
+        let right_weight = self.index - (left_index as f32);
+        let left_weight = 1.0 - right_weight;
 
-        truncated_index_weight * self.wavetable.at(truncated_index)
-            + next_index_weight * self.wavetable.at(next_index)
+        return left_weight * self.wavetable.at(left_index)
+            + right_weight * self.wavetable.at(right_index);
     }
 }
 

@@ -17,9 +17,9 @@ use crate::synth::{Oscillator, Wavetable, WavetableType};
 fn main() -> Result<()> {
     color_eyre::install()?;
 
-    let quizing = true;
+    let quizing = false;
     let debugging = false;
-    let synth = false;
+    let synth = true;
 
     if debugging {
         debug();
