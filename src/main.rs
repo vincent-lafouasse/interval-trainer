@@ -17,9 +17,9 @@ use crate::synth::{Oscillator, Wavetable, WavetableType};
 fn main() -> Result<()> {
     color_eyre::install()?;
 
-    let quizing = false;
+    let quizing = true;
     let debugging = false;
-    let synth = true;
+    let synth = false;
 
     if debugging {
         debug();
@@ -60,20 +60,22 @@ fn quiz() {
 
     let computed_end_note = random_interval.note_up_from(random_start_note);
 
-    let user_note = Note::get_from_user();
+    loop {
+        let user_note = Note::get_from_user();
 
-    if user_note == computed_end_note {
-        println!("ding ding you win");
-    } else {
-        println!("[EXTREMELY LOUD INCORRECT BUZZER]");
-        println!(
-            "{} to {} is not a {}, that is a {}\n",
-            random_start_note,
-            user_note,
-            random_interval,
-            Interval::between(random_start_note, user_note)
-        );
-        println!("The correct answer was {}", computed_end_note);
+        if user_note == computed_end_note {
+            println!("ding ding you win");
+            break;
+        } else {
+            println!("[EXTREMELY LOUD INCORRECT BUZZER]");
+            println!(
+                "{} to {} is not a {}, that is a {}\n",
+                random_start_note,
+                user_note,
+                random_interval,
+                Interval::between(random_start_note, user_note)
+            );
+        }
     }
 }
 
