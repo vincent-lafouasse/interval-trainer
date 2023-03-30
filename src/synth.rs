@@ -19,20 +19,10 @@ impl Oscillator {
     }
 
     pub fn get_sample(&mut self) -> f32 {
-        let sample = self.linear_interpolation();
+        let sample = self.wavetable.linear_interpolate(self.index);
         self.index += self.index_increment;
         self.index %= self.wavetable.resolution as f32;
         return sample;
-    }
-
-    fn linear_interpolation(&self) -> f32 {
-        let left_index = self.index as usize;
-        let right_index = (left_index + 1) % self.wavetable.resolution;
-        let right_weight = self.index - (left_index as f32);
-        let left_weight = 1.0 - right_weight;
-
-        return left_weight * self.wavetable.at(left_index)
-            + right_weight * self.wavetable.at(right_index);
     }
 }
 
@@ -87,11 +77,16 @@ impl Wavetable {
         Wavetable { plot, resolution }
     }
 
-    pub fn at(&self, index: usize) -> f32 {
-        self.plot[index]
+    fn linear_interpolate(&self, float_index: f32) -> f32 {
+        let left_index = float_index as usize;
+        let right_index = (left_index + 1) % self.resolution;
+        let right_weight = float_index - (left_index as f32);
+        let left_weight = 1.0 - right_weight;
+
+        return left_weight * self.at(left_index) + right_weight * self.at(right_index);
     }
 
-    pub fn resolution(&self) -> usize {
-        self.plot.len()
+    pub fn at(&self, index: usize) -> f32 {
+        self.plot[index]
     }
 }
