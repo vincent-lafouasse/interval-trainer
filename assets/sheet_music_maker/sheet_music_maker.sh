@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-set -o xtrace
+# set -o xtrace
 
 setup_globals() {
 	MAIN="main"
@@ -17,22 +17,66 @@ setup_globals() {
 }
 
 parse_cli_args() {
-	if [[ "$1" == "--clean" ]]; then
+	if [[ $1 == "--clean" ]]; then
 		clean
 		exit 0
 	fi
-	if [[ "$1" == "--mrproper" ]]; then
+	if [[ $1 == "--mrproper" ]]; then
 		mr_proper
 		exit 0
 	fi
 }
 
+parse_note() {
+	# convert scientific note names like A4 G2 to Lilypond style notation a' g,
+	note="$1"
+	if ! [[ ${note} =~ ^[A-G][0-8]$ ]]; then
+		echo "Error: invalid note $1" >&2
+		return 1
+	fi
+	note_name=$(printf %.1s "${note}" | tr '[:upper:]' '[:lower:]')
+	octave="${note:0-1}"
+	case "${octave}" in
+	0)
+		echo "${note_name},,,"
+		;;
+	1)
+		echo "${note_name},,"
+		;;
+	2)
+		echo "${note_name},"
+		;;
+	3)
+		echo "${note_name}"
+		;;
+	4)
+		echo "${note_name}'"
+		;;
+	5)
+		echo "${note_name}''"
+		;;
+	6)
+		echo "${note_name}'''"
+		;;
+	7)
+		echo "${note_name}''''"
+		;;
+	8)
+		echo "${note_name}'''''"
+		;;
+	*)
+		# unreacheable
+		;;
+	esac
+}
+
 fill_template() {
 	CLEF="treble"
-	NOTES="a'2"
+	SUBDIVISION='2'
+	NOTES="$1${SUBDIVISION} $2"
 	export CLEF NOTES
 
-	envsubst < "${TEMPLATE}" > "${LILY_FILE}"
+	envsubst <"${TEMPLATE}" >"${LILY_FILE}"
 }
 
 clean() {
@@ -46,9 +90,16 @@ mr_proper() {
 
 #################################################################################
 setup_globals
-parse_cli_args "$@" || { echo "Error: invalid input" >&2; return 1; }
-fill_template
-lilypond --silent --output="${TARGET_DIR}" "${LILY_FILE}"
-open "${OUTPUT_FILE}"
-clean
 
+parse_cli_args "$@" || {
+	echo "Error: invalid input" >&2
+	return 1
+}
+
+fill_template "$(parse_note C4)" "$(parse_note G5)"
+
+lilypond --silent --output="${TARGET_DIR}" "${LILY_FILE}"
+
+open "${OUTPUT_FILE}"
+
+clean
