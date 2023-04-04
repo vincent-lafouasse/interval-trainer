@@ -34,17 +34,22 @@ fn main() -> Result<()> {
         const SAMPLE_RATE: usize = 44_000;
         let (_stream, stream_handle) = OutputStream::try_default().unwrap();
 
-        let note_length = std::time::Duration::from_secs(1);
         let fundamental = 420.0;
         let volume = 0.5;
 
-        for &f in [fundamental, 1.25 * fundamental, 1.5 * fundamental].iter() {
+        let notes_to_play = vec![
+            (fundamental, 1),
+            (1.25 * fundamental, 2),
+            (1.5 * fundamental, 1),
+        ];
+
+        for (frequency, duration) in notes_to_play.iter() {
             let sink = Sink::try_new(&stream_handle)?;
             sink.set_volume(volume);
             let mut sine_oscillator = Oscillator::new(SAMPLE_RATE, SINE);
-            sine_oscillator.set_frequency(f);
+            sine_oscillator.set_frequency(*frequency);
             sink.append(sine_oscillator);
-            std::thread::sleep(note_length);
+            std::thread::sleep(std::time::Duration::from_secs(*duration));
             sink.stop();
         }
     }
