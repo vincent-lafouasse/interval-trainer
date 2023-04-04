@@ -27,6 +27,16 @@ parse_cli_args() {
 	fi
 }
 
+parse_instructions() {
+	JSON="$1"
+	CLEF="$(jq ".clef" "${JSON}" | sed 's/"//g')"
+	SUBDIVISION="$(jq ".subdivision" "${JSON}" | sed 's/"//g')"
+	NOTES="$(jq ".notes" "${JSON}" | sed 's/"//g')"
+	echo "${CLEF}"
+	echo "${SUBDIVISION}"
+	echo "${NOTES}"
+}
+
 parse_note() {
 	# convert scientific note names like A4 G2 to Lilypond style notation a' g,
 	note="$1"
@@ -95,6 +105,8 @@ parse_cli_args "$@" || {
 	echo "Error: invalid input" >&2
 	return 1
 }
+
+parse_instructions "sheet_music_instructions.json"
 
 fill_template "$(parse_note C4)" "$(parse_note G5)"
 
