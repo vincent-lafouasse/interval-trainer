@@ -8,7 +8,7 @@ mod synth;
 use color_eyre::eyre::Result;
 use core::time::Duration;
 use rodio::source::Source;
-use rodio::OutputStream;
+use rodio::{OutputStream, Sink};
 
 use crate::intervals::{BaseInterval, Interval, Quality};
 use crate::notes::{Alteration, Note, NoteName, CHROMATIC_NOTES_PER_OCTAVE};
@@ -34,20 +34,19 @@ fn main() -> Result<()> {
         const SAMPLE_RATE: usize = 44_000;
         let (_stream, stream_handle) = OutputStream::try_default().unwrap();
 
-        let mut sine_oscillator = Oscillator::new(SAMPLE_RATE, SINE);
-        let note_length = std::time::Duration::from_secs(2);
+        let note_length = std::time::Duration::from_secs(1);
+        let fundamental = 420.0;
+        let volume = 0.5;
 
-        sine_oscillator.set_frequency(420.0);
-        stream_handle.play_raw(sine_oscillator.convert_samples())?;
-        std::thread::sleep(note_length);
-
-        sine_oscillator.set_frequency(420.0 * 1.25);
-        stream_handle.play_raw(sine_oscillator.convert_samples())?;
-        std::thread::sleep(note_length);
-
-        sine_oscillator.set_frequency(420.0 * 1.5);
-        stream_handle.play_raw(sine_oscillator.convert_samples())?;
-        std::thread::sleep(note_length);
+        for &f in [fundamental, 1.25 * fundamental, 1.5 * fundamental].iter() {
+            let sink = Sink::try_new(&stream_handle)?;
+            sink.set_volume(volume);
+            let mut sine_oscillator = Oscillator::new(SAMPLE_RATE, SINE);
+            sine_oscillator.set_frequency(f);
+            sink.append(sine_oscillator);
+            std::thread::sleep(note_length);
+            sink.stop();
+        }
     }
 
     Ok(())

@@ -2,7 +2,6 @@ use core::time::Duration;
 use rodio::source::Source;
 
 /// A wavetable oscillator that can play sound via the `rodio::source::Source` trait
-#[derive(Copy, Clone)]
 pub struct Oscillator {
     sample_rate: usize,
     wavetable: Wavetable,
