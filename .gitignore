@@ -1,7 +1,8 @@
 /target
 
 # sheet music
-**/tmp.ly
 **/**.pdf
-**/**.eps
+**/**.svg
 **/**.png
+**/**.ps
+**/**.eps
