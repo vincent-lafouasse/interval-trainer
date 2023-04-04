@@ -8,8 +8,8 @@ setup_globals() {
 	AUX_DIR="aux"
 	TARGET_DIR="target"
 
-	mkdir "${AUX_DIR}"
-	mkdir "${TARGET_DIR}"
+	mkdir -p "${AUX_DIR}"
+	mkdir -p "${TARGET_DIR}"
 
 	TEMPLATE="template/template.ly"
 	LILY_FILE="${AUX_DIR}/${MAIN}.ly"
@@ -47,8 +47,9 @@ mr_proper() {
 
 #################################################################################
 setup_globals
-parse_cli_args "$@"
+parse_cli_args "$@" || { echo "Error: invalid input" >&2; return 1; }
 fill_template
-lilypond --output="${TARGET_DIR}" "${LILY_FILE}"
+lilypond --silent --output="${TARGET_DIR}" "${LILY_FILE}"
 open "${OUTPUT_FILE}"
+clean
 
