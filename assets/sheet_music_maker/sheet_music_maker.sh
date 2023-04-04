@@ -13,14 +13,25 @@ setup_globals() {
 
 	TEMPLATE="template/template.ly"
 	LILY_FILE="${AUX_DIR}/${MAIN}.ly"
-	OUTPUT="${TARGET_DIR}/${MAIN}.pdf"
+	OUTPUT_FILE="${TARGET_DIR}/${MAIN}.pdf"
+}
+
+parse_cli_args() {
+	if [[ "$1" == "--clean" ]]; then
+		clean
+		exit 0
+	fi
+	if [[ "$1" == "--mrproper" ]]; then
+		mr_proper
+		exit 0
+	fi
 }
 
 fill_template() {
-	TIME_SIG="2/4"
+	TIME_SIGNATURE="2/4"
 	CLEF="treble"
 	NOTES="c'2"
-	export TIME_SIG CLEF NOTES
+	export TIME_SIGNATURE CLEF NOTES
 
 	envsubst < "${TEMPLATE}" > "${LILY_FILE}"
 }
@@ -36,17 +47,8 @@ mr_proper() {
 
 #################################################################################
 setup_globals
-
-if [[ "$1" == "--clean" ]]; then
-	clean
-	exit 0
-fi
-if [[ "$1" == "--mrproper" ]]; then
-	mr_proper
-	exit 0
-fi
-
+parse_cli_args "$@"
 fill_template
 lilypond --output="${TARGET_DIR}" "${LILY_FILE}"
-open "${OUTPUT}"
+open "${OUTPUT_FILE}"
 

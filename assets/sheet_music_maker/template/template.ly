@@ -3,7 +3,7 @@
 #(set-default-paper-size "a9landscape")
 
 {
-\time ${TIME_SIG}
+\time ${TIME_SIGNATURE}
 \clef ${CLEF}
 \key c \major
 | ${NOTES} |
