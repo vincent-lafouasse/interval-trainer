@@ -1,6 +1,7 @@
 #![allow(unused_imports)]
 #![allow(dead_code)]
 
+mod frequencies;
 mod intervals;
 mod notes;
 mod synth;
@@ -10,6 +11,7 @@ use core::time::Duration;
 use rodio::source::Source;
 use rodio::{OutputStream, Sink};
 
+use crate::frequencies::FREQUENCIES;
 use crate::intervals::{BaseInterval, Interval, Quality};
 use crate::notes::{Alteration, Note, NoteName, CHROMATIC_NOTES_PER_OCTAVE};
 use crate::synth::{Oscillator, Wavetable};
@@ -34,13 +36,24 @@ fn main() -> Result<()> {
         const SAMPLE_RATE: usize = 44_000;
         let (_stream, stream_handle) = OutputStream::try_default().unwrap();
 
-        let fundamental = 420.0;
         let volume = 0.5;
 
+        let f_c4: f32 = FREQUENCIES[4 * 12].1;
+        let f_d4: f32 = FREQUENCIES[4 * 12 + 2].1;
+        let f_e4: f32 = FREQUENCIES[4 * 12 + 4].1;
+        let f_f4: f32 = FREQUENCIES[4 * 12 + 5].1;
+        let f_g4: f32 = FREQUENCIES[4 * 12 + 7].1;
+
+        let time_increment_ms = 300;
+
         let notes_to_play = vec![
-            (fundamental, 1),
-            (1.25 * fundamental, 2),
-            (1.5 * fundamental, 1),
+            (f_d4, 2 * time_increment_ms),
+            (f_e4, 1 * time_increment_ms),
+            (f_f4, 2 * time_increment_ms),
+            (f_g4, 1 * time_increment_ms),
+            (f_e4, 3 * time_increment_ms),
+            (f_c4, 2 * time_increment_ms),
+            (f_d4, 4 * time_increment_ms),
         ];
 
         for (frequency, duration) in notes_to_play.iter() {
@@ -49,7 +62,7 @@ fn main() -> Result<()> {
             let mut sine_oscillator = Oscillator::new(SAMPLE_RATE, SINE);
             sine_oscillator.set_frequency(*frequency);
             sink.append(sine_oscillator);
-            std::thread::sleep(std::time::Duration::from_secs(*duration));
+            std::thread::sleep(std::time::Duration::from_millis(*duration));
             sink.stop();
         }
     }
