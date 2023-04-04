@@ -50,31 +50,19 @@ impl Source for Oscillator {
 }
 
 pub struct Wavetable {
-    pub plot: Vec<f32>,
+    pub plot: [f32; 256],
     pub resolution: usize,
 }
 
-pub enum WavetableType {
-    Sine,
-    Square,
-}
-
 impl Wavetable {
-    pub fn new(resolution: usize, wavetable_type: WavetableType) -> Self {
+    pub fn new() -> Self {
         use std::f32::consts::PI;
-        let plot: Vec<f32> = match wavetable_type {
-            WavetableType::Sine => (0..resolution)
-                .map(|n| 2.0 * (n as f32) * PI / (resolution as f32))
-                .map(|n| n.sin())
-                .collect(),
-            WavetableType::Square => (0..resolution)
-                .map(|n| match 2 * n >= resolution {
-                    true => 1.,
-                    false => -1.,
-                })
-                .collect(),
-        };
-        Wavetable { plot, resolution }
+        let mut plot: [f32; 256] = [0.0; 256];
+
+        for i in 0..256 {
+            plot[i] = (2.0 * (i as f32) * PI / (256 as f32)).sin();
+        }
+        Wavetable { plot, resolution: 256 }
     }
 
     fn interpolate(&self, float_index: f32) -> f32 {

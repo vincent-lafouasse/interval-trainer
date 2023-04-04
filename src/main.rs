@@ -12,7 +12,7 @@ use rodio::OutputStream;
 
 use crate::intervals::{BaseInterval, Interval, Quality};
 use crate::notes::{Alteration, Note, NoteName, CHROMATIC_NOTES_PER_OCTAVE};
-use crate::synth::{Oscillator, Wavetable, WavetableType};
+use crate::synth::{Oscillator, Wavetable};
 
 fn main() -> Result<()> {
     color_eyre::install()?;
@@ -30,8 +30,7 @@ fn main() -> Result<()> {
     }
 
     if synth {
-        let wavetable_resolution: usize = 64;
-        let wavetable = Wavetable::new(wavetable_resolution, WavetableType::Sine);
+        let wavetable = Wavetable::new();
 
         let sample_rate = 44_000;
         let mut sine_oscillator = Oscillator::new(sample_rate, wavetable);
