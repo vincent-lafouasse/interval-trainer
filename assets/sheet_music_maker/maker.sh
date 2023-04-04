@@ -31,10 +31,7 @@ parse_instructions() {
 	JSON="$1"
 	CLEF="$(jq ".clef" "${JSON}" | sed 's/"//g')"
 	SUBDIVISION="$(jq ".subdivision" "${JSON}" | sed 's/"//g')"
-	NOTES="$(jq ".notes" "${JSON}" | sed 's/"//g')"
-	echo "${CLEF}"
-	echo "${SUBDIVISION}"
-	echo "${NOTES}"
+	SCIENTIFIC_NOTES="$(jq ".notes" "${JSON}" | sed 's/"//g')"
 }
 
 parse_note() {
@@ -80,10 +77,17 @@ parse_note() {
 	esac
 }
 
+parse_notes() {
+	PARSED_NOTES=""
+	for note in $1; do
+		parsed_note="$(parse_note "${note}")"
+		PARSED_NOTES="${PARSED_NOTES} ${parsed_note}"
+	done
+	echo "${PARSED_NOTES}"
+}
+
 fill_template() {
-	CLEF="treble"
-	SUBDIVISION='2'
-	NOTES="$1${SUBDIVISION} $2"
+	NOTES="$(parse_notes "${SCIENTIFIC_NOTES}")"
 	export CLEF NOTES
 
 	envsubst <"${TEMPLATE}" >"${LILY_FILE}"
@@ -106,7 +110,9 @@ parse_cli_args "$@" || {
 	return 1
 }
 
-parse_instructions "sheet_music_instructions.json"
+parse_instructions "instructions.json"
+
+parse_notes "${SCIENTIFIC_NOTES}"
 
 fill_template "$(parse_note C4)" "$(parse_note G5)"
 
