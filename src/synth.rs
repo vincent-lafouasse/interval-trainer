@@ -16,13 +16,13 @@ impl Oscillator {
 
     pub fn set_frequency(&mut self, frequency: f32) {
         self.index_increment =
-            frequency * (self.wavetable.resolution as f32) / (self.sample_rate as f32);
+            frequency * (self.wavetable.resolution() as f32) / (self.sample_rate as f32);
     }
 
     pub fn get_sample(&mut self) -> f32 {
         let sample = self.wavetable.interpolate(self.index);
         self.index += self.index_increment;
-        self.index %= self.wavetable.resolution as f32;
+        self.index %= self.wavetable.resolution() as f32;
         return sample;
     }
 }
@@ -53,17 +53,16 @@ impl Source for Oscillator {
 #[derive(Copy, Clone)]
 pub struct Wavetable {
     pub plot: [f32; 256],
-    pub resolution: usize,
 }
 
 impl Wavetable {
     pub const fn new() -> Self {
-        Wavetable { plot: SINE_256, resolution: 256 }
+        Wavetable { plot: SINE_256 }
     }
 
     fn interpolate(&self, float_index: f32) -> f32 {
         let left_index = float_index as usize;
-        let right_index = (left_index + 1) % self.resolution;
+        let right_index = (left_index + 1) % self.resolution();
         let right_weight = float_index - (left_index as f32);
         let left_weight = 1.0 - right_weight;
 
@@ -72,6 +71,10 @@ impl Wavetable {
 
     pub fn at(&self, index: usize) -> f32 {
         self.plot[index]
+    }
+
+    pub fn resolution(&self) -> usize {
+        256
     }
 }
 
