@@ -34,13 +34,21 @@ fn main() -> Result<()> {
 
         let sample_rate = 44_000;
         let mut sine_oscillator = Oscillator::new(sample_rate, wavetable);
-
-        sine_oscillator.set_frequency(420.0);
         let note_length = std::time::Duration::from_secs(2);
 
+        sine_oscillator.set_frequency(420.0);
         let (_stream, stream_handle) = OutputStream::try_default().unwrap();
         let _result = stream_handle.play_raw(sine_oscillator.convert_samples());
+        std::thread::sleep(note_length);
 
+        sine_oscillator.set_frequency(420.0 * 1.25);
+        let (_stream, stream_handle) = OutputStream::try_default().unwrap();
+        let _result = stream_handle.play_raw(sine_oscillator.convert_samples());
+        std::thread::sleep(note_length);
+
+        sine_oscillator.set_frequency(420.0 * 1.5);
+        let (_stream, stream_handle) = OutputStream::try_default().unwrap();
+        let _result = stream_handle.play_raw(sine_oscillator.convert_samples());
         std::thread::sleep(note_length);
     }
 

@@ -1,6 +1,7 @@
 use core::time::Duration;
 use rodio::source::Source;
 
+#[derive(Copy, Clone)]
 pub struct Oscillator {
     sample_rate: usize,
     wavetable: Wavetable,
@@ -49,6 +50,7 @@ impl Source for Oscillator {
     }
 }
 
+#[derive(Copy, Clone)]
 pub struct Wavetable {
     pub plot: [f32; 256],
     pub resolution: usize,
