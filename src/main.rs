@@ -38,11 +38,11 @@ fn main() -> Result<()> {
 
         let volume = 0.5;
 
-        let f_c4: f32 = FREQUENCIES[4 * 12].1;
-        let f_d4: f32 = FREQUENCIES[4 * 12 + 2].1;
-        let f_e4: f32 = FREQUENCIES[4 * 12 + 4].1;
-        let f_f4: f32 = FREQUENCIES[4 * 12 + 5].1;
-        let f_g4: f32 = FREQUENCIES[4 * 12 + 7].1;
+        let f_c4: f32 = FREQUENCIES[4 * 12];
+        let f_d4: f32 = FREQUENCIES[4 * 12 + 2];
+        let f_e4: f32 = FREQUENCIES[4 * 12 + 4];
+        let f_f4: f32 = FREQUENCIES[4 * 12 + 5];
+        let f_g4: f32 = FREQUENCIES[4 * 12 + 7];
 
         let time_increment_ms = 300;
 
