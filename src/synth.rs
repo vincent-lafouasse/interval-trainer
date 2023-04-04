@@ -57,7 +57,7 @@ pub struct Wavetable {
 }
 
 impl Wavetable {
-    pub fn new() -> Self {
+    pub const fn new() -> Self {
         Wavetable { plot: SINE_256, resolution: 256 }
     }
 

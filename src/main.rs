@@ -30,10 +30,10 @@ fn main() -> Result<()> {
     }
 
     if synth {
-        let wavetable = Wavetable::new();
+        static SINE: Wavetable = Wavetable::new();
 
         let sample_rate = 44_000;
-        let mut sine_oscillator = Oscillator::new(sample_rate, wavetable);
+        let mut sine_oscillator = Oscillator::new(sample_rate, SINE);
         let note_length = std::time::Duration::from_secs(2);
 
         sine_oscillator.set_frequency(420.0);
