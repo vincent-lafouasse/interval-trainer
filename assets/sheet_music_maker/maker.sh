@@ -2,20 +2,6 @@
 
 # set -o xtrace
 
-setup_globals() {
-	MAIN="main"
-
-	AUX_DIR="aux"
-	TARGET_DIR="target"
-
-	mkdir -p "${AUX_DIR}"
-	mkdir -p "${TARGET_DIR}"
-
-	TEMPLATE="template/template.ly"
-	LILY_FILE="${AUX_DIR}/${MAIN}.ly"
-	OUTPUT_FILE="${TARGET_DIR}/${MAIN}.pdf"
-}
-
 parse_cli_args() {
 	if [[ $1 == "--clean" ]]; then
 		clean
@@ -28,10 +14,10 @@ parse_cli_args() {
 }
 
 parse_instructions() {
-	JSON="$1"
-	CLEF="$(jq ".clef" "${JSON}" | sed 's/"//g')"
-	SUBDIVISION="$(jq ".subdivision" "${JSON}" | sed 's/"//g')"
-	SCIENTIFIC_NOTES="$(jq ".notes" "${JSON}" | sed 's/"//g')"
+	json="$1"
+	CLEF="$(jq ".clef" "${json}" | sed 's/"//g')"
+	SUBDIVISION="$(jq ".subdivision" "${json}" | sed 's/"//g')"
+	SCIENTIFIC_NOTES="$(jq ".notes" "${json}" | sed 's/"//g')"
 }
 
 parse_note() {
@@ -81,16 +67,15 @@ parse_notes() {
 	PARSED_NOTES=""
 	for note in $1; do
 		parsed_note="$(parse_note "${note}")"
-		PARSED_NOTES="${PARSED_NOTES} ${parsed_note}"
+		PARSED_NOTES="${PARSED_NOTES} ${parsed_note}${SUBDIVISION}"
 	done
-	echo "${PARSED_NOTES}"
 }
 
 fill_template() {
-	NOTES="$(parse_notes "${SCIENTIFIC_NOTES}")"
+	NOTES="${PARSED_NOTES}"
 	export CLEF NOTES
 
-	envsubst <"${TEMPLATE}" >"${LILY_FILE}"
+	envsubst <"$1" >"$2"
 }
 
 clean() {
@@ -103,21 +88,35 @@ mr_proper() {
 }
 
 #################################################################################
-setup_globals
+main() {
+	MAIN="main"
 
-parse_cli_args "$@" || {
-	echo "Error: invalid input" >&2
-	return 1
+	AUX_DIR="aux"
+	TARGET_DIR="target"
+
+	mkdir -p "${AUX_DIR}"
+	mkdir -p "${TARGET_DIR}"
+
+	TEMPLATE="template/template.ly"
+	LILY_FILE="${AUX_DIR}/${MAIN}.ly"
+	OUTPUT_FILE="${TARGET_DIR}/${MAIN}.pdf"
+
+	parse_cli_args "$@" || {
+		echo "Error: invalid input" >&2
+		return 1
+	}
+
+	parse_instructions "instructions.json"
+
+	parse_notes "${SCIENTIFIC_NOTES}"
+
+	fill_template "${TEMPLATE}" "${LILY_FILE}"
+
+	lilypond --silent --output="${TARGET_DIR}" "${LILY_FILE}"
+
+	open "${OUTPUT_FILE}"
+
+	clean
 }
 
-parse_instructions "instructions.json"
-
-parse_notes "${SCIENTIFIC_NOTES}"
-
-fill_template "$(parse_note C4)" "$(parse_note G5)"
-
-lilypond --silent --output="${TARGET_DIR}" "${LILY_FILE}"
-
-open "${OUTPUT_FILE}"
-
-clean
+main "$@"
