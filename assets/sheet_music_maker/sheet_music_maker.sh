@@ -28,10 +28,9 @@ parse_cli_args() {
 }
 
 fill_template() {
-	TIME_SIGNATURE="2/4"
 	CLEF="treble"
-	NOTES="c'2"
-	export TIME_SIGNATURE CLEF NOTES
+	NOTES="a'2"
+	export CLEF NOTES
 
 	envsubst < "${TEMPLATE}" > "${LILY_FILE}"
 }
