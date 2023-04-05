@@ -44,16 +44,16 @@ fn main() -> Result<()> {
         let f_f4: f32 = FREQUENCIES[4 * 12 + 5];
         let f_g4: f32 = FREQUENCIES[4 * 12 + 7];
 
-        let time_increment_ms = 300;
+        let time_unit_ms = 300;
 
         let notes_to_play = vec![
-            (f_d4, 2 * time_increment_ms),
-            (f_e4, 1 * time_increment_ms),
-            (f_f4, 2 * time_increment_ms),
-            (f_g4, 1 * time_increment_ms),
-            (f_e4, 3 * time_increment_ms),
-            (f_c4, 2 * time_increment_ms),
-            (f_d4, 4 * time_increment_ms),
+            (f_d4, 2 * time_unit_ms),
+            (f_e4, 1 * time_unit_ms),
+            (f_f4, 2 * time_unit_ms),
+            (f_g4, 1 * time_unit_ms),
+            (f_e4, 3 * time_unit_ms),
+            (f_c4, 2 * time_unit_ms),
+            (f_d4, 4 * time_unit_ms),
         ];
 
         for (frequency, duration) in notes_to_play.iter() {
