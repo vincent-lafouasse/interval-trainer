@@ -152,9 +152,22 @@ impl Note {
                 _ => return Err("Invalid alteration"),
             },
         };
-        match chars.next() {
-            None => Ok(Note { name, alteration }),
-            Some(_) => Err("can only parse one alteration (for now)"),
+
+        let second_alteration = match chars.next() {
+            None => return Ok(Note { name, alteration }),
+            Some(alteration_) => alteration_,
+        };
+
+        match second_alteration {
+            '#' => match alteration {
+                Alteration::Sharp => return Ok(Note { name, alteration: Alteration::DoubleSharp }),
+                _ => return Err("Incompatible alterations"),
+            },
+            'b' => match alteration {
+                Alteration::Flat => return Ok(Note { name, alteration: Alteration::DoubleFlat }),
+                _ => return Err("Incompatible alterations"),
+            },
+            _ => return Err("Invalid second alteration"),
         }
     }
 }
@@ -299,6 +312,34 @@ mod tests {
             d_natural.unwrap(),
             Note { name: NoteName::D, alteration: Alteration::Natural }
         );
+
+        let b_double_flat = Note::parse_from_string("Bbb");
+        assert!(b_double_flat.is_ok());
+        assert_eq!(
+            b_double_flat.unwrap(),
+            Note { name: NoteName::B, alteration: Alteration::DoubleFlat }
+        );
+
+        let c_double_flat = Note::parse_from_string("Cbb");
+        assert!(c_double_flat.is_ok());
+        assert_eq!(
+            c_double_flat.unwrap(),
+            Note { name: NoteName::C, alteration: Alteration::DoubleFlat }
+        );
+
+        let f_double_sharp = Note::parse_from_string("F##");
+        assert!(f_double_sharp.is_ok());
+        assert_eq!(
+            f_double_sharp.unwrap(),
+            Note { name: NoteName::F, alteration: Alteration::DoubleSharp }
+        );
+
+        let b_double_sharp = Note::parse_from_string("B##");
+        assert!(b_double_sharp.is_ok());
+        assert_eq!(
+            b_double_sharp.unwrap(),
+            Note { name: NoteName::B, alteration: Alteration::DoubleSharp }
+        );
     }
 
     #[test]
@@ -318,6 +359,30 @@ mod tests {
         let invalid_alteration = Note::parse_from_string("C+");
         match invalid_alteration {
             Err(msg) => assert_eq!(msg, "Invalid alteration"),
+            Ok(_) => panic!("Poorly written tests"),
+        }
+
+        let incompatible_alteration1 = Note::parse_from_string("C#b");
+        match incompatible_alteration1 {
+            Err(msg) => assert_eq!(msg, "Incompatible alterations"),
+            Ok(_) => panic!("Poorly written tests"),
+        }
+
+        let incompatible_alteration2 = Note::parse_from_string("Fb#");
+        match incompatible_alteration2 {
+            Err(msg) => assert_eq!(msg, "Incompatible alterations"),
+            Ok(_) => panic!("Poorly written tests"),
+        }
+
+        let invalid_second_alteration1 = Note::parse_from_string("Bb5");
+        match invalid_second_alteration1 {
+            Err(msg) => assert_eq!(msg, "Invalid second alteration"),
+            Ok(_) => panic!("Poorly written tests"),
+        }
+
+        let invalid_second_alteration2 = Note::parse_from_string("G#o");
+        match invalid_second_alteration2 {
+            Err(msg) => assert_eq!(msg, "Invalid second alteration"),
             Ok(_) => panic!("Poorly written tests"),
         }
     }
