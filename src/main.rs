@@ -33,7 +33,7 @@ fn main() -> Result<()> {
 
     if synth {
         static SINE: Wavetable = Wavetable::new();
-        const SAMPLE_RATE: usize = 44_000;
+        const SAMPLE_RATE: usize = 44_100;
         let (_stream, stream_handle) = OutputStream::try_default().unwrap();
 
         let volume = 0.5;
