@@ -36,6 +36,8 @@ pub enum Quality {
     Diminished,
     DoublyAugmented,
     DoublyDiminished,
+    TriplyAugmented,
+    TriplyDiminished,
 }
 
 #[derive(Copy, Clone, Debug, PartialEq)]
@@ -99,22 +101,26 @@ impl Interval {
                 || base_interval == BaseInterval::Seventh
             {
                 match distance_from_diatonic {
+                    3 => Quality::TriplyAugmented,
                     2 => Quality::DoublyAugmented,
                     1 => Quality::Augmented,
                     0 => Quality::Major,
                     11 => Quality::Minor,
                     10 => Quality::Diminished,
-                    19 => Quality::DoublyDiminished,
-                    _ => panic!("Interval too diminished or augmented to handle for now"),
+                    9 => Quality::DoublyDiminished,
+                    8 => Quality::TriplyDiminished,
+                    _ => panic!("Can't process more than triply diminished or augmented intervals"),
                 }
             } else {
                 match distance_from_diatonic {
+                    3 => Quality::TriplyAugmented,
                     2 => Quality::DoublyAugmented,
                     1 => Quality::Augmented,
                     0 => Quality::Perfect,
                     11 => Quality::Diminished,
                     10 => Quality::DoublyDiminished,
-                    _ => panic!("Interval too diminished or augmented to handle for now"),
+                    9 => Quality::TriplyDiminished,
+                    _ => panic!("Can't process more than triply diminished or augmented intervals"),
                 }
             }
         };
@@ -138,6 +144,8 @@ impl Interval {
                     Quality::Augmented => 1,
                     Quality::DoublyDiminished => -3,
                     Quality::DoublyAugmented => 2,
+                    Quality::TriplyDiminished => -4,
+                    Quality::TriplyAugmented => 3,
                 }
             } else {
                 match &self.quality {
@@ -148,6 +156,8 @@ impl Interval {
                     Quality::Augmented => 1,
                     Quality::DoublyDiminished => -2,
                     Quality::DoublyAugmented => 2,
+                    Quality::TriplyDiminished => -3,
+                    Quality::TriplyAugmented => 3,
                 }
             }
         };
@@ -207,6 +217,8 @@ impl fmt::Display for Quality {
             Quality::Augmented => "Augmented",
             Quality::DoublyDiminished => "Doubly Diminished",
             Quality::DoublyAugmented => "Doubly Augmented",
+            Quality::TriplyDiminished => "Triply Diminished",
+            Quality::TriplyAugmented => "Triply Augmented",
         };
         write!(f, "{}", repr)
     }
