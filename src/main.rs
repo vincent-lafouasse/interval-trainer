@@ -19,8 +19,8 @@ use crate::synth::{Oscillator, Wavetable};
 fn main() -> Result<()> {
     color_eyre::install()?;
 
-    let quizing = true;
-    let debugging = false;
+    let quizing = false;
+    let debugging = true;
     let synth = false;
 
     if debugging {
@@ -89,14 +89,9 @@ fn quiz() {
             println!("ding ding you win");
             break;
         } else {
+            let user_interval = Interval::between(random_start_note, user_note);
             println!("[EXTREMELY LOUD INCORRECT BUZZER]");
-            println!(
-                "{} to {} is not a {}, that is a {}\n",
-                random_start_note,
-                user_note,
-                random_interval,
-                Interval::between(random_start_note, user_note)
-            );
+            println!("{random_start_note} to {user_note} is not a {random_interval}, that is a {user_interval}\n");
         }
     }
 }
