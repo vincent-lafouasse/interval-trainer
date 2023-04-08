@@ -64,8 +64,10 @@ impl Interval {
         let alteration: Alteration = match self.size() - rough_distance {
             0 => Alteration::Natural,
             1 => Alteration::Sharp,
+            2 => Alteration::DoubleSharp,
             -1 => Alteration::Flat,
-            _ => panic!("Can only handle 1 alteration for the moment"),
+            -2 => Alteration::DoubleFlat,
+            _ => panic!("Can only handle 2 alteration"),
         };
         Note { name: note_name, alteration: alteration }
     }
@@ -244,6 +246,7 @@ mod tests {
 
     // Notes
     const C: Note = Note { name: NoteName::C, alteration: Alteration::Natural };
+    const E_SHARP: Note = Note { name: NoteName::E, alteration: Alteration::Sharp };
     const A_FLAT: Note = Note { name: NoteName::A, alteration: Alteration::Flat };
     const D_FLAT: Note = Note { name: NoteName::D, alteration: Alteration::Flat };
     const F_SHARP: Note = Note { name: NoteName::F, alteration: Alteration::Sharp };
@@ -301,5 +304,21 @@ mod tests {
 
         // B# -> Fb is a triply diminished fifth (eq to major third), implem of bbb intervals todo
         // Fb -> B# is triply augmented fourth (eq to minor sixth)
+    }
+
+    #[test]
+    fn test_note_up_from() {
+        assert_eq!(
+            MAJOR_SECOND.note_up_from(D_FLAT),
+            Note { name: NoteName::E, alteration: Alteration::Flat }
+        );
+        assert_eq!(
+            MAJOR_SIXTH.note_up_from(E_SHARP),
+            Note { name: NoteName::C, alteration: Alteration::DoubleSharp }
+        );
+        assert_eq!(
+            MAJOR_SEVENTH.note_up_from(E_SHARP),
+            Note { name: NoteName::D, alteration: Alteration::DoubleSharp }
+        );
     }
 }
