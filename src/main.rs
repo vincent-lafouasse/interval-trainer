@@ -20,8 +20,8 @@ fn main() -> Result<()> {
     color_eyre::install()?;
 
     let quizing = false;
-    let debugging = true;
-    let synth = false;
+    let debugging = false;
+    let synth = true;
 
     if debugging {
         debug();
@@ -38,11 +38,11 @@ fn main() -> Result<()> {
 
         let volume = 0.5;
 
-        let f_c4: f32 = FREQUENCIES[4 * 12];
-        let f_d4: f32 = FREQUENCIES[4 * 12 + 2];
-        let f_e4: f32 = FREQUENCIES[4 * 12 + 4];
-        let f_f4: f32 = FREQUENCIES[4 * 12 + 5];
-        let f_g4: f32 = FREQUENCIES[4 * 12 + 7];
+        let f_c4: f32 = FREQUENCIES[4 * CHROMATIC_NOTES_PER_OCTAVE];
+        let f_d4: f32 = FREQUENCIES[4 * CHROMATIC_NOTES_PER_OCTAVE + 2];
+        let f_e4: f32 = FREQUENCIES[4 * CHROMATIC_NOTES_PER_OCTAVE + 4];
+        let f_f4: f32 = FREQUENCIES[4 * CHROMATIC_NOTES_PER_OCTAVE + 5];
+        let f_g4: f32 = FREQUENCIES[4 * CHROMATIC_NOTES_PER_OCTAVE + 7];
 
         let time_unit_ms = 300;
 

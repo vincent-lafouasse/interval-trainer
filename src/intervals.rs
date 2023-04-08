@@ -1,6 +1,6 @@
 use std::fmt;
 
-use crate::notes::{Alteration, Note, NoteName};
+use crate::notes::{Alteration, Note, NoteName, CHROMATIC_NOTES_PER_OCTAVE};
 
 #[derive(Copy, Clone, Debug, PartialEq)]
 pub enum BaseInterval {
@@ -60,8 +60,8 @@ impl Interval {
 
         let note_name: NoteName = NoteName::shift(start.name, note_name_distance);
         let natural_note: Note = Note { name: note_name, alteration: Alteration::Natural };
-        let rough_distance =
-            (natural_note.distance_from_c() - start.distance_from_c()).rem_euclid(12);
+        let rough_distance = (natural_note.distance_from_c() - start.distance_from_c())
+            .rem_euclid(CHROMATIC_NOTES_PER_OCTAVE as isize);
 
         let alteration: Alteration = match self.size() - rough_distance {
             0 => Alteration::Natural,
@@ -90,9 +90,11 @@ impl Interval {
             _ => panic!(""),
         };
 
-        let interval_size = (end.distance_from_c() - start.distance_from_c()).rem_euclid(12);
+        let interval_size = (end.distance_from_c() - start.distance_from_c())
+            .rem_euclid(CHROMATIC_NOTES_PER_OCTAVE as isize);
         let base_size = base_interval.size();
-        let distance_from_diatonic = (interval_size - base_size).rem_euclid(12);
+        let distance_from_diatonic =
+            (interval_size - base_size).rem_euclid(CHROMATIC_NOTES_PER_OCTAVE as isize);
 
         let quality = {
             if base_interval == BaseInterval::Second
