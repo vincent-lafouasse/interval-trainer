@@ -5,6 +5,7 @@ mod frequencies;
 mod intervals;
 mod notes;
 mod synth;
+mod wavetables;
 
 use color_eyre::eyre::Result;
 use core::time::Duration;
