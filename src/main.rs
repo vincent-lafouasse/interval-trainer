@@ -10,19 +10,24 @@ mod wavetables;
 use color_eyre::eyre::Result;
 use core::time::Duration;
 use rodio::source::Source;
-use rodio::{OutputStream, Sink};
+use rodio::{OutputStream, OutputStreamHandle, Sink};
 
 use crate::frequencies::FREQUENCIES;
 use crate::intervals::{BaseInterval, Interval, Quality};
 use crate::notes::{Alteration, Note, NoteName, CHROMATIC_NOTES_PER_OCTAVE};
 use crate::synth::{Oscillator, Wavetable};
 
+const SAMPLE_RATE: usize = 44_100;
+static SINE: Wavetable = Wavetable::new();
+
 fn main() -> Result<()> {
     color_eyre::install()?;
+    let (_stream, stream_handle) = OutputStream::try_default().unwrap();
 
     let quizing = false;
     let debugging = false;
-    let synth = true;
+    let one_note = true;
+    let melody = false;
 
     if debugging {
         debug();
@@ -32,43 +37,61 @@ fn main() -> Result<()> {
         quiz();
     }
 
-    if synth {
-        static SINE: Wavetable = Wavetable::new();
-        const SAMPLE_RATE: usize = 44_100;
-        let (_stream, stream_handle) = OutputStream::try_default().unwrap();
+    if one_note {
+        play_one_note(&stream_handle);
+    }
 
-        let volume = 0.5;
-
-        let f_c4: f32 = FREQUENCIES[4 * CHROMATIC_NOTES_PER_OCTAVE];
-        let f_d4: f32 = FREQUENCIES[4 * CHROMATIC_NOTES_PER_OCTAVE + 2];
-        let f_e4: f32 = FREQUENCIES[4 * CHROMATIC_NOTES_PER_OCTAVE + 4];
-        let f_f4: f32 = FREQUENCIES[4 * CHROMATIC_NOTES_PER_OCTAVE + 5];
-        let f_g4: f32 = FREQUENCIES[4 * CHROMATIC_NOTES_PER_OCTAVE + 7];
-
-        let time_unit_ms = 300;
-
-        let notes_to_play = vec![
-            (f_d4, 2 * time_unit_ms),
-            (f_e4, 1 * time_unit_ms),
-            (f_f4, 2 * time_unit_ms),
-            (f_g4, 1 * time_unit_ms),
-            (f_e4, 3 * time_unit_ms),
-            (f_c4, 2 * time_unit_ms),
-            (f_d4, 4 * time_unit_ms),
-        ];
-
-        for (frequency, duration) in notes_to_play.iter() {
-            let sink = Sink::try_new(&stream_handle)?;
-            sink.set_volume(volume);
-            let mut sine_oscillator = Oscillator::new(SAMPLE_RATE, SINE);
-            sine_oscillator.set_frequency(*frequency);
-            sink.append(sine_oscillator);
-            std::thread::sleep(std::time::Duration::from_millis(*duration));
-            sink.stop();
-        }
+    if melody {
+        play_a_melody(&stream_handle);
     }
 
     Ok(())
+}
+
+fn play_one_note(handle: &OutputStreamHandle) {
+    let volume = 0.5;
+    let f_c4: f32 = FREQUENCIES[4 * CHROMATIC_NOTES_PER_OCTAVE];
+    let note_length_ms = 2000;
+
+    let sink = Sink::try_new(handle).expect("Failed to create a new sink for audio playback");
+    sink.set_volume(volume);
+    let mut sine_oscillator = Oscillator::new(SAMPLE_RATE, SINE);
+    sine_oscillator.set_frequency(f_c4);
+    sink.append(sine_oscillator);
+    std::thread::sleep(std::time::Duration::from_millis(note_length_ms));
+    sink.stop();
+}
+
+fn play_a_melody(handle: &OutputStreamHandle) {
+    let volume = 0.5;
+
+    let f_c4: f32 = FREQUENCIES[4 * CHROMATIC_NOTES_PER_OCTAVE];
+    let f_d4: f32 = FREQUENCIES[4 * CHROMATIC_NOTES_PER_OCTAVE + 2];
+    let f_e4: f32 = FREQUENCIES[4 * CHROMATIC_NOTES_PER_OCTAVE + 4];
+    let f_f4: f32 = FREQUENCIES[4 * CHROMATIC_NOTES_PER_OCTAVE + 5];
+    let f_g4: f32 = FREQUENCIES[4 * CHROMATIC_NOTES_PER_OCTAVE + 7];
+
+    let time_unit_ms = 300;
+
+    let notes_to_play = vec![
+        (f_d4, 2 * time_unit_ms),
+        (f_e4, 1 * time_unit_ms),
+        (f_f4, 2 * time_unit_ms),
+        (f_g4, 1 * time_unit_ms),
+        (f_e4, 3 * time_unit_ms),
+        (f_c4, 2 * time_unit_ms),
+        (f_d4, 4 * time_unit_ms),
+    ];
+
+    for (frequency, duration) in notes_to_play.iter() {
+        let sink = Sink::try_new(handle).expect("Failed to create a new sink for audio playback");
+        sink.set_volume(volume);
+        let mut sine_oscillator = Oscillator::new(SAMPLE_RATE, SINE);
+        sine_oscillator.set_frequency(*frequency);
+        sink.append(sine_oscillator);
+        std::thread::sleep(std::time::Duration::from_millis(*duration));
+        sink.stop();
+    }
 }
 
 fn quiz() {
