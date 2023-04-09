@@ -4,9 +4,9 @@ use rodio::source::Source;
 use crate::wavetables::SINE_256;
 
 /// A wavetable oscillator that can play sound via the `rodio::source::Source` trait
-pub struct Oscillator<'a> {
+pub struct Oscillator {
     sample_rate: usize,
-    wavetable: Wavetable<'a>,
+    wavetable: Wavetable,
     index: f32,
     index_increment: f32,
 }
@@ -66,7 +66,7 @@ impl Iterator for Oscillator {
 }
 
 #[derive(Copy, Clone)]
-pub struct Wavetable<'a> {
+pub struct Wavetable {
     pub plot: &'static [f32; 256],
 }
 
