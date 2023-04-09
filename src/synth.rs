@@ -64,13 +64,13 @@ impl Iterator for Oscillator {
 }
 
 #[derive(Copy, Clone)]
-pub struct Wavetable {
-    pub plot: [f32; 256],
+pub struct Wavetable<'a> {
+    pub plot: &'static [f32; 256],
 }
 
 impl Wavetable {
     pub const fn new() -> Self {
-        Wavetable { plot: SINE_256 }
+        Wavetable { plot: &SINE_256 }
     }
 
     fn interpolate(&self, float_index: f32) -> f32 {
