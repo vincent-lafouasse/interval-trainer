@@ -1,5 +1,4 @@
 #![allow(unused_imports)]
-#![allow(dead_code)]
 
 mod frequencies;
 mod intervals;
@@ -7,10 +6,9 @@ mod notes;
 mod synth;
 mod wavetables;
 
-use color_eyre::eyre::Result;
-use core::time::Duration;
-use rodio::source::Source;
+use std::time::{Duration, Instant};
 use rodio::{OutputStream, OutputStreamHandle, Sink};
+use color_eyre::eyre::Result;
 
 use crate::frequencies::FREQUENCIES;
 use crate::intervals::{BaseInterval, Interval, Quality};
@@ -56,13 +54,14 @@ fn play_one_note(handle: &OutputStreamHandle) {
     let f_a4: f32 = FREQUENCIES[4 * CHROMATIC_NOTES_PER_OCTAVE + 9];
     assert_eq!(f_a4, 440.0);
     sine_oscillator.set_frequency(f_a4);
+    let note_length = Duration::from_millis(2000);
+    let _note_start = Instant::now();
 
     let volume = 0.5;
-    let note_length_ms = 2000;
     sink.set_volume(volume);
 
     sink.append(sine_oscillator);
-    std::thread::sleep(std::time::Duration::from_millis(note_length_ms));
+    std::thread::sleep(note_length);
     sink.stop();
 }
 
