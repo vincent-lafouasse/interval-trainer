@@ -49,14 +49,18 @@ fn main() -> Result<()> {
 }
 
 fn play_one_note(handle: &OutputStreamHandle) {
-    let volume = 0.5;
-    let f_c4: f32 = FREQUENCIES[4 * CHROMATIC_NOTES_PER_OCTAVE];
-    let note_length_ms = 2000;
-
     let sink = Sink::try_new(handle).expect("Failed to create a new sink for audio playback");
-    sink.set_volume(volume);
+    sink.set_volume(0.0);
+
     let mut sine_oscillator = Oscillator::new(SAMPLE_RATE, SINE);
-    sine_oscillator.set_frequency(f_c4);
+    let f_a4: f32 = FREQUENCIES[4 * CHROMATIC_NOTES_PER_OCTAVE + 9];
+    assert_eq!(f_a4, 440.0);
+    sine_oscillator.set_frequency(f_a4);
+
+    let volume = 0.5;
+    let note_length_ms = 2000;
+    sink.set_volume(volume);
+
     sink.append(sine_oscillator);
     std::thread::sleep(std::time::Duration::from_millis(note_length_ms));
     sink.stop();
