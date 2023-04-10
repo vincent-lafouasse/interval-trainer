@@ -53,23 +53,22 @@ fn play_one_note(handle: &OutputStreamHandle) {
 
     let mut sine_oscillator = Oscillator::new(SAMPLE_RATE, SINE);
     let f_a4: f32 = FREQUENCIES[4 * CHROMATIC_NOTES_PER_OCTAVE + 9];
-    assert_eq!(f_a4, 440.0);
     sine_oscillator.set_frequency(f_a4);
-    let volume_increment = 0.01;
+    sink.append(sine_oscillator);
 
     let update_period = Duration::from_millis(10);
     let fade_in_duration = Duration::from_millis(300);
     let fade_out_duration = Duration::from_millis(300);
 
     let max_volume = 0.5;
+    let volume_increment = 0.01;
 
     let note_length = Duration::from_millis(2000);
     let note_start = Instant::now();
     let note_end = note_start + note_length;
 
-    sink.append(sine_oscillator);
-
     while Instant::now() <= note_end {
+        let start_tick = Instant::now();
         if Instant::now() <= note_start + fade_in_duration {
             let volume = f32::max(sink.volume() + volume_increment, max_volume);
             sink.set_volume(volume);
@@ -78,7 +77,8 @@ fn play_one_note(handle: &OutputStreamHandle) {
             let volume = f32::min(sink.volume() - volume_increment, 0.0);
             sink.set_volume(volume);
         }
-        sleep(update_period);
+        let end_tick = Instant::now();
+        sleep(update_period - end_tick.duration_since(start_tick));
     }
 
     sink.stop();
