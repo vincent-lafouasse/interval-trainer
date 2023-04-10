@@ -56,12 +56,18 @@ fn play_one_note(handle: &OutputStreamHandle) {
     sine_oscillator.set_frequency(f_a4);
     sink.append(sine_oscillator);
 
-    let update_period = Duration::from_millis(10);
-    let fade_in_duration = Duration::from_millis(300);
-    let fade_out_duration = Duration::from_millis(300);
+    let sustain_volume = 0.5;
 
-    let max_volume = 0.5;
-    let volume_increment = 0.01;
+    let update_period_ms = 10;
+    let fade_in_ms = 700;
+    let fade_out_ms = 700;
+
+    let fade_in_volume_increment = sustain_volume / (fade_in_ms as f32 / update_period_ms as f32);
+    let fade_out_volume_increment = sustain_volume / (fade_out_ms as f32 / update_period_ms as f32);
+
+    let update_period = Duration::from_millis(update_period_ms);
+    let fade_in_duration = Duration::from_millis(fade_in_ms);
+    let fade_out_duration = Duration::from_millis(fade_out_ms);
 
     let note_length = Duration::from_millis(2000);
     let note_start = Instant::now();
@@ -70,11 +76,11 @@ fn play_one_note(handle: &OutputStreamHandle) {
     while Instant::now() <= note_end {
         let start_tick = Instant::now();
         if Instant::now() <= note_start + fade_in_duration {
-            let volume = f32::max(sink.volume() + volume_increment, max_volume);
+            let volume = sink.volume() + fade_in_volume_increment;
             sink.set_volume(volume);
         }
         if Instant::now() >= note_end - fade_out_duration {
-            let volume = f32::min(sink.volume() - volume_increment, 0.0);
+            let volume = sink.volume() - fade_out_volume_increment;
             sink.set_volume(volume);
         }
         let end_tick = Instant::now();
