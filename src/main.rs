@@ -6,9 +6,10 @@ mod notes;
 mod synth;
 mod wavetables;
 
-use std::time::{Duration, Instant};
-use rodio::{OutputStream, OutputStreamHandle, Sink};
 use color_eyre::eyre::Result;
+use rodio::{OutputStream, OutputStreamHandle, Sink};
+use std::thread::sleep;
+use std::time::{Duration, Instant};
 
 use crate::frequencies::FREQUENCIES;
 use crate::intervals::{BaseInterval, Interval, Quality};
@@ -54,14 +55,32 @@ fn play_one_note(handle: &OutputStreamHandle) {
     let f_a4: f32 = FREQUENCIES[4 * CHROMATIC_NOTES_PER_OCTAVE + 9];
     assert_eq!(f_a4, 440.0);
     sine_oscillator.set_frequency(f_a4);
-    let note_length = Duration::from_millis(2000);
-    let _note_start = Instant::now();
+    let volume_increment = 0.01;
 
-    let volume = 0.5;
-    sink.set_volume(volume);
+    let update_period = Duration::from_millis(10);
+    let fade_in_duration = Duration::from_millis(300);
+    let fade_out_duration = Duration::from_millis(300);
+
+    let max_volume = 0.5;
+
+    let note_length = Duration::from_millis(2000);
+    let note_start = Instant::now();
+    let note_end = note_start + note_length;
 
     sink.append(sine_oscillator);
-    std::thread::sleep(note_length);
+
+    while Instant::now() <= note_end {
+        if Instant::now() <= note_start + fade_in_duration {
+            let volume = f32::max(sink.volume() + volume_increment, max_volume);
+            sink.set_volume(volume);
+        }
+        if Instant::now() >= note_end - fade_out_duration {
+            let volume = f32::min(sink.volume() - volume_increment, 0.0);
+            sink.set_volume(volume);
+        }
+        sleep(update_period);
+    }
+
     sink.stop();
 }
 
