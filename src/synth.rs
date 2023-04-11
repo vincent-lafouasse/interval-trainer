@@ -1,7 +1,7 @@
 use core::time::Duration;
 use rodio::source::Source;
 
-use crate::wavetables::SINE_256;
+use crate::wavetables::*;
 
 /// A wavetable oscillator that can play sound via the `rodio::source::Source` trait
 pub struct Oscillator {
