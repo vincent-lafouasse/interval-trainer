@@ -15,7 +15,7 @@ use std::time::{Duration, Instant};
 use crate::frequencies::FREQUENCIES;
 use crate::intervals::{BaseInterval, Interval, Quality};
 use crate::notes::{Alteration, Note, NoteName, CHROMATIC_NOTES_PER_OCTAVE};
-use crate::synth::{Oscillator, Wavetable};
+use crate::synth::{Oscillator, Wavetable, WavetableSynth};
 
 const SAMPLE_RATE: usize = 44_100;
 static SINE: Wavetable = Wavetable::new();
@@ -23,6 +23,8 @@ static SINE: Wavetable = Wavetable::new();
 fn main() -> Result<()> {
     color_eyre::install()?;
     let (_stream, stream_handle) = OutputStream::try_default().unwrap();
+    let mut synth = WavetableSynth::new(SINE, SAMPLE_RATE);
+    synth.set_fade_length_ms(300, 300);
 
     let quizing = false;
     let debugging = false;

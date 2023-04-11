@@ -3,6 +3,26 @@ use rodio::source::Source;
 
 use crate::wavetables::*;
 
+pub struct WavetableSynth {
+    wavetable: Wavetable,
+    sample_rate: usize,
+    fade_in_ms: u32,
+    fade_out_ms: u32,
+}
+
+impl WavetableSynth {
+    pub fn new(wavetable: Wavetable, sample_rate: usize) -> Self {
+        let fade_in_ms: u32 = 30;
+        let fade_out_ms: u32 = 30;
+        WavetableSynth { wavetable, sample_rate, fade_in_ms, fade_out_ms }
+    }
+
+    pub fn set_fade_length_ms(&mut self, _fade_in_ms: u32, _fade_out_ms: u32) {
+        self.fade_in_ms = _fade_in_ms;
+        self.fade_out_ms = _fade_out_ms;
+    }
+}
+
 /// A wavetable oscillator that can play sound via the `rodio::source::Source` trait
 pub struct Oscillator {
     sample_rate: usize,
