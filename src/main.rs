@@ -39,8 +39,7 @@ fn main() -> Result<()> {
 
     if one_note {
         let mut synth = WavetableSynth::new(SINE, SAMPLE_RATE);
-        synth.set_volume(1.0);
-        synth.set_fade_length_ms(100, 100);
+        synth.set_volume(0.5);
 
         let f_a4: f32 = FREQUENCIES[4 * CHROMATIC_NOTES_PER_OCTAVE + 9];
         let note_length_ms = 3000;

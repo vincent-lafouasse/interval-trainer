@@ -17,10 +17,10 @@ pub struct WavetableSynth {
 
 impl WavetableSynth {
     pub fn new(wavetable: Wavetable, sample_rate: usize) -> Self {
-        let fade_in_ms: u64 = 30;
-        let fade_out_ms: u64 = 30;
+        let fade_in_ms: u64 = 80;
+        let fade_out_ms: u64 = 80;
         let sustain_volume: f32 = 1.0;
-        let update_period_ms: u64 = 10;
+        let update_period_ms: u64 = 5;
         WavetableSynth {
             wavetable,
             sample_rate,
