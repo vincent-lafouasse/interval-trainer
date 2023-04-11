@@ -1,25 +1,81 @@
-use core::time::Duration;
+use std::thread::sleep;
+use std::time::{Duration, Instant};
+
 use rodio::source::Source;
+use rodio::{OutputStream, OutputStreamHandle, Sink};
 
 use crate::wavetables::*;
 
 pub struct WavetableSynth {
     wavetable: Wavetable,
     sample_rate: usize,
-    fade_in_ms: u32,
-    fade_out_ms: u32,
+    fade_in_ms: u64,
+    fade_out_ms: u64,
+    sustain_volume: f32,
+    update_period_ms: u64,
 }
 
 impl WavetableSynth {
     pub fn new(wavetable: Wavetable, sample_rate: usize) -> Self {
-        let fade_in_ms: u32 = 30;
-        let fade_out_ms: u32 = 30;
-        WavetableSynth { wavetable, sample_rate, fade_in_ms, fade_out_ms }
+        let fade_in_ms: u64 = 30;
+        let fade_out_ms: u64 = 30;
+        let sustain_volume: f32 = 1.0;
+        let update_period_ms: u64 = 10;
+        WavetableSynth {
+            wavetable,
+            sample_rate,
+            fade_in_ms,
+            fade_out_ms,
+            sustain_volume,
+            update_period_ms,
+        }
     }
 
-    pub fn set_fade_length_ms(&mut self, _fade_in_ms: u32, _fade_out_ms: u32) {
+    pub fn play(&self, frequency: f32, note_length_ms: u64, handle: &OutputStreamHandle) {
+        let sink = Sink::try_new(handle).expect("Failed to create a new sink for audio playback");
+        sink.set_volume(0.0);
+
+        let mut oscillator = Oscillator::new(self.sample_rate, self.wavetable);
+        oscillator.set_frequency(frequency);
+        sink.append(oscillator);
+
+        let fade_in_increment: f32 =
+            self.sustain_volume / (self.fade_in_ms as f32 / self.update_period_ms as f32);
+        let fade_out_increment: f32 =
+            self.sustain_volume / (self.fade_out_ms as f32 / self.update_period_ms as f32);
+
+        let update_period = Duration::from_millis(self.update_period_ms);
+        let fade_in_duration = Duration::from_millis(self.fade_in_ms);
+        let fade_out_duration = Duration::from_millis(self.fade_out_ms);
+
+        let note_length = Duration::from_millis(note_length_ms);
+        let note_start = Instant::now();
+        let note_end = note_start + note_length;
+
+        while Instant::now() <= note_end {
+            let start_tick = Instant::now();
+            if Instant::now() <= note_start + fade_in_duration {
+                let volume = sink.volume() + fade_in_increment;
+                sink.set_volume(volume);
+            }
+            if Instant::now() >= note_end - fade_out_duration {
+                let volume = sink.volume() - fade_out_increment;
+                sink.set_volume(volume);
+            }
+            let end_tick = Instant::now();
+            sleep(update_period - end_tick.duration_since(start_tick));
+        }
+
+        sink.stop();
+    }
+
+    pub fn set_fade_length_ms(&mut self, _fade_in_ms: u64, _fade_out_ms: u64) {
         self.fade_in_ms = _fade_in_ms;
         self.fade_out_ms = _fade_out_ms;
+    }
+
+    pub fn set_volume(&mut self, volume: f32) {
+        self.sustain_volume = volume;
     }
 }
 
