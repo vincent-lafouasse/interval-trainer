@@ -26,8 +26,8 @@ fn main() -> Result<()> {
 
     let quizing = false;
     let debugging = false;
-    let one_note = false;
-    let melody = true;
+    let synth = true;
+    let bach = false;
 
     if debugging {
         debug();
@@ -37,24 +37,27 @@ fn main() -> Result<()> {
         quiz();
     }
 
-    if one_note {
+    if synth {
         let mut synth = WavetableSynth::new(SINE, SAMPLE_RATE);
         synth.set_volume(0.5);
 
         let f_a4: f32 = FREQUENCIES[4 * CHROMATIC_NOTES_PER_OCTAVE + 9];
+        let f_e5: f32 = FREQUENCIES[4 * CHROMATIC_NOTES_PER_OCTAVE + 9 + 7];
         let note_length_ms = 3000;
 
         synth.play(f_a4, note_length_ms, &stream_handle);
+        sleep(Duration::from_secs(1));
+        synth.play(f_e5, note_length_ms, &stream_handle);
     }
 
-    if melody {
-        play_a_melody(&stream_handle);
+    if bach {
+        play_some_bach(&stream_handle);
     }
 
     Ok(())
 }
 
-fn play_a_melody(handle: &OutputStreamHandle) {
+fn play_some_bach(handle: &OutputStreamHandle) {
     let mut synth = WavetableSynth::new(SINE, SAMPLE_RATE);
     synth.set_volume(0.5);
     synth.set_fade_length_ms(100, 100);
