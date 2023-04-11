@@ -57,27 +57,30 @@ fn main() -> Result<()> {
 fn play_a_melody(handle: &OutputStreamHandle) {
     let mut synth = WavetableSynth::new(SINE, SAMPLE_RATE);
     synth.set_volume(0.5);
+    synth.set_fade_length_ms(100, 100);
 
-    let f_c4: f32 = FREQUENCIES[4 * CHROMATIC_NOTES_PER_OCTAVE];
-    let f_d4: f32 = FREQUENCIES[4 * CHROMATIC_NOTES_PER_OCTAVE + 2];
-    let f_e4: f32 = FREQUENCIES[4 * CHROMATIC_NOTES_PER_OCTAVE + 4];
-    let f_f4: f32 = FREQUENCIES[4 * CHROMATIC_NOTES_PER_OCTAVE + 5];
-    let f_g4: f32 = FREQUENCIES[4 * CHROMATIC_NOTES_PER_OCTAVE + 7];
+    let f_a4: f32 = FREQUENCIES[4 * CHROMATIC_NOTES_PER_OCTAVE + 9];
+    let f_b4: f32 = FREQUENCIES[4 * CHROMATIC_NOTES_PER_OCTAVE + 11];
+    let f_c5: f32 = FREQUENCIES[5 * CHROMATIC_NOTES_PER_OCTAVE + 0];
+    let f_d5: f32 = FREQUENCIES[5 * CHROMATIC_NOTES_PER_OCTAVE + 2];
 
-    let time_unit_ms = 300;
+    let time_unit_ms = 400;
 
     let notes_to_play = vec![
-        (f_d4, 2 * time_unit_ms),
-        (f_e4, 1 * time_unit_ms),
-        (f_f4, 2 * time_unit_ms),
-        (f_g4, 1 * time_unit_ms),
-        (f_e4, 3 * time_unit_ms),
-        (f_c4, 2 * time_unit_ms),
-        (f_d4, 4 * time_unit_ms),
+        (f_a4, 1),
+        (f_d5, 1),
+        (f_c5, 1),
+        (f_b4, 1),
+        (f_c5, 1),
+        (f_a4, 1),
+        (f_d5, 4),
+        (f_c5, 1),
+        (f_d5, 1),
+        (f_b4, 4),
     ];
 
-    for (frequency, note_length_ms) in notes_to_play.iter() {
-        synth.play(*frequency, *note_length_ms, handle);
+    for (frequency, note_length) in notes_to_play.iter() {
+        synth.play(*frequency, *note_length * time_unit_ms, handle);
     }
 }
 
