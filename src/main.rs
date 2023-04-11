@@ -26,8 +26,8 @@ fn main() -> Result<()> {
 
     let quizing = false;
     let debugging = false;
-    let one_note = true;
-    let melody = false;
+    let one_note = false;
+    let melody = true;
 
     if debugging {
         debug();
@@ -55,7 +55,8 @@ fn main() -> Result<()> {
 }
 
 fn play_a_melody(handle: &OutputStreamHandle) {
-    let volume = 0.5;
+    let mut synth = WavetableSynth::new(SINE, SAMPLE_RATE);
+    synth.set_volume(0.5);
 
     let f_c4: f32 = FREQUENCIES[4 * CHROMATIC_NOTES_PER_OCTAVE];
     let f_d4: f32 = FREQUENCIES[4 * CHROMATIC_NOTES_PER_OCTAVE + 2];
@@ -75,14 +76,8 @@ fn play_a_melody(handle: &OutputStreamHandle) {
         (f_d4, 4 * time_unit_ms),
     ];
 
-    for (frequency, duration) in notes_to_play.iter() {
-        let sink = Sink::try_new(handle).expect("Failed to create a new sink for audio playback");
-        sink.set_volume(volume);
-        let mut sine_oscillator = Oscillator::new(SAMPLE_RATE, SINE);
-        sine_oscillator.set_frequency(*frequency);
-        sink.append(sine_oscillator);
-        std::thread::sleep(std::time::Duration::from_millis(*duration));
-        sink.stop();
+    for (frequency, note_length_ms) in notes_to_play.iter() {
+        synth.play(*frequency, *note_length_ms, handle);
     }
 }
 
