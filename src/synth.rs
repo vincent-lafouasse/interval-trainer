@@ -107,7 +107,7 @@ impl Oscillator {
         let sample = self.wavetable.interpolate(self.index);
         self.index += self.index_increment;
         self.index %= self.wavetable.resolution() as f32;
-        return sample;
+        sample
     }
 }
 
@@ -157,7 +157,7 @@ impl Wavetable {
         let right_weight = float_index - (left_index as f32);
         let left_weight = 1.0 - right_weight;
 
-        return left_weight * self.at(left_index) + right_weight * self.at(right_index);
+        left_weight * self.at(left_index) + right_weight * self.at(right_index)
     }
 
     pub fn at(&self, index: usize) -> f32 {
