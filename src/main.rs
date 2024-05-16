@@ -44,12 +44,14 @@ fn main() -> Result<()> {
     sleep(Duration::from_secs(1));
     synth.play(f, 1000, &stream_handle);
 
-    println!("It was {}. Did you get it right?", mystery_note);
-    println!("{} Hz to {} Hz = {} cents", f0, f, distance_cents(f0, f));
-
     listen_for_frequency(f);
+    println!("It was {}. Did you get it right?", mystery_note);
 
     Ok(())
+}
+
+fn listen_for_frequency(_f: f64) {
+    // call Detector<sample type>.get_pitch() on input callback ?
 }
 
 fn choose_notes(range: &NoteRange) -> (Note, Note) {
@@ -63,22 +65,6 @@ fn choose_notes(range: &NoteRange) -> (Note, Note) {
 
     let reference = new_range.rand();
     (reference, reference.up(interval))
-}
-
-fn listen_for_frequency(_f: f64) {
-    let dt = 1.0 / SAMPLE_RATE as f64;
-    let freq = 300.0;
-    let signal: Vec<f64> = (0..SIZE)
-        .map(|x| (2.0 * std::f64::consts::PI * x as f64 * dt * freq).sin())
-        .collect();
-
-    let mut detector = McLeodDetector::new(SIZE, PADDING);
-
-    let pitch = detector
-        .get_pitch(&signal, SAMPLE_RATE, POWER_THRESHOLD, CLARITY_THRESHOLD)
-        .unwrap();
-
-    println!("Frequency: {}, Clarity: {}", pitch.frequency, pitch.clarity);
 }
 
 fn distance_cents(f0: f64, f: f64) -> i32 {
