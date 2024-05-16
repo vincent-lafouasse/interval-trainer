@@ -69,7 +69,7 @@ fn quiz() {
     let interval = Interval::get_random_diatonic();
     println!("{interval}");
     let direction = Direction::Up;
-    dbg!(direction);
+    println!("{:#?}", direction);
 
     let size: i8 = interval.size_i8();
 
@@ -77,11 +77,10 @@ fn quiz() {
         Direction::Up => range.crop_top(size),
         Direction::Down => range.crop_bottom(size),
     };
-    println!("{new_range}");
 
     let reference: Note = new_range.rand();
     let to_guess: Note = reference.up(interval);
-    println!("{interval}");
+    println!("looking for notes in {new_range}");
     println!("Reference: {}", reference);
     println!("To guess: {}", to_guess);
 }
