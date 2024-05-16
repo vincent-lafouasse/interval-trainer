@@ -128,7 +128,7 @@ impl Oscillator {
     pub fn get_sample(&mut self) -> f32 {
         // the wavetable is discrete so non-integer values must be estimated
         // here by linear interpolation
-        let sample = self.wavetable.interpolate(self.index);
+        let sample = self.wavetable.at(self.index);
         self.index += self.index_increment;
         self.index %= self.wavetable.resolution() as f32;
         sample
@@ -175,17 +175,13 @@ impl Wavetable {
         Wavetable { plot: &SQUARE_8 }
     }
 
-    fn interpolate(&self, float_index: f32) -> f32 {
-        let left_index = float_index as usize;
+    pub fn at(&self, index: f32) -> f32 {
+        let left_index = index as usize;
         let right_index = (left_index + 1) % self.resolution();
-        let right_weight = float_index - (left_index as f32);
+        let right_weight = index - (left_index as f32);
         let left_weight = 1.0 - right_weight;
 
-        left_weight * self.at(left_index) + right_weight * self.at(right_index)
-    }
-
-    pub fn at(&self, index: usize) -> f32 {
-        self.plot[index]
+        left_weight * self.plot[left_index] + right_weight * self.plot[right_index]
     }
 
     pub fn resolution(&self) -> usize {
