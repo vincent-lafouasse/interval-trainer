@@ -13,7 +13,7 @@ use rodio::{OutputStream, OutputStreamHandle, Sink};
 use std::thread::sleep;
 use std::time::{Duration, Instant};
 
-use crate::interval::Interval;
+use crate::interval::{Direction, Interval};
 use crate::note_range::NoteRange;
 use crate::notes::Note;
 use crate::simple_note::SimpleNote;
@@ -68,6 +68,8 @@ fn quiz() {
     let interval = Interval::get_random_diatonic();
     println!("{interval}");
     assert!(range.size() as isize > interval.size());
+    let direction = Direction::rand();
+    dbg!(direction);
 }
 
 fn log_note(note: &Note) {

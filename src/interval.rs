@@ -1,5 +1,7 @@
 use std::fmt;
 
+use rand::thread_rng;
+
 #[derive(Copy, Clone, Debug, PartialEq)]
 pub struct Interval {
     pub base_interval: BaseInterval,
@@ -38,6 +40,20 @@ impl Interval {
 pub enum Direction {
     Up,
     Down,
+}
+
+impl Direction {
+    pub fn rand() -> Self {
+        use rand::Rng;
+        let mut rng = thread_rng();
+        let rn: u8 = rng.gen::<u8>() % 2;
+
+        match rn {
+            0 => Direction::Up,
+            1 => Direction::Down,
+            _ => panic!("unreachable"),
+        }
+    }
 }
 
 #[derive(Copy, Clone, Debug, PartialEq)]
