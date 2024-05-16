@@ -18,13 +18,13 @@ impl NoteRange {
     }
 
     pub fn crop_bottom(&self, shift_amount: u8) -> Self {
-        assert!(shift_amount < self.size());
+        assert!(shift_amount < self.size_u8());
         let shift_amount: i8 = shift_amount.try_into().unwrap();
         NoteRange::new(self.bottom.shift(shift_amount), self.top).unwrap()
     }
 
     pub fn crop_top(&self, shift_amount: u8) -> Self {
-        assert!(shift_amount < self.size());
+        assert!(shift_amount < self.size_u8());
         let shift_amount: i8 = shift_amount.try_into().unwrap();
         NoteRange::new(self.bottom, self.top.shift(-shift_amount)).unwrap()
     }
@@ -40,17 +40,18 @@ impl NoteRange {
 
     pub fn rand(&self) -> Note {
         let mut rng = rand::thread_rng();
-
-        let size: i8 = self.top.get_i8() + 1 - self.bottom.get_i8();
-        let rn: i8 = rng.gen_range(0..=size);
-
+        let rn: i8 = rng.gen_range(0..=self.size_i8());
         let note: i8 = self.bottom.get_i8() + rn;
 
         SimpleNote::new(note).to_note_rand()
     }
 
-    pub fn size(&self) -> u8 {
-        (self.top.data + 1 - self.bottom.data).try_into().unwrap()
+    pub fn size_u8(&self) -> u8 {
+        self.top.get_u8() + 1 - self.bottom.get_u8()
+    }
+
+    pub fn size_i8(&self) -> i8 {
+        self.top.get_i8() + 1 - self.bottom.get_i8()
     }
 
     pub fn alto_sax() -> Self {
