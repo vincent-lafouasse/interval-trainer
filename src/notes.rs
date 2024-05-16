@@ -26,18 +26,30 @@ pub enum NoteName {
 impl Note {
     pub fn up(&self, interval: Interval) -> Note {
         // garbage
+        println!("looking for a {} up from {}", interval, *self);
+        println!("reference:");
+        println!("{:#?}", *self);
         let new_notename: u8 = u8::from(self.name) + u8::from(interval.base_interval);
         let octave_shift: i8 = new_notename.try_into().unwrap();
         let octave_shift: i8 = octave_shift / 7;
+
         let natural = Note {
             name: NoteName::try_from(new_notename % 7).unwrap(),
             alteration: 0,
             octave: self.octave + octave_shift,
         };
+        println!("first candidate");
+        println!("{:#?}", natural);
+
+        let distance = natural.distance_from(*self);
+        println!("candidate is {} semitones away", distance);
+
+        let target_distance = interval.size_i8();
+        println!("target should be {} semitones away", target_distance);
 
         Note {
             name: natural.name,
-            alteration: self.distance_from(natural),
+            alteration: target_distance - distance,
             octave: natural.octave,
         }
     }
