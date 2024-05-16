@@ -1,6 +1,7 @@
 #![allow(unused_imports)]
 #![allow(dead_code)]
 
+mod note_range;
 mod notes;
 mod synth;
 mod wavetables;
@@ -10,6 +11,7 @@ use rodio::{OutputStream, OutputStreamHandle, Sink};
 use std::thread::sleep;
 use std::time::{Duration, Instant};
 
+use crate::note_range::NoteRange;
 use crate::notes::Note;
 use crate::synth::{Oscillator, Wavetable, WavetableSynth};
 
@@ -71,4 +73,7 @@ fn quiz() {
     log_note(&note);
     let note = Note::parse_from_string("G##2").unwrap();
     log_note(&note);
+
+    let range = NoteRange::alto_sax();
+    println!("{range}");
 }
