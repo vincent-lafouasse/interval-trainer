@@ -1,6 +1,7 @@
 #![allow(unused_imports)]
 #![allow(dead_code)]
 
+mod interval;
 mod note_range;
 mod notes;
 mod simple_note;
