@@ -11,7 +11,7 @@ pub struct NoteRange {
 
 impl NoteRange {
     pub fn new(bottom: SimpleNote, top: SimpleNote) -> Result<Self, &'static str> {
-        match top > bottom {
+        match top.get_u8() > bottom.get_u8() {
             true => Ok(NoteRange { bottom, top }),
             false => Err("Invalid note range"),
         }
@@ -40,14 +40,11 @@ impl NoteRange {
 
     pub fn rand(&self) -> Note {
         let mut rng = rand::thread_rng();
-        let top = self.top.data;
-        let bottom = self.bottom.data;
-        let size: u8 = (top + 1 - bottom).try_into().unwrap();
+        let size: u8 = self.top.get_u8() + 1 - self.bottom.get_u8();
 
         let rn: i8 = (rng.gen::<u8>() % size).try_into().unwrap();
 
-        let note: i8 = bottom + rn;
-        println!("{}", note);
+        let note: i8 = self.bottom.get_i8() + rn;
 
         SimpleNote::new(note).to_note_rand()
     }
