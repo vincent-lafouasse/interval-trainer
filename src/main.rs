@@ -41,12 +41,19 @@ fn main() -> Result<()> {
 
     let synth = WavetableSynth::new(SINE, SAMPLE_RATE);
 
+    let f0: f32 = reference.frequency();
+    let f: f32 = mystery_note.frequency();
     let note_length_ms = 3000;
-    synth.play(reference.frequency(), note_length_ms, &stream_handle);
+    synth.play(f0, note_length_ms, &stream_handle);
     sleep(Duration::from_secs(1));
-    synth.play(mystery_note.frequency(), note_length_ms, &stream_handle);
+    synth.play(f, note_length_ms, &stream_handle);
 
     println!("It was {}. Did you get it right?", mystery_note);
+    println!("{} to {} = {} cents", f0, f, distance_cents(f0, f));
 
     Ok(())
+}
+
+fn distance_cents(f0: f32, f: f32) -> i32 {
+    1200 * f32::log2(f / f0) as i32
 }
