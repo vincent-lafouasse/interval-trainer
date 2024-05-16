@@ -8,6 +8,9 @@ mod simple_note;
 mod synth;
 mod wavetables;
 
+use cpal::traits::{DeviceTrait, HostTrait};
+use cpal::{Device, Host, SupportedStreamConfig};
+
 use color_eyre::eyre::Result;
 use pitch_detection::detector::mcleod::McLeodDetector;
 use pitch_detection::detector::PitchDetector;
@@ -52,6 +55,8 @@ fn main() -> Result<()> {
 
 fn listen_for_frequency(_f: f64) {
     // call Detector<sample type>.get_pitch() on input callback ?
+    let (_host, input_device, config) =
+        setup_input_device().expect("Failed to find an input device");
 }
 
 fn choose_notes(range: &NoteRange) -> (Note, Note) {
@@ -65,6 +70,21 @@ fn choose_notes(range: &NoteRange) -> (Note, Note) {
 
     let reference = new_range.rand();
     (reference, reference.up(interval))
+}
+
+fn setup_input_device() -> Result<(Host, Device, SupportedStreamConfig), &'static str> {
+    let host: Host = cpal::default_host();
+    let device: Device = match host.default_input_device() {
+        Some(device) => device,
+        None => return Err("no input device available"),
+    };
+
+    let stream_config: SupportedStreamConfig = match device.default_input_config() {
+        Ok(config) => config,
+        Err(_) => return Err("couldnt find default stream config"),
+    };
+
+    Ok((host, device, stream_config))
 }
 
 fn distance_cents(f0: f64, f: f64) -> i32 {
