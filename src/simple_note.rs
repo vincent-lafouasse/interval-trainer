@@ -1,5 +1,9 @@
 use std::fmt;
 
+use crate::notes::NoteName;
+use crate::Note;
+use rand::Rng;
+
 #[derive(Debug, PartialEq, PartialOrd)]
 pub struct SimpleNote {
     pub data: i8,
@@ -12,6 +16,47 @@ impl SimpleNote {
 
     pub fn octave(&self) -> i8 {
         (self.data / 12) - 1
+    }
+
+    pub fn to_note_rand(&self) -> Note {
+        let mut rng = rand::thread_rng();
+        let sharp: u8 = rng.gen::<u8>() / 2;
+
+        match self.data / 12 {
+            0 => Note { name: NoteName::C, alteration: 0, octave: self.octave() },
+            1 => match sharp {
+                1 => Note { name: NoteName::C, alteration: 1, octave: self.octave() },
+                0 => Note { name: NoteName::D, alteration: -1, octave: self.octave() },
+                _ => panic!("unreachable"),
+            },
+            2 => Note { name: NoteName::D, alteration: 0, octave: self.octave() },
+            3 => match sharp {
+                1 => Note { name: NoteName::D, alteration: 1, octave: self.octave() },
+                0 => Note { name: NoteName::E, alteration: -1, octave: self.octave() },
+                _ => panic!("unreachable"),
+            },
+            4 => Note { name: NoteName::E, alteration: 0, octave: self.octave() },
+            5 => Note { name: NoteName::F, alteration: 0, octave: self.octave() },
+            6 => match sharp {
+                1 => Note { name: NoteName::F, alteration: 1, octave: self.octave() },
+                0 => Note { name: NoteName::G, alteration: -1, octave: self.octave() },
+                _ => panic!("unreachable"),
+            },
+            7 => Note { name: NoteName::G, alteration: 0, octave: self.octave() },
+            8 => match sharp {
+                1 => Note { name: NoteName::G, alteration: 1, octave: self.octave() },
+                0 => Note { name: NoteName::A, alteration: -1, octave: self.octave() },
+                _ => panic!("unreachable"),
+            },
+            9 => Note { name: NoteName::A, alteration: 0, octave: self.octave() },
+            10 => match sharp {
+                1 => Note { name: NoteName::A, alteration: 1, octave: self.octave() },
+                0 => Note { name: NoteName::B, alteration: -1, octave: self.octave() },
+                _ => panic!("unreachable"),
+            },
+            11 => Note { name: NoteName::B, alteration: 0, octave: self.octave() },
+            _ => panic!("unreachable"),
+        }
     }
 }
 

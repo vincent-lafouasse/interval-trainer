@@ -74,16 +74,11 @@ fn log_simple(note: &SimpleNote) {
 
 fn quiz() {
     println!("-----------------------------------------------------------");
-    let note = SimpleNote { data: 35 };
-    log_simple(&note);
-    let note = SimpleNote { data: 36 };
-    log_simple(&note);
-    let note = SimpleNote { data: 60 };
-    log_simple(&note);
-    let note = SimpleNote { data: 69 };
-    log_simple(&note);
-    let note = SimpleNote { data: 70 };
-    log_simple(&note);
+    let note = Note::parse_from_string("Ab3").unwrap();
+    println!("{}", SimpleNote::new(note.to_midi_style()).to_note_rand());
+    println!("-----------------------------------------------------------");
+    let note = Note::parse_from_string("D#6").unwrap();
+    println!("{}", SimpleNote::new(note.to_midi_style()).to_note_rand());
 
     let range = NoteRange::alto_sax();
     println!("{range}");
