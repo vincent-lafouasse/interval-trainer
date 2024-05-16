@@ -2,14 +2,14 @@ use std::fmt;
 
 #[derive(Debug)]
 pub struct Note {
-    pub name: u8,
+    pub name: NoteName,
     pub alteration: i8,
     pub octave: i8,
 }
 
 impl Note {
     pub fn to_midi_style(&self) -> i8 {
-        12 * (self.octave + 1) + self.name as i8 + self.alteration as i8
+        12 * (self.octave + 1) + self.name.distance_from_c() as i8 + self.alteration as i8
     }
 
     pub fn frequency(&self) -> f32 {
@@ -21,16 +21,16 @@ impl Note {
     pub fn parse_from_string(string: &str) -> Result<Note, &str> {
         let mut chars = string.chars();
 
-        let name: u8 = match chars.next() {
+        let name: NoteName = match chars.next() {
             None => return Err("no note given"),
             Some(note_name) => match note_name {
-                'C' => 0,
-                'D' => 1,
-                'E' => 2,
-                'F' => 3,
-                'G' => 4,
-                'A' => 5,
-                'B' => 6,
+                'C' => NoteName::C,
+                'D' => NoteName::D,
+                'E' => NoteName::E,
+                'F' => NoteName::F,
+                'G' => NoteName::G,
+                'A' => NoteName::A,
+                'B' => NoteName::B,
                 _ => return Err("invalid note name"),
             },
         };
@@ -71,6 +71,7 @@ impl Note {
     }
 }
 
+#[derive(Debug)]
 pub enum NoteName {
     A,
     B,
@@ -112,16 +113,6 @@ impl fmt::Display for NoteName {
 
 impl fmt::Display for Note {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        let notename_repr = match self.name {
-            0 => "C",
-            1 => "D",
-            2 => "E",
-            3 => "F",
-            4 => "G",
-            5 => "A",
-            6 => "B",
-            _ => "X",
-        };
         let alteration_repr = match self.alteration {
             -2 => "bb",
             -1 => "b",
@@ -130,6 +121,6 @@ impl fmt::Display for Note {
             2 => "##",
             _ => "X",
         };
-        write!(f, "{}{}{}", notename_repr, alteration_repr, self.octave)
+        write!(f, "{}{}{}", self.name, alteration_repr, self.octave)
     }
 }
