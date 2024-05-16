@@ -11,6 +11,18 @@ pub struct Note {
     pub octave: i8,
 }
 
+#[derive(Copy, Clone, Debug, PartialEq, IntEnum)]
+#[repr(u8)]
+pub enum NoteName {
+    C = 0,
+    D = 1,
+    E = 2,
+    F = 3,
+    G = 4,
+    A = 5,
+    B = 6,
+}
+
 impl Note {
     pub fn up(&self, interval: Interval) -> Note {
         let notename_shift: u8 = u8::from(self.name) + u8::from(interval.base_interval);
@@ -97,18 +109,6 @@ impl Note {
             },
         }
     }
-}
-
-#[derive(Copy, Clone, Debug, PartialEq, IntEnum)]
-#[repr(u8)]
-pub enum NoteName {
-    C = 0,
-    D = 1,
-    E = 2,
-    F = 3,
-    G = 4,
-    A = 5,
-    B = 6,
 }
 
 impl NoteName {
