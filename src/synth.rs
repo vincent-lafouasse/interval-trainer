@@ -17,7 +17,10 @@ fn duration_to_millis(duration: Duration) -> f32 {
 }
 
 fn interpolate(current: f32, start: f32, end: f32, start_value: f32, end_value: f32) -> f32 {
-    1.0
+    let high_contribution = (current - start) / (end - start);
+    let low_contribution = (end - current) / (end - start);
+
+    high_contribution * end_value + low_contribution * start_value
 }
 
 impl VCA {
