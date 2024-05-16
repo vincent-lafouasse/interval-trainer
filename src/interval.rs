@@ -49,7 +49,7 @@ impl Interval {
         use rand::prelude::*;
         let mut rng = thread_rng();
         let diatonic_intervals = [
-            Interval { base_interval: BaseInterval::Unison, quality: Quality::Perfect },
+            //Interval { base_interval: BaseInterval::Unison, quality: Quality::Perfect },
             Interval { base_interval: BaseInterval::Second, quality: Quality::Major },
             Interval { base_interval: BaseInterval::Second, quality: Quality::Minor },
             Interval { base_interval: BaseInterval::Third, quality: Quality::Major },
