@@ -56,8 +56,11 @@ fn main() -> Result<()> {
 */
 
 fn log_note(note: &Note) {
+    println!("-----------------------------------------------------------");
+    println!("{}", note);
     println!("{:#?}", note);
-    println!("{}: {}", note, note.frequency());
+    println!("{}", note.to_midi_style());
+    println!("{}", note.frequency());
 
 }
 
