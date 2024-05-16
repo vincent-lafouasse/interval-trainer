@@ -3,6 +3,7 @@
 
 mod note_range;
 mod notes;
+mod simple_note;
 mod synth;
 mod wavetables;
 
