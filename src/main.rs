@@ -13,7 +13,7 @@ use cpal::traits::{DeviceTrait, HostTrait};
 use cpal::{Device, Host, SupportedStreamConfig};
 use pitch_detection::detector::mcleod::McLeodDetector;
 use pitch_detection::detector::PitchDetector;
-use rodio::OutputStream;
+use rodio::{OutputStream, OutputStreamHandle};
 
 use color_eyre::eyre::Result;
 use std::thread::sleep;
@@ -39,22 +39,13 @@ fn main() -> Result<()> {
     let range = NoteRange::from_str("C2", "C5").unwrap();
     let (reference, mystery_note) = choose_notes(&range);
 
-    let synth = WavetableSynth::new(SINE, SAMPLE_RATE);
     println!("This is {}", reference);
-    synth.play(reference.frequency(), 1000, &stream_handle);
-    sleep(Duration::from_secs(1));
-    synth.play(mystery_note.frequency(), 1000, &stream_handle);
+    play_notes(reference, mystery_note, &stream_handle);
 
     listen_for_frequency(mystery_note.frequency());
     println!("It was {}. Did you get it right?", mystery_note);
 
     Ok(())
-}
-
-fn listen_for_frequency(_f: f64) {
-    // call Detector<sample type>.get_pitch() on input callback ?
-    let (_host, input_device, config) =
-        setup_input_device().expect("Failed to find an input device");
 }
 
 fn choose_notes(range: &NoteRange) -> (Note, Note) {
@@ -70,6 +61,13 @@ fn choose_notes(range: &NoteRange) -> (Note, Note) {
     (reference, reference.up(interval))
 }
 
+fn play_notes(n1: Note, n2: Note, stream_handle: &OutputStreamHandle) {
+    let synth = WavetableSynth::new(SINE, SAMPLE_RATE);
+    synth.play(n1.frequency(), 1000, stream_handle);
+    sleep(Duration::from_secs(1));
+    synth.play(n2.frequency(), 1000, stream_handle);
+}
+
 fn setup_input_device() -> Result<(Host, Device, SupportedStreamConfig), &'static str> {
     let host: Host = cpal::default_host();
     let device: Device = match host.default_input_device() {
@@ -83,6 +81,12 @@ fn setup_input_device() -> Result<(Host, Device, SupportedStreamConfig), &'stati
     };
 
     Ok((host, device, stream_config))
+}
+
+fn listen_for_frequency(_f: f64) {
+    // call Detector<sample type>.get_pitch() on input callback ?
+    let (_host, input_device, config) =
+        setup_input_device().expect("Failed to find an input device");
 }
 
 fn distance_cents(f0: f64, f: f64) -> i32 {
