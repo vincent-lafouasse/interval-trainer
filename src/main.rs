@@ -26,74 +26,27 @@ fn main() -> Result<()> {
     color_eyre::install()?;
     let (_stream, stream_handle) = OutputStream::try_default().unwrap();
 
-    let quizing = true;
-    let synth = false;
-
-    if quizing {
-        quiz();
-    }
-
-    if synth {
-        let synth = WavetableSynth::new(SINE, SAMPLE_RATE);
-
-        let f_a4: f32 = Note::parse_from_string("A4").unwrap().frequency();
-        let f_e5: f32 = Note::parse_from_string("E5").unwrap().frequency();
-        let note_length_ms = 3000;
-
-        // needs refactoring to take a Duration instead of a usize
-        synth.play(f_a4, note_length_ms, &stream_handle);
-        sleep(Duration::from_secs(1));
-        synth.play(f_e5, note_length_ms, &stream_handle);
-    }
-
-    Ok(())
-}
-
-/*
-*   something like:
-*
-*   let range = Range::trombone();
-*   let interval = Interval::get_random_common();
-*   let direction = random_direction();
-*   let reference, to_guess = random_notes(range, interval, direction);
-*
-*   synth.play(reference, duration);
-*   synth.play(to_guess, duration);
-*
-*/
-
-fn quiz() {
-    println!("-----------------------------------------------------------");
-    let range = NoteRange::from_str("C3", "C6").unwrap();
-    println!("{range}");
+    let range = NoteRange::from_str("C2", "C5").unwrap();
     let interval = Interval::get_random_diatonic();
-    println!("{interval}");
     let direction = Direction::Up;
-    println!("{:#?}", direction);
-
-    let size: i8 = interval.size_i8();
 
     let new_range = match direction {
-        Direction::Up => range.crop_top(size),
-        Direction::Down => range.crop_bottom(size),
+        Direction::Up => range.crop_top(interval.size_i8()),
+        Direction::Down => range.crop_bottom(interval.size_i8()),
     };
 
     let reference: Note = new_range.rand();
-    let to_guess: Note = reference.up(interval);
-    println!("looking for notes in {new_range}");
-    println!("Reference: {}", reference);
-    println!("To guess: {}", to_guess);
-}
+    let mystery_note: Note = reference.up(interval);
+    println!("This is {}", reference);
 
-fn log_note(note: &Note) {
-    println!("-----------------------------------------------------------");
-    println!("{}", note);
-    println!("{:#?}", note);
-    println!("{}", note.to_simple());
-    println!("{}", note.frequency());
-}
+    let synth = WavetableSynth::new(SINE, SAMPLE_RATE);
 
-fn log_simple(note: &SimpleNote) {
-    println!("-----------------------------------------------------------");
-    println!("{}: {}", note.data, note);
+    let note_length_ms = 3000;
+    synth.play(reference.frequency(), note_length_ms, &stream_handle);
+    sleep(Duration::from_secs(1));
+    synth.play(mystery_note.frequency(), note_length_ms, &stream_handle);
+
+    println!("It was {}. Did you get it right?", mystery_note);
+
+    Ok(())
 }
