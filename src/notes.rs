@@ -1,5 +1,7 @@
 use std::fmt;
 
+use crate::SimpleNote;
+
 #[derive(Debug)]
 pub struct Note {
     pub name: NoteName,
@@ -8,12 +10,16 @@ pub struct Note {
 }
 
 impl Note {
-    pub fn to_midi_style(&self) -> i8 {
-        12 * (self.octave + 1) + self.name.distance_from_c() as i8 + self.alteration as i8
+    pub fn to_simple(&self) -> SimpleNote {
+        SimpleNote {
+            data: 12 * (self.octave + 1)
+                + self.name.distance_from_c() as i8
+                + self.alteration as i8,
+        }
     }
 
     pub fn frequency(&self) -> f32 {
-        let offset_from_a4: i8 = self.to_midi_style() - 69;
+        let offset_from_a4: i8 = self.to_simple().data - 69;
 
         440.0 * 2.0_f32.powf(offset_from_a4 as f32 / 12.0)
     }

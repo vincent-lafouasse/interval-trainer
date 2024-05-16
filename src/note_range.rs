@@ -17,10 +17,12 @@ impl NoteRange {
     }
 
     pub fn from_str(bottom_str: &str, top_str: &str) -> Result<Self, &'static str> {
-        let bottom_note = Note::parse_from_string(bottom_str).unwrap().to_midi_style();
-        let top_note = Note::parse_from_string(top_str).unwrap().to_midi_style();
+        let bottom_note = Note::parse_from_string(bottom_str).unwrap();
+        let top_note = Note::parse_from_string(top_str).unwrap();
+        let bottom = bottom_note.to_simple();
+        let top = top_note.to_simple();
 
-        NoteRange::new(SimpleNote::new(bottom_note), SimpleNote::new(top_note))
+        NoteRange::new(bottom, top)
     }
 
     pub fn alto_sax() -> Self {

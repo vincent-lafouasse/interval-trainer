@@ -63,7 +63,7 @@ fn log_note(note: &Note) {
     println!("-----------------------------------------------------------");
     println!("{}", note);
     println!("{:#?}", note);
-    println!("{}", note.to_midi_style());
+    println!("{}", note.to_simple());
     println!("{}", note.frequency());
 }
 
@@ -76,7 +76,7 @@ fn quiz() {
     println!("-----------------------------------------------------------");
     let note = Note::parse_from_string("D#6").unwrap();
     println!("note parsed: {}", note);
-    let s_note = SimpleNote::new(note.to_midi_style());
+    let s_note = note.to_simple();
     println!("snote created: {}", s_note);
     println!("note recreated: {}", s_note.to_note_rand());
 }
