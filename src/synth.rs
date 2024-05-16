@@ -61,7 +61,6 @@ pub struct WavetableSynth {
     wavetable: Wavetable,
     sample_rate: usize,
     vca: VCA,
-    update_period_ms: u64,
 }
 
 impl WavetableSynth {
@@ -74,7 +73,6 @@ impl WavetableSynth {
                 sustain: 1.0,
                 release: Duration::from_millis(500),
             },
-            update_period_ms: 5,
         }
     }
 
@@ -88,18 +86,17 @@ impl WavetableSynth {
 
         let note_length = Duration::from_millis(note_length_ms);
         let note_start = Instant::now();
-        let update_period = Duration::from_millis(self.update_period_ms);
+        let update_period = Duration::from_millis(5);
 
-        while Instant::now().duration_since(note_start) <= note_length {
+        while Instant::now().duration_since(note_start) <= note_length + self.vca.release {
             let start_tick = Instant::now();
 
-            let volume = self
-                .vca
-                .get(Instant::now().duration_since(note_start), note_length);
-            sink.set_volume(volume);
+            sink.set_volume(
+                self.vca
+                    .get(Instant::now().duration_since(note_start), note_length),
+            );
 
-            let end_tick = Instant::now();
-            sleep(update_period - end_tick.duration_since(start_tick));
+            sleep(update_period - Instant::now().duration_since(start_tick));
         }
 
         sink.stop();
@@ -170,12 +167,12 @@ impl Iterator for Oscillator {
 
 #[derive(Copy, Clone)]
 pub struct Wavetable {
-    pub plot: &'static [f32; 256],
+    pub plot: &'static [f32; 1024],
 }
 
 impl Wavetable {
     pub const fn new() -> Self {
-        Wavetable { plot: &SINE_256 }
+        Wavetable { plot: &SQUARE_8 }
     }
 
     fn interpolate(&self, float_index: f32) -> f32 {
@@ -192,6 +189,6 @@ impl Wavetable {
     }
 
     pub fn resolution(&self) -> usize {
-        256
+        1024
     }
 }
