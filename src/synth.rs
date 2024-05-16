@@ -35,8 +35,8 @@ impl VCA {
                 0.0,
                 duration_to_millis(length),
                 0.0,
-                self.sustain
-            );      
+                self.sustain,
+            );
         }
 
         if from_start < length {
@@ -50,7 +50,7 @@ impl VCA {
                 duration_to_millis(self.release),
                 self.sustain,
                 0.0,
-            );      
+            );
         }
 
         0.0
@@ -93,7 +93,9 @@ impl WavetableSynth {
         while Instant::now().duration_since(note_start) <= note_length {
             let start_tick = Instant::now();
 
-            let volume = self.vca.get(Instant::now().duration_since(note_start), note_length);
+            let volume = self
+                .vca
+                .get(Instant::now().duration_since(note_start), note_length);
             sink.set_volume(volume);
 
             let end_tick = Instant::now();
