@@ -57,6 +57,12 @@ fn main() -> Result<()> {
     println!("It was {}. Did you get it right?", mystery_note);
     println!("{} Hz to {} Hz = {} cents", f0, f, distance_cents(f0, f));
 
+    listen_for_frequency(f);
+
+    Ok(())
+}
+
+fn listen_for_frequency(_f: f32) {
     let dt = 1.0 / SAMPLE_RATE as f64;
     let freq = 300.0;
     let signal: Vec<f64> = (0..SIZE)
@@ -70,8 +76,6 @@ fn main() -> Result<()> {
         .unwrap();
 
     println!("Frequency: {}, Clarity: {}", pitch.frequency, pitch.clarity);
-
-    Ok(())
 }
 
 fn distance_cents(f0: f32, f: f32) -> i32 {
