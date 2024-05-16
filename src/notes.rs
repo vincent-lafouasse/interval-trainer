@@ -13,7 +13,9 @@ pub struct Note {
 
 impl Note {
     pub fn up(&self, interval: Interval) -> Note {
-        todo!();
+        let mut output = Note {name: self.name, alteration: 0, octave: self.octave};
+        let notename_shift = u8::from(interval.base_interval);
+        todo!()
     }
 
     pub fn distance_from(&self, other: Note) -> i8 {
@@ -110,6 +112,22 @@ impl NoteName {
             NoteName::F => 5,
             NoteName::G => 7,
         }
+    }
+
+    pub fn shift_up(&self, shift: u8) -> Self {
+        let mut out = *self;
+         for _ in 0..(shift % 7) {
+            out = out.next();
+        }
+        out
+    }
+
+    pub fn shift_down(&self, shift: u8) -> Self {
+        let mut out = *self;
+         for _ in 0..(shift % 7) {
+            out = out.prev();
+        }
+        out
     }
 
     pub fn next(&self) -> Self {
