@@ -33,6 +33,26 @@ fn main() -> Result<()> {
     let (_stream, stream_handle) = OutputStream::try_default().unwrap();
 
     let range = NoteRange::from_str("C2", "C5").unwrap();
+    let (reference, mystery_note) = choose_notes(&range);
+
+    let f0: f64 = reference.frequency();
+    let f: f64 = mystery_note.frequency();
+
+    let synth = WavetableSynth::new(SINE, SAMPLE_RATE);
+    println!("This is {}", reference);
+    synth.play(f0, 1000, &stream_handle);
+    sleep(Duration::from_secs(1));
+    synth.play(f, 1000, &stream_handle);
+
+    println!("It was {}. Did you get it right?", mystery_note);
+    println!("{} Hz to {} Hz = {} cents", f0, f, distance_cents(f0, f));
+
+    listen_for_frequency(f);
+
+    Ok(())
+}
+
+fn choose_notes(range: &NoteRange) -> (Note, Note) {
     let interval = Interval::get_random_diatonic();
     let direction = Direction::Up;
 
@@ -41,25 +61,8 @@ fn main() -> Result<()> {
         Direction::Down => range.crop_bottom(interval.size_i8()),
     };
 
-    let reference: Note = new_range.rand();
-    let mystery_note: Note = reference.up(interval);
-    println!("This is {}", reference);
-
-    let synth = WavetableSynth::new(SINE, SAMPLE_RATE);
-
-    let f0: f64 = reference.frequency();
-    let f: f64 = mystery_note.frequency();
-    let note_length_ms = 3000;
-    synth.play(f0, note_length_ms, &stream_handle);
-    sleep(Duration::from_secs(1));
-    synth.play(f, note_length_ms, &stream_handle);
-
-    println!("It was {}. Did you get it right?", mystery_note);
-    println!("{} Hz to {} Hz = {} cents", f0, f, distance_cents(f0, f));
-
-    listen_for_frequency(f);
-
-    Ok(())
+    let reference = new_range.rand();
+    (reference, reference.up(interval))
 }
 
 fn listen_for_frequency(_f: f64) {
