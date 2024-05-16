@@ -17,6 +17,18 @@ impl NoteRange {
         }
     }
 
+    pub fn crop_bottom(input: Self, shift_amount: u8) -> Self {
+        assert!(shift_amount < input.size());
+        let shift_amount: i8 = shift_amount.try_into().unwrap();
+        NoteRange::new(input.bottom.shift(shift_amount), input.top).unwrap()
+    }
+
+    pub fn crop_top(input: Self, shift_amount: u8) -> Self {
+        assert!(shift_amount < input.size());
+        let shift_amount: i8 = shift_amount.try_into().unwrap();
+        NoteRange::new(input.bottom, input.top.shift(-shift_amount)).unwrap()
+    }
+
     pub fn from_str(bottom_str: &str, top_str: &str) -> Result<Self, &'static str> {
         let bottom_note = Note::parse_from_string(bottom_str).unwrap();
         let top_note = Note::parse_from_string(top_str).unwrap();
