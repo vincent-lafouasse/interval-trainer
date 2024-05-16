@@ -49,11 +49,11 @@ fn main() -> Result<()> {
     synth.play(f, note_length_ms, &stream_handle);
 
     println!("It was {}. Did you get it right?", mystery_note);
-    println!("{} to {} = {} cents", f0, f, distance_cents(f0, f));
+    println!("{} Hz to {} Hz = {} cents", f0, f, distance_cents(f0, f));
 
     Ok(())
 }
 
 fn distance_cents(f0: f32, f: f32) -> i32 {
-    1200 * f32::log2(f / f0) as i32
+    (1200.0 * f32::log2(f / f0)) as i32
 }
