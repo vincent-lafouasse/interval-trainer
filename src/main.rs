@@ -24,9 +24,9 @@ fn main() -> Result<()> {
     color_eyre::install()?;
     let (_stream, stream_handle) = OutputStream::try_default().unwrap();
 
-    let quizing = true;
+    let quizing = false;
     let debugging = false;
-    let synth = false;
+    let synth = true;
     let bach = false;
 
     if debugging {
