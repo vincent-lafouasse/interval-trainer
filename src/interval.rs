@@ -35,6 +35,12 @@ impl Interval {
 }
 
 #[derive(Copy, Clone, Debug, PartialEq)]
+pub enum Direction {
+    Up,
+    Down,
+}
+
+#[derive(Copy, Clone, Debug, PartialEq)]
 pub enum BaseInterval {
     Unison,
     Second,
