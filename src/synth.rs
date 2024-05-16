@@ -13,7 +13,7 @@ pub struct WavetableSynth {
 }
 
 impl WavetableSynth {
-    pub fn play(&self, frequency: f32, note_length_ms: u64, handle: &OutputStreamHandle) {
+    pub fn play(&self, frequency: f64, note_length_ms: u64, handle: &OutputStreamHandle) {
         let sink = Sink::try_new(handle).expect("Failed to create a new sink for audio playback");
         sink.set_volume(0.0);
 
@@ -105,13 +105,13 @@ impl Oscillator {
         Oscillator { sample_rate, wavetable, index: 0., index_increment: 0. }
     }
 
-    pub fn set_frequency(&mut self, frequency: f32) {
+    pub fn set_frequency(&mut self, frequency: f64) {
         // how much to move in the wavetable per tick
         // linear in self.wavetable.resolution()
         // linear in frequency (higher f => bigger increment to get more periods per units of time)
         // inverse in sample_rate because "per tick"
         self.index_increment =
-            (self.wavetable.resolution() as f32) * frequency / (self.sample_rate as f32);
+            ((self.wavetable.resolution() as f64) * frequency / (self.sample_rate as f64)) as f32;
     }
 
     pub fn get_sample(&mut self) -> f32 {

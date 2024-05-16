@@ -49,10 +49,10 @@ impl Note {
         }
     }
 
-    pub fn frequency(&self) -> f32 {
+    pub fn frequency(&self) -> f64 {
         let offset_from_a4: i8 = self.to_simple().get_i8() - 69;
 
-        440.0 * 2.0_f32.powf(offset_from_a4 as f32 / 12.0)
+        440.0 * 2.0_f64.powf(offset_from_a4 as f64 / 12.0)
     }
 
     pub fn parse_from_string(string: &str) -> Result<Note, &str> {

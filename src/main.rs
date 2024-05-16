@@ -47,8 +47,8 @@ fn main() -> Result<()> {
 
     let synth = WavetableSynth::new(SINE, SAMPLE_RATE);
 
-    let f0: f32 = reference.frequency();
-    let f: f32 = mystery_note.frequency();
+    let f0: f64 = reference.frequency();
+    let f: f64 = mystery_note.frequency();
     let note_length_ms = 3000;
     synth.play(f0, note_length_ms, &stream_handle);
     sleep(Duration::from_secs(1));
@@ -62,7 +62,7 @@ fn main() -> Result<()> {
     Ok(())
 }
 
-fn listen_for_frequency(_f: f32) {
+fn listen_for_frequency(_f: f64) {
     let dt = 1.0 / SAMPLE_RATE as f64;
     let freq = 300.0;
     let signal: Vec<f64> = (0..SIZE)
@@ -78,6 +78,6 @@ fn listen_for_frequency(_f: f32) {
     println!("Frequency: {}, Clarity: {}", pitch.frequency, pitch.clarity);
 }
 
-fn distance_cents(f0: f32, f: f32) -> i32 {
-    (1200.0 * f32::log2(f / f0)) as i32
+fn distance_cents(f0: f64, f: f64) -> i32 {
+    (1200.0 * f64::log2(f / f0)) as i32
 }
