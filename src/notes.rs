@@ -177,14 +177,14 @@ impl Note {
 
         match second_alteration {
             '#' => match alteration {
-                Alteration::Sharp => return Ok(Note { name, alteration: Alteration::DoubleSharp }),
-                _ => return Err("Incompatible alterations"),
+                Alteration::Sharp => Ok(Note { name, alteration: Alteration::DoubleSharp }),
+                _ => Err("Incompatible alterations"),
             },
             'b' => match alteration {
-                Alteration::Flat => return Ok(Note { name, alteration: Alteration::DoubleFlat }),
-                _ => return Err("Incompatible alterations"),
+                Alteration::Flat => Ok(Note { name, alteration: Alteration::DoubleFlat }),
+                _ => Err("Incompatible alterations"),
             },
-            _ => return Err("Invalid second alteration"),
+            _ => Err("Invalid second alteration"),
         }
     }
 }
