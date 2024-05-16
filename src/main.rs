@@ -10,7 +10,7 @@ mod synth;
 mod wavetables;
 
 use cpal::traits::{DeviceTrait, HostTrait};
-use cpal::{Device, Host, SupportedStreamConfig};
+use cpal::{Device, Host, StreamConfig};
 use pitch_detection::detector::mcleod::McLeodDetector;
 use pitch_detection::detector::PitchDetector;
 use rodio::{OutputStream, OutputStreamHandle};
@@ -69,23 +69,22 @@ fn listen_for_frequency(_f: f64) {
     const PADDING: usize = SIZE / 2;
     const POWER_THRESHOLD: f64 = 5.0;
     const CLARITY_THRESHOLD: f64 = 0.7;
-    let (_host, input_device, config) =
-        setup_input_device().expect("Failed to find an input device");
+    let (_host, input_device) = setup_input_device().unwrap();
+    let config = StreamConfig {
+        channels: 1,
+        sample_rate: cpal::SampleRate(44_100),
+        buffer_size: cpal::BufferSize::Default,
+    };
 }
 
-fn setup_input_device() -> Result<(Host, Device, SupportedStreamConfig), &'static str> {
+fn setup_input_device() -> Result<(Host, Device), &'static str> {
     let host: Host = cpal::default_host();
     let device: Device = match host.default_input_device() {
         Some(device) => device,
         None => return Err("no input device available"),
     };
 
-    let stream_config: SupportedStreamConfig = match device.default_input_config() {
-        Ok(config) => config,
-        Err(_) => return Err("couldnt find default stream config"),
-    };
-
-    Ok((host, device, stream_config))
+    Ok((host, device))
 }
 
 fn distance_cents(f0: f64, f: f64) -> i32 {
