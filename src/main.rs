@@ -14,6 +14,7 @@ use std::time::{Duration, Instant};
 
 use crate::note_range::NoteRange;
 use crate::notes::Note;
+use crate::simple_note::SimpleNote;
 use crate::synth::{Oscillator, Wavetable, WavetableSynth};
 
 const SAMPLE_RATE: usize = 44_100;
@@ -68,12 +69,9 @@ fn log_note(note: &Note) {
 
 fn quiz() {
     println!("-----------------------------------------------------------");
-    let note = Note::parse_from_string("A4").unwrap();
-    log_note(&note);
-    let note = Note::parse_from_string("A2").unwrap();
-    log_note(&note);
-    let note = Note::parse_from_string("G##2").unwrap();
-    log_note(&note);
+    println!("{}", SimpleNote {data: 60});
+    println!("{}", SimpleNote {data: 69});
+    println!("{}", SimpleNote {data: 70});
 
     let range = NoteRange::alto_sax();
     println!("{range}");

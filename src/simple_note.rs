@@ -1,7 +1,7 @@
 use std::fmt;
 
 pub struct SimpleNote {
-    data: u8,
+    pub data: u8,
 }
 
 impl SimpleNote {
