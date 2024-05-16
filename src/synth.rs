@@ -14,10 +14,10 @@ pub struct VCA {
 
 impl VCA {
     pub fn new(attack: Duration, sustain: f32, release: Duration) -> Self {
-        VCA {attack, sustain, release}
+        VCA { attack, sustain, release }
     }
 
-    pub fn get(from_start: Duration, length: Duration, sample_rate: usize) -> f32 {
+    pub fn get(&self, from_start: Duration, length: Duration, sample_rate: usize) -> f32 {
         1.0
     }
 }
@@ -31,19 +31,15 @@ pub struct WavetableSynth {
 
 impl WavetableSynth {
     pub fn new(wavetable: Wavetable, sample_rate: usize) -> Self {
-        let fade_in_ms: u64 = 50;
-        let fade_out_ms: u64 = 50;
-        let sustain_volume: f32 = 1.0;
-        let update_period_ms: u64 = 5;
         WavetableSynth {
             wavetable,
             sample_rate,
             vca: VCA {
-            attack: Duration::from_millis(100),
-            sustain: 1.0,
-            release: Duration::from_millis(100),
-        },
-            update_period_ms,
+                attack: Duration::from_millis(100),
+                sustain: 1.0,
+                release: Duration::from_millis(100),
+            },
+            update_period_ms: 5,
         }
     }
 
@@ -55,43 +51,21 @@ impl WavetableSynth {
         oscillator.set_frequency(frequency);
         sink.append(oscillator);
 
-        let fade_in_increment: f32 =
-            self.sustain_volume / (self.fade_in_ms as f32 / self.update_period_ms as f32);
-        let fade_out_increment: f32 =
-            self.sustain_volume / (self.fade_out_ms as f32 / self.update_period_ms as f32);
-
-        let update_period = Duration::from_millis(self.update_period_ms);
-        let fade_in_duration = Duration::from_millis(self.fade_in_ms);
-        let fade_out_duration = Duration::from_millis(self.fade_out_ms);
-
         let note_length = Duration::from_millis(note_length_ms);
         let note_start = Instant::now();
-        let note_end = note_start + note_length;
+        let update_period = Duration::from_millis(self.update_period_ms);
 
-        while Instant::now() <= note_end {
+        while Instant::now().duration_since(note_start) <= note_length {
             let start_tick = Instant::now();
-            if Instant::now() <= note_start + fade_in_duration {
-                let volume = sink.volume() + fade_in_increment;
-                sink.set_volume(volume);
-            }
-            if Instant::now() >= note_end - fade_out_duration {
-                let volume = sink.volume() - fade_out_increment;
-                sink.set_volume(volume);
-            }
+
+            let volume = self.vca.get(Instant::now().duration_since(note_start), note_length, self.sample_rate);
+            sink.set_volume(volume);
+
             let end_tick = Instant::now();
             sleep(update_period - end_tick.duration_since(start_tick));
         }
 
         sink.stop();
-    }
-
-    pub fn set_fade_length_ms(&mut self, _fade_in_ms: u64, _fade_out_ms: u64) {
-        self.fade_in_ms = _fade_in_ms;
-        self.fade_out_ms = _fade_out_ms;
-    }
-
-    pub fn set_volume(&mut self, volume: f32) {
-        self.sustain_volume = volume;
     }
 }
 

@@ -38,8 +38,7 @@ fn main() -> Result<()> {
     }
 
     if synth {
-        let mut synth = WavetableSynth::new(SINE, SAMPLE_RATE);
-        synth.set_volume(0.5);
+        let synth = WavetableSynth::new(SINE, SAMPLE_RATE);
 
         let f_a4: f32 = FREQUENCIES[4 * CHROMATIC_NOTES_PER_OCTAVE + 9];
         let f_e5: f32 = FREQUENCIES[4 * CHROMATIC_NOTES_PER_OCTAVE + 9 + 7];
@@ -58,9 +57,7 @@ fn main() -> Result<()> {
 }
 
 fn play_some_bach(handle: &OutputStreamHandle) {
-    let mut synth = WavetableSynth::new(SINE, SAMPLE_RATE);
-    synth.set_volume(0.5);
-    synth.set_fade_length_ms(100, 100);
+    let synth = WavetableSynth::new(SINE, SAMPLE_RATE);
 
     let f_a4: f32 = FREQUENCIES[4 * CHROMATIC_NOTES_PER_OCTAVE + 9];
     let f_b4: f32 = FREQUENCIES[4 * CHROMATIC_NOTES_PER_OCTAVE + 11];
