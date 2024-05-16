@@ -64,7 +64,7 @@ fn main() -> Result<()> {
 fn quiz() {
     println!("-----------------------------------------------------------");
     let range = NoteRange::alto_sax();
-    println!("{range}");
+    dbg!(range);
     let note = range.rand();
     println!("{note}");
     let interval = Interval::get_random_diatonic();

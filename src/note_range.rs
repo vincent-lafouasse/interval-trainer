@@ -3,7 +3,7 @@ use crate::{notes::Note, simple_note::SimpleNote};
 use rand::Rng;
 use std::fmt;
 
-#[derive(Debug)]
+#[derive(Debug, Copy, Clone)]
 pub struct NoteRange {
     pub bottom: SimpleNote,
     pub top: SimpleNote,

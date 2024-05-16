@@ -4,7 +4,7 @@ use crate::notes::NoteName;
 use crate::Note;
 use rand::Rng;
 
-#[derive(Debug, PartialEq, PartialOrd)]
+#[derive(Debug, PartialEq, PartialOrd, Copy, Clone)]
 pub struct SimpleNote {
     pub data: i8,
 }
