@@ -71,7 +71,7 @@ fn quiz() {
     let direction = Direction::Up;
     dbg!(direction);
 
-    let size: u8 = interval.size().try_into().unwrap();
+    let size: u8 = interval.size_u8();
 
     let new_range = match direction {
         Direction::Up => range.crop_top(size),

@@ -37,8 +37,12 @@ pub enum Direction {
 }
 
 impl Interval {
-    pub fn size(&self) -> isize {
-        self.base_interval.size() + self.quality.delta()
+    pub fn size_i8(&self) -> i8 {
+        self.base_interval.size_i8() + self.quality.delta()
+    }
+
+    pub fn size_u8(&self) -> u8 {
+        self.size_i8().try_into().unwrap()
     }
 
     pub fn get_random_diatonic() -> Interval {
@@ -79,7 +83,7 @@ impl Direction {
 }
 
 impl BaseInterval {
-    pub fn size(&self) -> isize {
+    pub fn size_i8(&self) -> i8 {
         match &self {
             BaseInterval::Unison => 0,
             BaseInterval::Second => 2,
@@ -90,10 +94,14 @@ impl BaseInterval {
             BaseInterval::Seventh => 11,
         }
     }
+
+    pub fn size_u8(&self) -> u8 {
+        self.size_i8().try_into().unwrap()
+    }
 }
 
 impl Quality {
-    pub fn delta(&self) -> isize {
+    pub fn delta(&self) -> i8 {
         match &self {
             Quality::Major => 0,
             Quality::Minor => -1,
