@@ -33,10 +33,10 @@ fn main() -> Result<()> {
     let (_stream, stream_handle) = OutputStream::try_default().unwrap();
 
     let range = NoteRange::from_str("C2", "C5").unwrap();
-    let (reference, mystery_note) = choose_notes(&range);
+    let (reference_note, mystery_note) = choose_notes(&range);
 
-    println!("This is {}", reference);
-    play_notes(reference, mystery_note, &stream_handle);
+    println!("This is {}", reference_note);
+    play_notes(reference_note, mystery_note, &stream_handle);
 
     listen_for_frequency(mystery_note.frequency());
     println!("It was {}. Did you get it right?", mystery_note);
