@@ -1,7 +1,8 @@
+use int_enum::IntEnum;
 use std::fmt;
 
-use crate::SimpleNote;
 use crate::interval::*;
+use crate::SimpleNote;
 
 #[derive(Debug)]
 pub struct Note {
@@ -86,15 +87,16 @@ impl Note {
     }
 }
 
-#[derive(Debug)]
+#[derive(Copy, Clone, Debug, PartialEq, IntEnum)]
+#[repr(u8)]
 pub enum NoteName {
-    A,
-    B,
-    C,
-    D,
-    E,
-    F,
-    G,
+    C = 0,
+    D = 1,
+    E = 2,
+    F = 3,
+    G = 4,
+    A = 5,
+    B = 6,
 }
 
 impl NoteName {

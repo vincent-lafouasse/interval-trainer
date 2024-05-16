@@ -1,3 +1,4 @@
+use int_enum::IntEnum;
 use std::fmt;
 
 use rand::thread_rng;
@@ -56,15 +57,16 @@ impl Direction {
     }
 }
 
-#[derive(Copy, Clone, Debug, PartialEq)]
+#[derive(Copy, Clone, Debug, PartialEq, IntEnum)]
+#[repr(u8)]
 pub enum BaseInterval {
-    Unison,
-    Second,
-    Third,
-    Fourth,
-    Fifth,
-    Sixth,
-    Seventh,
+    Unison = 0,
+    Second = 1,
+    Third = 2,
+    Fourth = 3,
+    Fifth = 4,
+    Sixth = 5,
+    Seventh = 6,
 }
 
 impl BaseInterval {
