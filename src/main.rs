@@ -55,12 +55,18 @@ fn main() -> Result<()> {
 *
 */
 
+fn log_note(note: &Note) {
+    println!("{:#?}", note);
+    println!("{}: {}", note, note.frequency());
+
+}
+
 fn quiz() {
     println!("-----------------------------------------------------------");
-    let note1 = Note::parse_from_string("A4").unwrap();
-    println!("{}: {}", note1, note1.frequency());
-    let note1 = Note::parse_from_string("A2").unwrap();
-    println!("{}: {}", note1, note1.frequency());
-    let note1 = Note::parse_from_string("G##2").unwrap();
-    println!("{}: {}", note1, note1.frequency());
+    let note = Note::parse_from_string("A4").unwrap();
+    log_note(&note);
+    let note = Note::parse_from_string("A2").unwrap();
+    log_note(&note);
+    let note = Note::parse_from_string("G##2").unwrap();
+    log_note(&note);
 }

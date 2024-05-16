@@ -1,5 +1,6 @@
 use std::fmt;
 
+#[derive(Debug)]
 pub struct Note {
     pub name: u8,
     pub alteration: i8,
