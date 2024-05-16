@@ -9,6 +9,8 @@ mod synth;
 mod wavetables;
 
 use color_eyre::eyre::Result;
+use pitch_detection::detector::mcleod::McLeodDetector;
+use pitch_detection::detector::PitchDetector;
 use rodio::{OutputStream, OutputStreamHandle, Sink};
 use std::thread::sleep;
 use std::time::{Duration, Instant};
@@ -20,6 +22,10 @@ use crate::simple_note::SimpleNote;
 use crate::synth::{Oscillator, Wavetable, WavetableSynth};
 
 const SAMPLE_RATE: usize = 44_100;
+const SIZE: usize = 1024;
+const PADDING: usize = SIZE / 2;
+const POWER_THRESHOLD: f64 = 5.0;
+const CLARITY_THRESHOLD: f64 = 0.7;
 static SINE: Wavetable = Wavetable::new();
 
 fn main() -> Result<()> {
@@ -50,6 +56,20 @@ fn main() -> Result<()> {
 
     println!("It was {}. Did you get it right?", mystery_note);
     println!("{} Hz to {} Hz = {} cents", f0, f, distance_cents(f0, f));
+
+    let dt = 1.0 / SAMPLE_RATE as f64;
+    let freq = 300.0;
+    let signal: Vec<f64> = (0..SIZE)
+        .map(|x| (2.0 * std::f64::consts::PI * x as f64 * dt * freq).sin())
+        .collect();
+
+    let mut detector = McLeodDetector::new(SIZE, PADDING);
+
+    let pitch = detector
+        .get_pitch(&signal, SAMPLE_RATE, POWER_THRESHOLD, CLARITY_THRESHOLD)
+        .unwrap();
+
+    println!("Frequency: {}, Clarity: {}", pitch.frequency, pitch.clarity);
 
     Ok(())
 }
