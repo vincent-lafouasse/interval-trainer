@@ -69,10 +69,7 @@ fn log_note(note: &Note) {
 
 fn log_simple(note: &SimpleNote) {
     println!("-----------------------------------------------------------");
-    println!("{}", note);
-    println!("{:#?}", note);
-    let octave: u8 = note.data / 12;
-    println!("{}", octave);
+    println!("{}: {}", note.data, note);
 }
 
 fn quiz() {
