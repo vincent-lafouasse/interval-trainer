@@ -34,8 +34,12 @@ impl NoteRange {
         let mut rng = rand::thread_rng();
         let top = self.top.data;
         let bottom = self.bottom.data;
+        let size: u8 = (top + 1 - bottom).try_into().unwrap();
 
-        let note: i8 = bottom + rng.gen::<i8>() % (top + 1 - bottom);
+        let rn: i8 = (rng.gen::<u8>() % size).try_into().unwrap();
+
+        let note: i8 = bottom + rn;
+        println!("{}", note);
 
         SimpleNote::new(note).to_note_rand()
     }
