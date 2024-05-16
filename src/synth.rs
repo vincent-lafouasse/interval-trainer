@@ -33,7 +33,7 @@ impl VCA {
             return interpolate(
                 duration_to_millis(from_start),
                 0.0,
-                duration_to_millis(length),
+                duration_to_millis(self.attack),
                 0.0,
                 self.sustain,
             );
@@ -70,9 +70,9 @@ impl WavetableSynth {
             wavetable,
             sample_rate,
             vca: VCA {
-                attack: Duration::from_millis(100),
+                attack: Duration::from_millis(500),
                 sustain: 1.0,
-                release: Duration::from_millis(100),
+                release: Duration::from_millis(500),
             },
             update_period_ms: 5,
         }
