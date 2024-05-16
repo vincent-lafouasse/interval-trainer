@@ -39,16 +39,13 @@ fn main() -> Result<()> {
     let range = NoteRange::from_str("C2", "C5").unwrap();
     let (reference, mystery_note) = choose_notes(&range);
 
-    let f0: f64 = reference.frequency();
-    let f: f64 = mystery_note.frequency();
-
     let synth = WavetableSynth::new(SINE, SAMPLE_RATE);
     println!("This is {}", reference);
-    synth.play(f0, 1000, &stream_handle);
+    synth.play(reference.frequency(), 1000, &stream_handle);
     sleep(Duration::from_secs(1));
-    synth.play(f, 1000, &stream_handle);
+    synth.play(mystery_note.frequency(), 1000, &stream_handle);
 
-    listen_for_frequency(f);
+    listen_for_frequency(mystery_note.frequency());
     println!("It was {}. Did you get it right?", mystery_note);
 
     Ok(())
