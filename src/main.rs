@@ -75,6 +75,14 @@ fn listen_for_frequency(_f: f64) {
         sample_rate: cpal::SampleRate(44_100),
         buffer_size: cpal::BufferSize::Default,
     };
+
+    let input_callback = move |data: &[f32], _: &cpal::InputCallbackInfo| todo!();
+    let stream = input_device.build_input_stream::<f32, _, _>(
+        &config,
+        input_callback,
+        |_e| (),
+        None,
+    );
 }
 
 fn setup_input_device() -> Result<(Host, Device), &'static str> {
