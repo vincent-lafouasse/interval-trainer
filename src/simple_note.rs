@@ -18,6 +18,10 @@ impl SimpleNote {
         (self.data / 12) - 1
     }
 
+    pub fn shift(input: Self, size: i8) -> Self {
+        SimpleNote { data: input.data + size }
+    }
+
     pub fn to_note_rand(&self) -> Note {
         let mut rng = rand::thread_rng();
         let sharp: u8 = rng.gen::<u8>() % 2;
