@@ -63,12 +63,11 @@ fn main() -> Result<()> {
 
 fn quiz() {
     println!("-----------------------------------------------------------");
-    let range = NoteRange::alto_sax();
+    let range = NoteRange::from_str("C3", "C6").unwrap();
     println!("{range}");
     let interval = Interval::get_random_diatonic();
     println!("{interval}");
-    assert!(range.size() as isize > interval.size());
-    let direction = Direction::rand();
+    let direction = Direction::Up;
     dbg!(direction);
 
     let size: u8 = interval.size().try_into().unwrap();
@@ -78,6 +77,12 @@ fn quiz() {
         Direction::Down => range.crop_bottom(size),
     };
     println!("{new_range}");
+
+    let reference: Note = new_range.rand();
+    let to_guess: Note = reference.up(interval);
+    println!("{interval}");
+    println!("Reference: {}", reference);
+    println!("To guess: {}", to_guess);
 }
 
 fn log_note(note: &Note) {
