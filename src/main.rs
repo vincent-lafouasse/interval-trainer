@@ -77,15 +77,17 @@ fn listen_for_frequency(_f: f64) {
     };
 
     //let input_callback = move |data: &[f32], _: &cpal::InputCallbackInfo| todo!();
-    let stream = input_device.build_input_stream::<f32, _, _>(
-        &config,
-        move |data: &[f32], _: &cpal::InputCallbackInfo| {
-            // audio callback
-            // println!("{:?}", data);
-        },
-        |e| eprintln!("An error has occured on the audio thread: {e}"),
-        None,
-    ).unwrap();
+    let stream = input_device
+        .build_input_stream::<f32, _, _>(
+            &config,
+            move |data: &[f32], _: &cpal::InputCallbackInfo| {
+                // audio callback
+                // println!("{:?}", data);
+            },
+            |e| eprintln!("An error has occured on the audio thread: {e}"),
+            None,
+        )
+        .unwrap();
     stream.play().unwrap();
     //std::thread::sleep(Duration::from_secs(3));
     stream.pause().unwrap();
