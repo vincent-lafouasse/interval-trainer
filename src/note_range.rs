@@ -40,9 +40,9 @@ impl NoteRange {
 
     pub fn rand(&self) -> Note {
         let mut rng = rand::thread_rng();
-        let size: u8 = self.top.get_u8() + 1 - self.bottom.get_u8();
 
-        let rn: i8 = (rng.gen::<u8>() % size).try_into().unwrap();
+        let size: i8 = self.top.get_i8() + 1 - self.bottom.get_i8();
+        let rn: i8 = rng.gen_range(0..=size);
 
         let note: i8 = self.bottom.get_i8() + rn;
 
