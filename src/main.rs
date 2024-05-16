@@ -13,6 +13,7 @@ use rodio::{OutputStream, OutputStreamHandle, Sink};
 use std::thread::sleep;
 use std::time::{Duration, Instant};
 
+use crate::interval::Interval;
 use crate::note_range::NoteRange;
 use crate::notes::Note;
 use crate::simple_note::SimpleNote;
@@ -25,8 +26,8 @@ fn main() -> Result<()> {
     color_eyre::install()?;
     let (_stream, stream_handle) = OutputStream::try_default().unwrap();
 
-    let quizing = false;
-    let synth = true;
+    let quizing = true;
+    let synth = false;
 
     if quizing {
         quiz();
@@ -66,6 +67,8 @@ fn quiz() {
     println!("{range}");
     let note = range.rand();
     println!("{note}");
+    let interval = Interval::get_random_diatonic();
+    println!("{interval}");
 }
 
 fn log_note(note: &Note) {
