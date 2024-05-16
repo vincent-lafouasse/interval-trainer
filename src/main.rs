@@ -25,12 +25,7 @@ fn main() -> Result<()> {
     let (_stream, stream_handle) = OutputStream::try_default().unwrap();
 
     let quizing = false;
-    let debugging = false;
     let synth = true;
-
-    if debugging {
-        debug();
-    }
 
     if quizing {
         quiz();
@@ -50,6 +45,19 @@ fn main() -> Result<()> {
 
     Ok(())
 }
+
+/*
+*   something like:
+*
+*   let range = Range::trombone();
+*   let interval = Interval::get_random_common();
+*   let direction = random_direction();
+*   let reference, to_guess = random_notes(range, interval, direction);
+*
+*   synth.play(reference, duration);
+*   synth.play(to_guess, duration);
+*
+*/
 
 fn quiz() {
     println!("-----------------------------------------------------------");
