@@ -5,6 +5,23 @@ use std::io;
 pub const CHROMATIC_NOTES_PER_OCTAVE: usize = 12;
 pub const DIATONIC_NOTES_PER_OCTAVE: usize = 7;
 
+pub struct AbsoluteNote {
+    pub note: Note,
+    pub octave: u8
+}
+
+impl AbsoluteNote {
+    pub fn frequency(&self) -> f32 {
+        let midi_style_note: isize = 12 * (self.octave as isize + 1) + self.note.distance_from_c();
+        let offset_from_a4: isize = midi_style_note - 69;
+        440.0_f32 * 2.0_f32.powf(offset_from_a4 as f32 / 12.0)
+    }
+
+    pub fn midi_style(&self) -> u8 {
+        12 * (self.octave + 1) + self.note.distance_from_c() as u8
+    }
+}
+
 #[derive(Copy, Clone, Debug, PartialEq, IntEnum)]
 #[repr(usize)]
 pub enum NoteName {
@@ -105,8 +122,8 @@ impl Note {
         notes.choose_weighted(&mut rng, |item| item.1).unwrap().0
     }
 
-    pub fn distance_from_c(&self) -> isize {
-        let base_distance: isize = match self.name {
+    pub fn distance_from_c(&self) -> u8 {
+        let base_distance: u8 = match self.name {
             NoteName::C => 0,
             NoteName::D => 2,
             NoteName::E => 4,
@@ -116,15 +133,15 @@ impl Note {
             NoteName::B => 11,
         };
 
-        let increment: isize = match self.alteration {
+        let increment: u8 = match self.alteration {
             Alteration::Natural => 0,
-            Alteration::Flat => -1,
+            Alteration::Flat => 11,
             Alteration::Sharp => 1,
-            Alteration::DoubleFlat => -2,
+            Alteration::DoubleFlat => 10,
             Alteration::DoubleSharp => 2,
         };
 
-        (base_distance + increment).rem_euclid(CHROMATIC_NOTES_PER_OCTAVE as isize)
+        (base_distance + increment).rem_euclid(CHROMATIC_NOTES_PER_OCTAVE as u8)
     }
 
     pub fn parse_from_string(string: &str) -> Result<Note, &str> {
