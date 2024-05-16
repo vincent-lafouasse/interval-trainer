@@ -10,6 +10,7 @@ use rodio::{OutputStream, OutputStreamHandle, Sink};
 use std::thread::sleep;
 use std::time::{Duration, Instant};
 
+use crate::notes::Note;
 use crate::synth::{Oscillator, Wavetable, WavetableSynth};
 
 const SAMPLE_RATE: usize = 44_100;
@@ -19,8 +20,8 @@ fn main() -> Result<()> {
     color_eyre::install()?;
     let (_stream, stream_handle) = OutputStream::try_default().unwrap();
 
-    let quizing = false;
-    let synth = true;
+    let quizing = true;
+    let synth = false;
 
     if quizing {
         quiz();
@@ -56,4 +57,6 @@ fn main() -> Result<()> {
 
 fn quiz() {
     println!("-----------------------------------------------------------");
+    let note1 = Note::parse_from_string("A4").unwrap();
+    println!("{}", note1);
 }

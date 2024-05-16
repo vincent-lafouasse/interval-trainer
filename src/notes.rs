@@ -1,3 +1,5 @@
+use std::fmt;
+
 pub struct Note {
     pub name: u8,
     pub alteration: i8,
@@ -12,12 +14,12 @@ impl Note {
             None => return Err("no note given"),
             Some(note_name) => match note_name {
                 'C' => 0,
-                'D' => 2,
-                'E' => 4,
-                'F' => 5,
-                'G' => 7,
-                'A' => 9,
-                'B' => 11,
+                'D' => 1,
+                'E' => 2,
+                'F' => 3,
+                'G' => 4,
+                'A' => 5,
+                'B' => 6,
                 _ => return Err("invalid note name"),
             },
         };
@@ -55,5 +57,29 @@ impl Note {
                 _ => Err("invalid note"),
             },
         }
+    }
+}
+
+impl fmt::Display for Note {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let notename_repr = match self.name {
+            0 => "C",
+            1 => "D",
+            2 => "E",
+            3 => "F",
+            4 => "G",
+            5 => "A",
+            6 => "B",
+            _ => "X",
+        };
+        let alteration_repr = match self.alteration {
+            -2 => "bb",
+            -1 => "b",
+            0 => "",
+            1 => "#",
+            2 => "##",
+            _ => "X",
+        };
+        write!(f, "{}{}{}", notename_repr, alteration_repr, self.octave)
     }
 }
