@@ -69,9 +69,9 @@ fn log_note(note: &Note) {
 
 fn quiz() {
     println!("-----------------------------------------------------------");
-    println!("{}", SimpleNote {data: 60});
-    println!("{}", SimpleNote {data: 69});
-    println!("{}", SimpleNote {data: 70});
+    println!("{}", SimpleNote { data: 60 });
+    println!("{}", SimpleNote { data: 69 });
+    println!("{}", SimpleNote { data: 70 });
 
     let range = NoteRange::alto_sax();
     println!("{range}");
