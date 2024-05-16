@@ -40,6 +40,10 @@ impl NoteRange {
         SimpleNote::new(note).to_note_rand()
     }
 
+    pub fn size(&self) -> u8 {
+        (self.top.data + 1 - self.bottom.data).try_into().unwrap()
+    }
+
     pub fn alto_sax() -> Self {
         Self::from_str("Db3", "F6").unwrap()
     }

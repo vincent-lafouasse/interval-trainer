@@ -64,11 +64,10 @@ fn main() -> Result<()> {
 fn quiz() {
     println!("-----------------------------------------------------------");
     let range = NoteRange::alto_sax();
-    dbg!(range);
-    let note = range.rand();
-    println!("{note}");
+    println!("{range}");
     let interval = Interval::get_random_diatonic();
     println!("{interval}");
+    assert!(range.size() as isize > interval.size());
 }
 
 fn log_note(note: &Note) {
