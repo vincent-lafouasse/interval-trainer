@@ -1,5 +1,6 @@
 use crate::{notes::Note, simple_note::SimpleNote};
 
+use rand::Rng;
 use std::fmt;
 
 #[derive(Debug)]
@@ -27,6 +28,16 @@ impl NoteRange {
 
     pub fn alto_sax() -> Self {
         NoteRange::from_str("Db3", "F6").unwrap()
+    }
+
+    pub fn rand(&self) -> Note {
+        let mut rng = rand::thread_rng();
+        let top = self.top.data;
+        let bottom = self.bottom.data;
+
+        let note: i8 = bottom + rng.gen::<i8>() % (top + 1 - bottom);
+
+        SimpleNote::new(note).to_note_rand()
     }
 }
 
