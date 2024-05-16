@@ -10,6 +10,10 @@ pub struct Note {
 }
 
 impl Note {
+    pub fn distance_from(&self, other: Note) -> i8 {
+        self.to_simple().data - other.to_simple().data
+    }
+
     pub fn to_simple(&self) -> SimpleNote {
         SimpleNote {
             data: 12 * (self.octave + 1)
