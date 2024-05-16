@@ -11,19 +11,19 @@ mod wavetables;
 
 use cpal::traits::{DeviceTrait, HostTrait};
 use cpal::{Device, Host, SupportedStreamConfig};
-
-use color_eyre::eyre::Result;
 use pitch_detection::detector::mcleod::McLeodDetector;
 use pitch_detection::detector::PitchDetector;
-use rodio::{OutputStream, OutputStreamHandle, Sink};
+use rodio::OutputStream;
+
+use color_eyre::eyre::Result;
 use std::thread::sleep;
-use std::time::{Duration, Instant};
+use std::time::Duration;
 
 use crate::interval::{Direction, Interval};
 use crate::note_range::NoteRange;
 use crate::notes::Note;
 use crate::simple_note::SimpleNote;
-use crate::synth::{Oscillator, Wavetable, WavetableSynth};
+use crate::synth::{Wavetable, WavetableSynth};
 
 const SAMPLE_RATE: usize = 44_100;
 const SIZE: usize = 1024;
