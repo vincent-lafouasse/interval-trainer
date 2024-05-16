@@ -25,6 +25,7 @@ pub enum NoteName {
 
 impl Note {
     pub fn up(&self, interval: Interval) -> Note {
+        // garbage
         let notename_shift: u8 = u8::from(self.name) + u8::from(interval.base_interval);
         let shift_also: i8 = notename_shift.try_into().unwrap();
         let natural = Note {
@@ -41,7 +42,7 @@ impl Note {
     }
 
     pub fn distance_from(&self, other: Note) -> i8 {
-        self.to_simple().data - other.to_simple().data
+        self.to_simple().get_i8() - other.to_simple().get_i8()
     }
 
     pub fn to_simple(&self) -> SimpleNote {
@@ -53,7 +54,7 @@ impl Note {
     }
 
     pub fn frequency(&self) -> f32 {
-        let offset_from_a4: i8 = self.to_simple().data - 69;
+        let offset_from_a4: i8 = self.to_simple().get_i8() - 69;
 
         440.0 * 2.0_f32.powf(offset_from_a4 as f32 / 12.0)
     }
