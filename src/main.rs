@@ -24,8 +24,8 @@ fn main() -> Result<()> {
     color_eyre::install()?;
     let (_stream, stream_handle) = OutputStream::try_default().unwrap();
 
-    let quizing = true;
-    let synth = false;
+    let quizing = false;
+    let synth = true;
 
     if quizing {
         quiz();
@@ -34,8 +34,8 @@ fn main() -> Result<()> {
     if synth {
         let synth = WavetableSynth::new(SINE, SAMPLE_RATE);
 
-        let f_a4: f32 = 440.0;
-        let f_e5: f32 = f_a4 * 1.5;
+        let f_a4: f32 = Note::parse_from_string("A4").unwrap().frequency();
+        let f_e5: f32 = Note::parse_from_string("E5").unwrap().frequency();
         let note_length_ms = 3000;
 
         synth.play(f_a4, note_length_ms, &stream_handle);
