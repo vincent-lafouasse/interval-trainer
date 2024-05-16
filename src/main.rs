@@ -40,6 +40,7 @@ fn main() -> Result<()> {
         let f_e5: f32 = Note::parse_from_string("E5").unwrap().frequency();
         let note_length_ms = 3000;
 
+        // needs refactoring to take a Duration instead of a usize
         synth.play(f_a4, note_length_ms, &stream_handle);
         sleep(Duration::from_secs(1));
         synth.play(f_e5, note_length_ms, &stream_handle);
