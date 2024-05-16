@@ -6,21 +6,56 @@ use rodio::{OutputStream, OutputStreamHandle, Sink};
 
 use crate::wavetables::*;
 
+pub struct WavetableSynth {
+    wavetable: Wavetable,
+    sample_rate: usize,
+    vca: VCA,
+}
+
+impl WavetableSynth {
+    pub fn play(&self, frequency: f32, note_length_ms: u64, handle: &OutputStreamHandle) {
+        let sink = Sink::try_new(handle).expect("Failed to create a new sink for audio playback");
+        sink.set_volume(0.0);
+
+        let mut oscillator = Oscillator::new(self.sample_rate, self.wavetable);
+        oscillator.set_frequency(frequency);
+        sink.append(oscillator);
+
+        let note_length = Duration::from_millis(note_length_ms);
+        let note_start = Instant::now();
+        let update_period = Duration::from_millis(5);
+
+        while Instant::now().duration_since(note_start) <= note_length + self.vca.release {
+            let start_tick = Instant::now();
+
+            sink.set_volume(
+                self.vca
+                    .get(Instant::now().duration_since(note_start), note_length),
+            );
+
+            sleep(update_period - Instant::now().duration_since(start_tick));
+        }
+
+        sink.stop();
+    }
+
+    pub fn new(wavetable: Wavetable, sample_rate: usize) -> Self {
+        WavetableSynth {
+            wavetable,
+            sample_rate,
+            vca: VCA {
+                attack: Duration::from_millis(500),
+                sustain: 1.0,
+                release: Duration::from_millis(500),
+            },
+        }
+    }
+}
+
 pub struct VCA {
     attack: Duration,
     sustain: f32,
     release: Duration,
-}
-
-fn duration_to_millis(duration: Duration) -> f32 {
-    (duration.as_secs() as f32) * 1000.0 + (duration.subsec_millis() as f32)
-}
-
-fn interpolate(current: f32, start: f32, end: f32, start_value: f32, end_value: f32) -> f32 {
-    let high_contribution = (current - start) / (end - start);
-    let low_contribution = (end - current) / (end - start);
-
-    high_contribution * end_value + low_contribution * start_value
 }
 
 impl VCA {
@@ -57,52 +92,6 @@ impl VCA {
     }
 }
 
-pub struct WavetableSynth {
-    wavetable: Wavetable,
-    sample_rate: usize,
-    vca: VCA,
-}
-
-impl WavetableSynth {
-    pub fn new(wavetable: Wavetable, sample_rate: usize) -> Self {
-        WavetableSynth {
-            wavetable,
-            sample_rate,
-            vca: VCA {
-                attack: Duration::from_millis(500),
-                sustain: 1.0,
-                release: Duration::from_millis(500),
-            },
-        }
-    }
-
-    pub fn play(&self, frequency: f32, note_length_ms: u64, handle: &OutputStreamHandle) {
-        let sink = Sink::try_new(handle).expect("Failed to create a new sink for audio playback");
-        sink.set_volume(0.0);
-
-        let mut oscillator = Oscillator::new(self.sample_rate, self.wavetable);
-        oscillator.set_frequency(frequency);
-        sink.append(oscillator);
-
-        let note_length = Duration::from_millis(note_length_ms);
-        let note_start = Instant::now();
-        let update_period = Duration::from_millis(5);
-
-        while Instant::now().duration_since(note_start) <= note_length + self.vca.release {
-            let start_tick = Instant::now();
-
-            sink.set_volume(
-                self.vca
-                    .get(Instant::now().duration_since(note_start), note_length),
-            );
-
-            sleep(update_period - Instant::now().duration_since(start_tick));
-        }
-
-        sink.stop();
-    }
-}
-
 /// A wavetable oscillator that can play sound via the `rodio::source::Source` trait
 pub struct Oscillator {
     sample_rate: usize,
@@ -132,27 +121,6 @@ impl Oscillator {
         self.index += self.index_increment;
         self.index %= self.wavetable.resolution() as f32;
         sample
-    }
-}
-
-impl Source for Oscillator {
-    fn channels(&self) -> u16 {
-        // number of channels
-        // this is a monophonic synth
-        1
-    }
-    fn sample_rate(&self) -> u32 {
-        self.sample_rate as u32
-    }
-    fn current_frame_len(&self) -> Option<usize> {
-        // > Returns the number of samples before the current frame ends. None means “infinite” or
-        // > “until the sound ends”. Should never return 0 unless there’s no more data.
-        None
-    }
-    fn total_duration(&self) -> Option<Duration> {
-        // > Returns the total duration of this source, if known.
-        // > None indicates at the same time “infinite” or “unknown”.
-        None
     }
 }
 
@@ -187,4 +155,36 @@ impl Wavetable {
     pub fn resolution(&self) -> usize {
         1024
     }
+}
+
+impl Source for Oscillator {
+    fn channels(&self) -> u16 {
+        // number of channels
+        // this is a monophonic synth
+        1
+    }
+    fn sample_rate(&self) -> u32 {
+        self.sample_rate as u32
+    }
+    fn current_frame_len(&self) -> Option<usize> {
+        // > Returns the number of samples before the current frame ends. None means “infinite” or
+        // > “until the sound ends”. Should never return 0 unless there’s no more data.
+        None
+    }
+    fn total_duration(&self) -> Option<Duration> {
+        // > Returns the total duration of this source, if known.
+        // > None indicates at the same time “infinite” or “unknown”.
+        None
+    }
+}
+
+fn duration_to_millis(duration: Duration) -> f32 {
+    (duration.as_secs() as f32) * 1000.0 + (duration.subsec_millis() as f32)
+}
+
+fn interpolate(current: f32, start: f32, end: f32, start_value: f32, end_value: f32) -> f32 {
+    let high_contribution = (current - start) / (end - start);
+    let low_contribution = (end - current) / (end - start);
+
+    high_contribution * end_value + low_contribution * start_value
 }
