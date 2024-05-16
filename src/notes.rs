@@ -111,6 +111,20 @@ impl NoteName {
             NoteName::G => 7,
         }
     }
+
+    pub fn next(&self) -> Self {
+        match self {
+            NoteName::B => NoteName::C,
+            _ => NoteName::try_from(u8::from(*self) + 1).unwrap(),
+        }
+    }
+
+    pub fn prev(&self) -> Self {
+        match self {
+            NoteName::C => NoteName::B,
+            _ => NoteName::try_from(u8::from(*self) - 1).unwrap(),
+        }
+    }
 }
 
 impl fmt::Display for NoteName {
