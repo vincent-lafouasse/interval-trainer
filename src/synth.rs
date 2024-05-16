@@ -12,13 +12,45 @@ pub struct VCA {
     release: Duration,
 }
 
+fn duration_to_millis(duration: Duration) -> f32 {
+    (duration.as_secs() as f32) * 1000.0 + (duration.subsec_millis() as f32)
+}
+
+fn interpolate(current: f32, start: f32, end: f32, start_value: f32, end_value: f32) -> f32 {
+    1.0
+}
+
 impl VCA {
     pub fn new(attack: Duration, sustain: f32, release: Duration) -> Self {
         VCA { attack, sustain, release }
     }
 
-    pub fn get(&self, from_start: Duration, length: Duration, sample_rate: usize) -> f32 {
-        1.0
+    pub fn get(&self, from_start: Duration, length: Duration) -> f32 {
+        if from_start < self.attack {
+            return interpolate(
+                duration_to_millis(from_start),
+                0.0,
+                duration_to_millis(length),
+                0.0,
+                self.sustain
+            );      
+        }
+
+        if from_start < length {
+            return self.sustain;
+        }
+
+        if from_start - length < self.release {
+            return interpolate(
+                duration_to_millis(from_start - length),
+                0.0,
+                duration_to_millis(self.release),
+                self.sustain,
+                0.0,
+            );      
+        }
+
+        0.0
     }
 }
 
@@ -58,7 +90,7 @@ impl WavetableSynth {
         while Instant::now().duration_since(note_start) <= note_length {
             let start_tick = Instant::now();
 
-            let volume = self.vca.get(Instant::now().duration_since(note_start), note_length, self.sample_rate);
+            let volume = self.vca.get(Instant::now().duration_since(note_start), note_length);
             sink.set_volume(volume);
 
             let end_tick = Instant::now();
