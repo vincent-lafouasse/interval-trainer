@@ -26,10 +26,6 @@ impl NoteRange {
         NoteRange::new(bottom, top)
     }
 
-    pub fn alto_sax() -> Self {
-        NoteRange::from_str("Db3", "F6").unwrap()
-    }
-
     pub fn rand(&self) -> Note {
         let mut rng = rand::thread_rng();
         let top = self.top.data;
@@ -42,6 +38,10 @@ impl NoteRange {
         println!("{}", note);
 
         SimpleNote::new(note).to_note_rand()
+    }
+
+    pub fn alto_sax() -> Self {
+        NoteRange::from_str("Db3", "F6").unwrap()
     }
 }
 
