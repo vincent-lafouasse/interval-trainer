@@ -71,7 +71,15 @@ impl Note {
     }
 }
 
-pub enum NoteName {A, B, C, D, E, F, G}
+pub enum NoteName {
+    A,
+    B,
+    C,
+    D,
+    E,
+    F,
+    G,
+}
 
 impl NoteName {
     pub fn distance_from_c(&self) -> u8 {

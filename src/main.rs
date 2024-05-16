@@ -61,7 +61,6 @@ fn log_note(note: &Note) {
     println!("{:#?}", note);
     println!("{}", note.to_midi_style());
     println!("{}", note.frequency());
-
 }
 
 fn quiz() {
