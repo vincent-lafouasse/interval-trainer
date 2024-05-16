@@ -13,7 +13,7 @@ pub struct Note {
 
 impl Note {
     pub fn up(&self, interval: Interval) -> Note {
-        let mut output = Note {name: self.name, alteration: 0, octave: self.octave};
+        let mut output = Note { name: self.name, alteration: 0, octave: self.octave };
         let notename_shift = u8::from(interval.base_interval);
         todo!()
     }
@@ -116,7 +116,7 @@ impl NoteName {
 
     pub fn shift_up(&self, shift: u8) -> Self {
         let mut out = *self;
-         for _ in 0..(shift % 7) {
+        for _ in 0..(shift % 7) {
             out = out.next();
         }
         out
@@ -124,7 +124,7 @@ impl NoteName {
 
     pub fn shift_down(&self, shift: u8) -> Self {
         let mut out = *self;
-         for _ in 0..(shift % 7) {
+        for _ in 0..(shift % 7) {
             out = out.prev();
         }
         out
