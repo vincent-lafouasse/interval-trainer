@@ -30,13 +30,12 @@ static SINE: Wavetable = Wavetable::new();
 
 fn main() -> Result<()> {
     color_eyre::install()?;
-    let (_stream, stream_handle) = OutputStream::try_default().unwrap();
 
     let range = NoteRange::from_str("C2", "C5").unwrap();
     let (reference_note, mystery_note) = choose_notes(&range);
 
     println!("This is {}", reference_note);
-    play_notes(reference_note, mystery_note, &stream_handle);
+    play_notes(reference_note, mystery_note);
 
     listen_for_frequency(mystery_note.frequency());
     println!("It was {}. Did you get it right?", mystery_note);
@@ -57,24 +56,29 @@ fn choose_notes(range: &NoteRange) -> (Note, Note) {
     (reference, reference.up(interval))
 }
 
-fn play_notes(n1: Note, n2: Note, stream_handle: &OutputStreamHandle) {
+fn play_notes(n1: Note, n2: Note) {
     let synth = WavetableSynth::new(SINE, SAMPLE_RATE);
-    synth.play(n1.frequency(), 1000, stream_handle);
+    let (_stream, stream_handle) = OutputStream::try_default().unwrap();
+    const NOTE_LENGTH: u64 = 1000;
+
+    // synth needs refactoring to take a Duration instead of a u64
+    synth.play(n1.frequency(), NOTE_LENGTH, &stream_handle);
     sleep(Duration::from_secs(1));
-    synth.play(n2.frequency(), 1000, stream_handle);
+    synth.play(n2.frequency(), NOTE_LENGTH, &stream_handle);
 }
 
 fn listen_for_frequency(_f: f64) {
-    const SIZE: usize = 1024;
-    const PADDING: usize = SIZE / 2;
-    const POWER_THRESHOLD: f64 = 5.0;
-    const CLARITY_THRESHOLD: f64 = 0.7;
     let (_host, input_device) = setup_input_device().unwrap();
     let config = StreamConfig {
         channels: 1,
         sample_rate: cpal::SampleRate(44_100),
         buffer_size: cpal::BufferSize::Default,
     };
+
+    const SIZE: usize = 1024;
+    const PADDING: usize = SIZE / 2;
+    const POWER_THRESHOLD: f64 = 5.0;
+    const CLARITY_THRESHOLD: f64 = 0.7;
 
     //let input_callback = move |data: &[f32], _: &cpal::InputCallbackInfo| todo!();
     let stream = input_device
