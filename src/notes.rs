@@ -71,6 +71,37 @@ impl Note {
     }
 }
 
+pub enum NoteName {A, B, C, D, E, F, G}
+
+impl NoteName {
+    pub fn distance_from_c(&self) -> u8 {
+        match *self {
+            NoteName::A => 9,
+            NoteName::B => 11,
+            NoteName::C => 0,
+            NoteName::D => 2,
+            NoteName::E => 4,
+            NoteName::F => 5,
+            NoteName::G => 7,
+        }
+    }
+}
+
+impl fmt::Display for NoteName {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let repr = match *self {
+            NoteName::A => "A",
+            NoteName::B => "B",
+            NoteName::C => "C",
+            NoteName::D => "D",
+            NoteName::E => "E",
+            NoteName::F => "F",
+            NoteName::G => "G",
+        };
+        write!(f, "{}", repr)
+    }
+}
+
 impl fmt::Display for Note {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         let notename_repr = match self.name {
