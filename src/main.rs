@@ -67,11 +67,26 @@ fn log_note(note: &Note) {
     println!("{}", note.frequency());
 }
 
+fn log_simple(note: &SimpleNote) {
+    println!("-----------------------------------------------------------");
+    println!("{}", note);
+    println!("{:#?}", note);
+    let octave: u8 = note.data / 12;
+    println!("{}", octave);
+}
+
 fn quiz() {
     println!("-----------------------------------------------------------");
-    println!("{}", SimpleNote { data: 60 });
-    println!("{}", SimpleNote { data: 69 });
-    println!("{}", SimpleNote { data: 70 });
+    let note = SimpleNote { data: 35 };
+    log_simple(&note);
+    let note = SimpleNote { data: 36 };
+    log_simple(&note);
+    let note = SimpleNote { data: 60 };
+    log_simple(&note);
+    let note = SimpleNote { data: 69 };
+    log_simple(&note);
+    let note = SimpleNote { data: 70 };
+    log_simple(&note);
 
     let range = NoteRange::alto_sax();
     println!("{range}");

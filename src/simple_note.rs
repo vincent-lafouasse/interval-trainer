@@ -1,18 +1,19 @@
 use std::fmt;
 
+#[derive(Debug)]
 pub struct SimpleNote {
     pub data: u8,
 }
 
 impl SimpleNote {
-    pub fn octave(&self) -> i8 {
-        (self.data / 12) as i8 - 1
+    pub fn octave(&self) -> u8 {
+        (self.data / 12) - 1
     }
 }
 
 impl fmt::Display for SimpleNote {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        let name = match self.data / 12 {
+        let name = match self.data % 12 {
             0 => "C",
             1 => "C#/Db",
             2 => "D",
