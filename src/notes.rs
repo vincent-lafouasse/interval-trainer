@@ -7,7 +7,7 @@ pub const DIATONIC_NOTES_PER_OCTAVE: usize = 7;
 
 pub struct AbsoluteNote {
     pub note: Note,
-    pub octave: u8
+    pub octave: u8,
 }
 
 impl AbsoluteNote {
