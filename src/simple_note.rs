@@ -20,9 +20,9 @@ impl SimpleNote {
 
     pub fn to_note_rand(&self) -> Note {
         let mut rng = rand::thread_rng();
-        let sharp: u8 = rng.gen::<u8>() / 2;
+        let sharp: u8 = rng.gen::<u8>() % 2;
 
-        match self.data / 12 {
+        match self.data % 12 {
             0 => Note { name: NoteName::C, alteration: 0, octave: self.octave() },
             1 => match sharp {
                 1 => Note { name: NoteName::C, alteration: 1, octave: self.octave() },
