@@ -58,5 +58,9 @@ fn main() -> Result<()> {
 fn quiz() {
     println!("-----------------------------------------------------------");
     let note1 = Note::parse_from_string("A4").unwrap();
-    println!("{}", note1);
+    println!("{}: {}", note1, note1.frequency());
+    let note1 = Note::parse_from_string("A2").unwrap();
+    println!("{}: {}", note1, note1.frequency());
+    let note1 = Note::parse_from_string("G##2").unwrap();
+    println!("{}: {}", note1, note1.frequency());
 }
