@@ -22,6 +22,14 @@ impl SimpleNote {
         SimpleNote { data: self.data + size }
     }
 
+    pub fn get_u8(&self) -> u8 {
+        self.data.try_into().unwrap()
+    }
+
+    pub fn get_i8(&self) -> i8 {
+        self.data
+    }
+
     pub fn to_note_rand(&self) -> Note {
         let mut rng = rand::thread_rng();
         let sharp: u8 = rng.gen::<u8>() % 2;
