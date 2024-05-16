@@ -74,9 +74,8 @@ fn log_simple(note: &SimpleNote) {
 
 fn quiz() {
     println!("-----------------------------------------------------------");
-    let note = Note::parse_from_string("D#6").unwrap();
-    println!("note parsed: {}", note);
-    let s_note = note.to_simple();
-    println!("snote created: {}", s_note);
-    println!("note recreated: {}", s_note.to_note_rand());
+    let range = NoteRange::from_str("C4", "B4").unwrap();
+    println!("{range}");
+    let note = range.rand();
+    println!("{note}");
 }
