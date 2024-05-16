@@ -26,10 +26,6 @@ use crate::simple_note::SimpleNote;
 use crate::synth::{Wavetable, WavetableSynth};
 
 const SAMPLE_RATE: usize = 44_100;
-const SIZE: usize = 1024;
-const PADDING: usize = SIZE / 2;
-const POWER_THRESHOLD: f64 = 5.0;
-const CLARITY_THRESHOLD: f64 = 0.7;
 static SINE: Wavetable = Wavetable::new();
 
 fn main() -> Result<()> {
@@ -68,6 +64,15 @@ fn play_notes(n1: Note, n2: Note, stream_handle: &OutputStreamHandle) {
     synth.play(n2.frequency(), 1000, stream_handle);
 }
 
+fn listen_for_frequency(_f: f64) {
+    const SIZE: usize = 1024;
+    const PADDING: usize = SIZE / 2;
+    const POWER_THRESHOLD: f64 = 5.0;
+    const CLARITY_THRESHOLD: f64 = 0.7;
+    let (_host, input_device, config) =
+        setup_input_device().expect("Failed to find an input device");
+}
+
 fn setup_input_device() -> Result<(Host, Device, SupportedStreamConfig), &'static str> {
     let host: Host = cpal::default_host();
     let device: Device = match host.default_input_device() {
@@ -81,12 +86,6 @@ fn setup_input_device() -> Result<(Host, Device, SupportedStreamConfig), &'stati
     };
 
     Ok((host, device, stream_config))
-}
-
-fn listen_for_frequency(_f: f64) {
-    // call Detector<sample type>.get_pitch() on input callback ?
-    let (_host, input_device, config) =
-        setup_input_device().expect("Failed to find an input device");
 }
 
 fn distance_cents(f0: f64, f: f64) -> i32 {
