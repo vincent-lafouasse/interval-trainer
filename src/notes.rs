@@ -4,7 +4,7 @@ use std::fmt;
 use crate::interval::*;
 use crate::SimpleNote;
 
-#[derive(Debug)]
+#[derive(Debug, Copy, Clone)]
 pub struct Note {
     pub name: NoteName,
     pub alteration: i8,
@@ -13,9 +13,19 @@ pub struct Note {
 
 impl Note {
     pub fn up(&self, interval: Interval) -> Note {
-        let mut output = Note { name: self.name, alteration: 0, octave: self.octave };
-        let notename_shift = u8::from(interval.base_interval);
-        todo!()
+        let notename_shift: u8 = u8::from(self.name) + u8::from(interval.base_interval);
+        let shift_also: i8 = notename_shift.try_into().unwrap();
+        let natural = Note {
+            name: self.name.shift_up(notename_shift % 7),
+            alteration: 0,
+            octave: self.octave + shift_also / 7,
+        };
+
+        Note {
+            name: natural.name,
+            alteration: self.distance_from(natural),
+            octave: natural.octave,
+        }
     }
 
     pub fn distance_from(&self, other: Note) -> i8 {
