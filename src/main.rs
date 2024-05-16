@@ -80,7 +80,7 @@ fn listen_for_frequency(_f: f64) {
     let stream = input_device.build_input_stream::<f32, _, _>(
         &config,
         input_callback,
-        |_e| (),
+        |e| eprintln!("An error has occured on the audio thread: {e}"),
         None,
     );
 }
