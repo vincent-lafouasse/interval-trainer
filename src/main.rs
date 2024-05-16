@@ -9,7 +9,7 @@ mod simple_note;
 mod synth;
 mod wavetables;
 
-use cpal::traits::{DeviceTrait, HostTrait};
+use cpal::traits::{DeviceTrait, HostTrait, StreamTrait};
 use cpal::{Device, Host, StreamConfig};
 use pitch_detection::detector::mcleod::McLeodDetector;
 use pitch_detection::detector::PitchDetector;
@@ -76,13 +76,19 @@ fn listen_for_frequency(_f: f64) {
         buffer_size: cpal::BufferSize::Default,
     };
 
-    let input_callback = move |data: &[f32], _: &cpal::InputCallbackInfo| todo!();
+    //let input_callback = move |data: &[f32], _: &cpal::InputCallbackInfo| todo!();
     let stream = input_device.build_input_stream::<f32, _, _>(
         &config,
-        input_callback,
+        move |data: &[f32], _: &cpal::InputCallbackInfo| {
+            // audio callback
+            // println!("{:?}", data);
+        },
         |e| eprintln!("An error has occured on the audio thread: {e}"),
         None,
-    );
+    ).unwrap();
+    stream.play().unwrap();
+    //std::thread::sleep(Duration::from_secs(3));
+    stream.pause().unwrap();
 }
 
 fn setup_input_device() -> Result<(Host, Device), &'static str> {
