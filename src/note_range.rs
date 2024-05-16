@@ -39,6 +39,10 @@ impl NoteRange {
 
         SimpleNote::new(note).to_note_rand()
     }
+
+    pub fn alto_sax() -> Self {
+        Self::from_str("Db3", "F6").unwrap()
+    }
 }
 
 impl fmt::Display for NoteRange {

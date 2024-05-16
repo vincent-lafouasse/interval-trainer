@@ -61,7 +61,7 @@ fn main() -> Result<()> {
 
 fn quiz() {
     println!("-----------------------------------------------------------");
-    let range = NoteRange::from_str("C4", "B4").unwrap();
+    let range = NoteRange::alto_sax();
     println!("{range}");
     let note = range.rand();
     println!("{note}");
