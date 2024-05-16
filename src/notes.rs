@@ -7,6 +7,16 @@ pub struct Note {
 }
 
 impl Note {
+    pub fn to_midi_style(&self) -> i8 {
+        12 * (self.octave + 1) + self.name as i8 + self.alteration as i8
+    }
+
+    pub fn frequency(&self) -> f32 {
+        let offset_from_a4: i8 = self.to_midi_style() - 69;
+
+        440.0 * 2.0_f32.powf(offset_from_a4 as f32 / 12.0)
+    }
+
     pub fn parse_from_string(string: &str) -> Result<Note, &str> {
         let mut chars = string.chars();
 
