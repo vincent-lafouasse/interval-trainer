@@ -1,12 +1,16 @@
 use std::fmt;
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq, PartialOrd)]
 pub struct SimpleNote {
-    pub data: u8,
+    pub data: i8,
 }
 
 impl SimpleNote {
-    pub fn octave(&self) -> u8 {
+    pub fn new(data: i8) -> Self {
+        SimpleNote { data }
+    }
+
+    pub fn octave(&self) -> i8 {
         (self.data / 12) - 1
     }
 }
