@@ -1,6 +1,7 @@
 use std::fmt;
 
 use crate::SimpleNote;
+use crate::interval::*;
 
 #[derive(Debug)]
 pub struct Note {
@@ -10,6 +11,10 @@ pub struct Note {
 }
 
 impl Note {
+    pub fn up(&self, interval: Interval) -> Note {
+        todo!();
+    }
+
     pub fn distance_from(&self, other: Note) -> i8 {
         self.to_simple().data - other.to_simple().data
     }
