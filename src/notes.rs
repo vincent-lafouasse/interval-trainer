@@ -41,7 +41,7 @@ impl Note {
         println!("first candidate");
         println!("{:#?}", natural);
 
-        let distance = natural.distance_from(*self);
+        let distance = natural.distance_up_from(*self);
         println!("candidate is {} semitones away", distance);
 
         let target_distance = interval.size_i8();
@@ -54,14 +54,14 @@ impl Note {
         }
     }
 
-    pub fn distance_from(&self, other: Note) -> i8 {
+    pub fn distance_up_from(&self, other: Note) -> i8 {
         self.to_simple().get_i8() - other.to_simple().get_i8()
     }
 
     pub fn to_simple(&self) -> SimpleNote {
         SimpleNote {
             data: 12 * (self.octave + 1)
-                + self.name.distance_from_c() as i8
+                + self.name.semitones_from_c() as i8
                 + self.alteration as i8,
         }
     }
@@ -126,45 +126,15 @@ impl Note {
 }
 
 impl NoteName {
-    pub fn distance_from_c(&self) -> u8 {
+    pub fn semitones_from_c(&self) -> u8 {
         match *self {
-            NoteName::A => 9,
-            NoteName::B => 11,
             NoteName::C => 0,
             NoteName::D => 2,
             NoteName::E => 4,
             NoteName::F => 5,
             NoteName::G => 7,
-        }
-    }
-
-    pub fn shift_up(&self, shift: u8) -> Self {
-        let mut out = *self;
-        for _ in 0..(shift % 7) {
-            out = out.next();
-        }
-        out
-    }
-
-    pub fn shift_down(&self, shift: u8) -> Self {
-        let mut out = *self;
-        for _ in 0..(shift % 7) {
-            out = out.prev();
-        }
-        out
-    }
-
-    pub fn next(&self) -> Self {
-        match self {
-            NoteName::B => NoteName::C,
-            _ => NoteName::try_from(u8::from(*self) + 1).unwrap(),
-        }
-    }
-
-    pub fn prev(&self) -> Self {
-        match self {
-            NoteName::C => NoteName::B,
-            _ => NoteName::try_from(u8::from(*self) - 1).unwrap(),
+            NoteName::A => 9,
+            NoteName::B => 11,
         }
     }
 }
