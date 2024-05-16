@@ -27,7 +27,6 @@ fn main() -> Result<()> {
     let quizing = false;
     let debugging = false;
     let synth = true;
-    let bach = false;
 
     if debugging {
         debug();
@@ -49,39 +48,7 @@ fn main() -> Result<()> {
         synth.play(f_e5, note_length_ms, &stream_handle);
     }
 
-    if bach {
-        play_some_bach(&stream_handle);
-    }
-
     Ok(())
-}
-
-fn play_some_bach(handle: &OutputStreamHandle) {
-    let synth = WavetableSynth::new(SINE, SAMPLE_RATE);
-
-    let f_a4: f32 = FREQUENCIES[4 * CHROMATIC_NOTES_PER_OCTAVE + 9];
-    let f_b4: f32 = FREQUENCIES[4 * CHROMATIC_NOTES_PER_OCTAVE + 11];
-    let f_c5: f32 = FREQUENCIES[5 * CHROMATIC_NOTES_PER_OCTAVE + 0];
-    let f_d5: f32 = FREQUENCIES[5 * CHROMATIC_NOTES_PER_OCTAVE + 2];
-
-    let time_unit_ms = 400;
-
-    let notes_to_play = vec![
-        (f_a4, 1),
-        (f_d5, 1),
-        (f_c5, 1),
-        (f_b4, 1),
-        (f_c5, 1),
-        (f_a4, 1),
-        (f_d5, 4),
-        (f_c5, 1),
-        (f_d5, 1),
-        (f_b4, 4),
-    ];
-
-    for (frequency, note_length) in notes_to_play.iter() {
-        synth.play(*frequency, *note_length * time_unit_ms, handle);
-    }
 }
 
 fn quiz() {
@@ -102,11 +69,11 @@ fn quiz() {
         if user_note == computed_end_note {
             println!("ding ding you win");
             break;
-        } else {
-            let user_interval = Interval::between(random_start_note, user_note);
-            println!("[EXTREMELY LOUD INCORRECT BUZZER]");
-            println!("{random_start_note} to {user_note} is not a {random_interval}, that is a {user_interval}\n");
         }
+
+        let user_interval = Interval::between(random_start_note, user_note);
+        println!("[EXTREMELY LOUD INCORRECT BUZZER]");
+        println!("{random_start_note} to {user_note} is not a {random_interval}, that is a {user_interval}\n");
     }
 }
 
