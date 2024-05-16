@@ -59,6 +59,14 @@ fn main() -> Result<()> {
 *
 */
 
+fn quiz() {
+    println!("-----------------------------------------------------------");
+    let range = NoteRange::from_str("C4", "B4").unwrap();
+    println!("{range}");
+    let note = range.rand();
+    println!("{note}");
+}
+
 fn log_note(note: &Note) {
     println!("-----------------------------------------------------------");
     println!("{}", note);
@@ -70,12 +78,4 @@ fn log_note(note: &Note) {
 fn log_simple(note: &SimpleNote) {
     println!("-----------------------------------------------------------");
     println!("{}: {}", note.data, note);
-}
-
-fn quiz() {
-    println!("-----------------------------------------------------------");
-    let range = NoteRange::from_str("C4", "B4").unwrap();
-    println!("{range}");
-    let note = range.rand();
-    println!("{note}");
 }
