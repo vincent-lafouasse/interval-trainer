@@ -26,12 +26,13 @@ pub enum NoteName {
 impl Note {
     pub fn up(&self, interval: Interval) -> Note {
         // garbage
-        let notename_shift: u8 = u8::from(self.name) + u8::from(interval.base_interval);
-        let shift_also: i8 = notename_shift.try_into().unwrap();
+        let new_notename: u8 = u8::from(self.name) + u8::from(interval.base_interval);
+        let octave_shift: i8 = new_notename.try_into().unwrap();
+        let octave_shift: i8 = octave_shift / 7;
         let natural = Note {
-            name: self.name.shift_up(notename_shift % 7),
+            name: NoteName::try_from(new_notename % 7).unwrap(),
             alteration: 0,
-            octave: self.octave + shift_also / 7,
+            octave: self.octave + octave_shift,
         };
 
         Note {
