@@ -9,6 +9,33 @@ pub struct Interval {
     pub quality: Quality,
 }
 
+#[derive(Copy, Clone, Debug, PartialEq, IntEnum)]
+#[repr(u8)]
+pub enum BaseInterval {
+    Unison = 0,
+    Second = 1,
+    Third = 2,
+    Fourth = 3,
+    Fifth = 4,
+    Sixth = 5,
+    Seventh = 6,
+}
+
+#[derive(Copy, Clone, Debug, PartialEq)]
+pub enum Quality {
+    Major,
+    Minor,
+    Perfect,
+    Augmented,
+    Diminished,
+}
+
+#[derive(Copy, Clone, Debug, PartialEq)]
+pub enum Direction {
+    Up,
+    Down,
+}
+
 impl Interval {
     pub fn size(&self) -> isize {
         self.base_interval.size() + self.quality.delta()
@@ -37,12 +64,6 @@ impl Interval {
     }
 }
 
-#[derive(Copy, Clone, Debug, PartialEq)]
-pub enum Direction {
-    Up,
-    Down,
-}
-
 impl Direction {
     pub fn rand() -> Self {
         use rand::Rng;
@@ -57,18 +78,6 @@ impl Direction {
     }
 }
 
-#[derive(Copy, Clone, Debug, PartialEq, IntEnum)]
-#[repr(u8)]
-pub enum BaseInterval {
-    Unison = 0,
-    Second = 1,
-    Third = 2,
-    Fourth = 3,
-    Fifth = 4,
-    Sixth = 5,
-    Seventh = 6,
-}
-
 impl BaseInterval {
     pub fn size(&self) -> isize {
         match &self {
@@ -81,15 +90,6 @@ impl BaseInterval {
             BaseInterval::Seventh => 11,
         }
     }
-}
-
-#[derive(Copy, Clone, Debug, PartialEq)]
-pub enum Quality {
-    Major,
-    Minor,
-    Perfect,
-    Augmented,
-    Diminished,
 }
 
 impl Quality {
