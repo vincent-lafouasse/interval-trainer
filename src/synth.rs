@@ -6,12 +6,26 @@ use rodio::{OutputStream, OutputStreamHandle, Sink};
 
 use crate::wavetables::*;
 
+pub struct VCA {
+    attack: Duration,
+    sustain: f32,
+    release: Duration,
+}
+
+impl VCA {
+    pub fn new(attack: Duration, sustain: f32, release: Duration) -> Self {
+        VCA {attack, sustain, release}
+    }
+
+    pub fn get(from_start: Duration, length: Duration, sample_rate: usize) -> f32 {
+        1.0
+    }
+}
+
 pub struct WavetableSynth {
     wavetable: Wavetable,
     sample_rate: usize,
-    fade_in_ms: u64,
-    fade_out_ms: u64,
-    sustain_volume: f32,
+    vca: VCA,
     update_period_ms: u64,
 }
 
@@ -24,9 +38,11 @@ impl WavetableSynth {
         WavetableSynth {
             wavetable,
             sample_rate,
-            fade_in_ms,
-            fade_out_ms,
-            sustain_volume,
+            vca: VCA {
+            attack: Duration::from_millis(100),
+            sustain: 1.0,
+            release: Duration::from_millis(100),
+        },
             update_period_ms,
         }
     }
