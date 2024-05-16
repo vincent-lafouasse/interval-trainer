@@ -17,16 +17,16 @@ impl NoteRange {
         }
     }
 
-    pub fn crop_bottom(input: Self, shift_amount: u8) -> Self {
-        assert!(shift_amount < input.size());
+    pub fn crop_bottom(&self, shift_amount: u8) -> Self {
+        assert!(shift_amount < self.size());
         let shift_amount: i8 = shift_amount.try_into().unwrap();
-        NoteRange::new(input.bottom.shift(shift_amount), input.top).unwrap()
+        NoteRange::new(self.bottom.shift(shift_amount), self.top).unwrap()
     }
 
-    pub fn crop_top(input: Self, shift_amount: u8) -> Self {
-        assert!(shift_amount < input.size());
+    pub fn crop_top(&self, shift_amount: u8) -> Self {
+        assert!(shift_amount < self.size());
         let shift_amount: i8 = shift_amount.try_into().unwrap();
-        NoteRange::new(input.bottom, input.top.shift(-shift_amount)).unwrap()
+        NoteRange::new(self.bottom, self.top.shift(-shift_amount)).unwrap()
     }
 
     pub fn from_str(bottom_str: &str, top_str: &str) -> Result<Self, &'static str> {

@@ -70,6 +70,14 @@ fn quiz() {
     assert!(range.size() as isize > interval.size());
     let direction = Direction::rand();
     dbg!(direction);
+
+    let size: u8 = interval.size().try_into().unwrap();
+
+    let new_range = match direction {
+        Direction::Up => range.crop_top(size),
+        Direction::Down => range.crop_bottom(size),
+    };
+    println!("{new_range}");
 }
 
 fn log_note(note: &Note) {
