@@ -29,6 +29,12 @@ struct IntervalTrainer {
     state: GameState,
 }
 
+impl IntervalTrainer {
+    fn set_state(&mut self, new_state: GameState) {
+        self.state = new_state;
+    }
+}
+
 #[derive(Default, Copy, Clone, PartialEq)]
 enum GameState {
     #[default]
@@ -50,6 +56,12 @@ impl eframe::App for IntervalTrainer {
             } else if self.state == GameState::CoolSVG {
                 ui.label("Cool SVG");
                 ui.image(egui::include_image!("assets/svg/a_svg.svg"));
+            }
+            if ui.button("Click me").clicked() {
+                match self.state {
+                    GameState::Hello => self.set_state(GameState::CoolSVG),
+                    GameState::CoolSVG => self.set_state(GameState::Hello),
+                }
             }
         });
     }
