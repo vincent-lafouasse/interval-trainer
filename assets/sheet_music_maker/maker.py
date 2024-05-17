@@ -20,9 +20,9 @@ class LilypondFile:
             output.write("	\\override TimeSignature.stencil = ##f \n")
             output.write("}{ \n")
             output.write("	\\time 100/2 % no bar lines (probably) \n")
-            output.write("	\\clef ${CLEF} \n")
+            output.write(f"	\\clef {self.clef.get()} \n")
             output.write("	\\key c \\major \n")
-            output.write("	| ${NOTES} | \n")
+            output.write(f"	| {self.note.ly_repr()} {self.note.ly_repr()} | \n")
             output.write("} \n")
 
 
