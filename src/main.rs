@@ -20,7 +20,7 @@ use std::sync::atomic::AtomicU64;
 use std::sync::atomic::Ordering;
 use std::sync::Arc;
 use std::thread::sleep;
-use std::time::Duration;
+use std::time::{Duration, Instant};
 
 use crate::interval::{Direction, Interval};
 use crate::note_range::NoteRange;
@@ -87,6 +87,7 @@ fn listen_for_frequency(_f: f64, detection_duration: Duration) {
     const CLARITY_THRESHOLD: f32 = 0.7;
 
     let freq = Arc::new(AtomicU64::new(0));
+    let ui_thread_freq = freq.clone();
     let mut detection_buffer: Vec<f32> = Vec::new();
 
     let input_callback = move |data: &[f32], _: &cpal::InputCallbackInfo| {
@@ -103,8 +104,6 @@ fn listen_for_frequency(_f: f64, detection_duration: Duration) {
                     Into::<f64>::into(pitch.frequency).to_bits(),
                     Ordering::Relaxed,
                 );
-                let detected_pitch = f64::from_bits(freq.load(Ordering::Relaxed));
-                println!("freq detected: {} Hz", detected_pitch as u32);
             }
             detection_buffer.clear();
         } else {
@@ -112,6 +111,7 @@ fn listen_for_frequency(_f: f64, detection_duration: Duration) {
             detection_buffer.extend_from_slice(data);
         }
     };
+
     let stream = input_device
         .build_input_stream::<f32, _, _>(
             &config,
@@ -126,8 +126,26 @@ fn listen_for_frequency(_f: f64, detection_duration: Duration) {
         detection_duration.as_millis()
     );
     stream.play().unwrap();
-    std::thread::sleep(detection_duration);
+
+    let update_fps = 10;
+    let update_tick_len = Duration::from_millis(1000 / update_fps);
+    let start = Instant::now();
+    while Instant::now().duration_since(start) < detection_duration {
+        let tick_start = Instant::now();
+
+        let detected_pitch = f64::from_bits(ui_thread_freq.load(Ordering::Relaxed));
+        println!("freq detected: {} Hz", detected_pitch as u32);
+
+        regularize_fps(tick_start, update_tick_len);
+    }
     stream.pause().unwrap();
+}
+
+fn regularize_fps(tick_start: Instant, target_tick_duration: Duration) {
+    let actual_tick_len = Instant::now().duration_since(tick_start);
+    if actual_tick_len < target_tick_duration {
+        std::thread::sleep(target_tick_duration - actual_tick_len);
+    }
 }
 
 fn setup_input_device() -> Result<(Host, Device), &'static str> {
