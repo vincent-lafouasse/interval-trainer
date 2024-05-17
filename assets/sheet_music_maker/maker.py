@@ -1,4 +1,4 @@
-from Alteration import NoAlteration
+from Alteration import NoAlteration, Flat, DoubleFlat, Sharp, DoubleSharp
 
 TARGET_DIR = "./target"
 
@@ -15,6 +15,8 @@ class Note:
 
 def main():
     note = Note("C", NoAlteration(), 3)
+    note = Note("B", Flat(), 7)
+    note = Note("E", DoubleSharp(), 4)
 
 
 if __name__ == "__main__":
