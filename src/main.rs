@@ -86,8 +86,8 @@ fn listen_for_frequency(_f: f64, detection_duration: Duration) {
     const POWER_THRESHOLD: f32 = 5.0;
     const CLARITY_THRESHOLD: f32 = 0.7;
 
-    let freq = Arc::new(AtomicU64::new(0));
-    let ui_thread_freq = freq.clone();
+    let audio_thread_freq = Arc::new(AtomicU64::new(0));
+    let ui_thread_freq = audio_thread_freq.clone();
     let mut detection_buffer: Vec<f32> = Vec::new();
 
     let input_callback = move |data: &[f32], _: &cpal::InputCallbackInfo| {
@@ -100,7 +100,7 @@ fn listen_for_frequency(_f: f64, detection_duration: Duration) {
                 POWER_THRESHOLD,
                 CLARITY_THRESHOLD,
             ) {
-                freq.store(
+                audio_thread_freq.store(
                     Into::<f64>::into(pitch.frequency).to_bits(),
                     Ordering::Relaxed,
                 );
