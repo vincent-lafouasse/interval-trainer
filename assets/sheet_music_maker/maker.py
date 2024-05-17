@@ -1,5 +1,6 @@
 from Alteration import NoAlteration, Flat, DoubleFlat, Sharp, DoubleSharp
 from Note import Note
+from Clef import TrebleClef, BassClef
 
 TARGET_DIR = "./target"
 
