@@ -14,6 +14,7 @@ use color_eyre::eyre::Result;
 use std::time::Duration;
 
 use eframe::egui;
+use egui::Color32;
 
 use crate::interval::{Direction, Interval};
 use crate::listen::listen_for_note;
@@ -51,17 +52,21 @@ impl IntervalTrainer {
 impl eframe::App for IntervalTrainer {
     fn update(&mut self, ctx: &egui::Context, _frame: &mut eframe::Frame) {
         egui::CentralPanel::default().show(ctx, |ui| {
-            if self.state == GameState::Hello {
-                ui.label("Hello");
-            } else if self.state == GameState::CoolSVG {
-                ui.label("Cool SVG");
-                ui.image(egui::include_image!("assets/svg/a_svg.svg"));
-            }
             if ui.button("Click me").clicked() {
                 match self.state {
                     GameState::Hello => self.set_state(GameState::CoolSVG),
                     GameState::CoolSVG => self.set_state(GameState::Hello),
                 }
+            }
+
+            if self.state == GameState::Hello {
+                ui.label("Hello");
+            } else if self.state == GameState::CoolSVG {
+                ui.label("Cool SVG");
+                ui.add(
+                    egui::Image::new(egui::include_image!("assets/svg/a_svg.svg"))
+                        .bg_fill(Color32::WHITE),
+                );
             }
         });
     }
