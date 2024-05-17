@@ -42,7 +42,7 @@ fn main() -> Result<()> {
 
     listen_for_frequency(mystery_note.frequency());
     println!(
-        "It was {} at a frequency of {}. Did you get it right?",
+        "It was {} at a frequency of {} Hz. Did you get it right?",
         mystery_note,
         mystery_note.frequency() as u32
     );
@@ -105,7 +105,7 @@ fn listen_for_frequency(_f: f64) {
                     Ordering::Relaxed,
                 );
                 let detected_pitch = f64::from_bits(freq.load(Ordering::Relaxed));
-                println!("freq detected: {}", detected_pitch as u32);
+                println!("freq detected: {} Hz", detected_pitch as u32);
             }
             detection_buffer.clear();
         } else {
