@@ -30,6 +30,7 @@ impl SimpleNote {
         self.data
     }
 
+    // spell(&self, policy: NamingPolicy) -> SpelledNote ?
     pub fn to_note_rand(&self) -> Note {
         let mut rng = rand::thread_rng();
         let sharp: bool = rng.gen::<bool>();
@@ -65,6 +66,12 @@ impl SimpleNote {
             _ => panic!("unreachable"),
         }
     }
+}
+
+pub enum NamingPolicy {
+    Flats,
+    Sharps,
+    Random,
 }
 
 impl fmt::Display for SimpleNote {
