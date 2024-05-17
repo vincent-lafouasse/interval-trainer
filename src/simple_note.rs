@@ -37,9 +37,7 @@ impl SimpleNote {
         match self.data % 12 {
             0 => Note { name: NoteName::C, alteration: 0, octave: self.octave() },
             1 => match sharp {
-                // both are ugly, idk what to do, nothing, this is fine ig
-                true => Note::parse_from_string(&("C#".to_owned() + &self.octave().to_string()))
-                    .unwrap(),
+                true => Note { name: NoteName::C, alteration: 1, octave: self.octave() },
                 false => Note { name: NoteName::D, alteration: -1, octave: self.octave() },
             },
             2 => Note { name: NoteName::D, alteration: 0, octave: self.octave() },
