@@ -138,7 +138,7 @@ pub struct Wavetable {
 }
 
 impl Wavetable {
-    pub const fn new() -> Self {
+    pub const fn square8() -> Self {
         Wavetable { plot: &SQUARE_8 }
     }
 

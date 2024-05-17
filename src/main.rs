@@ -29,7 +29,7 @@ use crate::simple_note::SimpleNote;
 use crate::synth::{Wavetable, WavetableSynth};
 
 const SAMPLE_RATE: u16 = 44_100;
-static SINE: Wavetable = Wavetable::new();
+static SQUARE8: Wavetable = Wavetable::square8();
 
 fn main() -> Result<()> {
     color_eyre::install()?;
@@ -65,7 +65,7 @@ fn choose_notes(range: &NoteRange) -> (Note, Note) {
 }
 
 fn play_notes(n1: Note, n2: Note, note_length: Duration) {
-    let synth = WavetableSynth::new(SINE, SAMPLE_RATE);
+    let synth = WavetableSynth::new(SQUARE8, SAMPLE_RATE);
     let (_stream, stream_handle) = OutputStream::try_default().unwrap();
 
     // synth needs refactoring to take a Duration instead of a u64
@@ -121,11 +121,6 @@ fn listen_for_note(target_note: SimpleNote, detection_duration: Duration) -> Opt
             None,
         )
         .unwrap();
-
-    println!(
-        "lauching an input stream for {} ms",
-        detection_duration.as_millis()
-    );
 
     let update_fps = 10.0;
     let start = Instant::now();
