@@ -30,17 +30,15 @@ struct IntervalTrainer {}
 impl eframe::App for IntervalTrainer {
     fn update(&mut self, ctx: &egui::Context, _frame: &mut eframe::Frame) {
         egui::CentralPanel::default().show(ctx, |ui| {
-            egui::ScrollArea::both().show(ui, |ui| {
-                ui.image(egui::include_image!("assets/svg/a_svg.svg"));
-            });
+            ui.image(egui::include_image!("assets/svg/a_svg.svg"));
         });
     }
 }
 
 fn main() -> Result<()> {
     color_eyre::install()?;
-
     env_logger::init(); // Log to stderr (if you run with `RUST_LOG=debug`).
+
     let options = eframe::NativeOptions {
         viewport: egui::ViewportBuilder::default().with_inner_size([600.0, 800.0]),
         ..Default::default()
