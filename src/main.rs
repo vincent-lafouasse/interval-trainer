@@ -17,6 +17,7 @@ use rodio::{OutputStream, OutputStreamHandle};
 
 use color_eyre::eyre::Result;
 use std::sync::atomic::AtomicU32;
+use std::sync::atomic::Ordering;
 use std::sync::Arc;
 use std::thread::sleep;
 use std::time::Duration;
@@ -79,8 +80,8 @@ fn listen_for_frequency(_f: f64) {
 
     const DETECTION_BUFFER_SIZE: usize = 1024;
     const PADDING: usize = DETECTION_BUFFER_SIZE / 2;
-    const POWER_THRESHOLD: f64 = 5.0;
-    const CLARITY_THRESHOLD: f64 = 0.7;
+    const POWER_THRESHOLD: f32 = 5.0;
+    const CLARITY_THRESHOLD: f32 = 0.7;
 
     let freq = Arc::new(AtomicU32::new(0));
     let mut detection_buffer: Vec<f32> = Vec::new();
@@ -92,6 +93,15 @@ fn listen_for_frequency(_f: f64) {
                 if detection_buffer.len() >= DETECTION_BUFFER_SIZE {
                     // buffer is ready to try pitch detection
                     println!("detection attempt");
+                    let mut detector = McLeodDetector::new(DETECTION_BUFFER_SIZE, PADDING);
+                    if let Some(pitch) = detector.get_pitch(
+                        &detection_buffer[0..DETECTION_BUFFER_SIZE],
+                        SAMPLE_RATE,
+                        POWER_THRESHOLD,
+                        CLARITY_THRESHOLD,
+                    ) {
+                        freq.store(pitch.frequency.to_bits(), Ordering::Relaxed);
+                    }
                     detection_buffer.clear();
                 } else {
                     // detection buffer isn't full, use this callback to append a callback buffer
