@@ -15,7 +15,7 @@ class LilypondFile:
         full_filename = TARGET_DIR + self.filename + ".ly"
         with open(full_filename, "w") as output:
             output.write('\\version "2.22.2" \n')
-            output.write("#(set-default-paper-size '(cons (* 100 mm) (* 50 mm)))\n")
+            output.write("#(set-default-paper-size '(cons (* 1000 pt) (* 500 pt)))\n")
             output.write("\\header { tagline = \" \" }")
             output.write("\\new Staff \\with { \n")
             output.write("	\\override TimeSignature.stencil = ##f \n")
