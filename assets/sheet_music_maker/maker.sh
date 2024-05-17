@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-# set -o xtrace
+set -o xtrace
 
 AUX_DIR="aux"
 TARGET_DIR="target"
@@ -14,41 +14,47 @@ parse_note() {
 	# convert scientific note names like A4 G2 to Lilypond style notation a' g,
 	note="$1"
 	
-	note_regex='^[A-G][#b]?[0-8]$'
+	note_regex='^[A-G]([#b]?)[0-8]$'
 
 	if ! [[ ${note} =~ $note_regex ]]; then
 		echo "Error: invalid note $1" >&2
 		return 1
 	fi
+
 	note_name=$(printf %.1s "${note}" | tr '[:upper:]' '[:lower:]')
-	octave="${note:0-1}"
+	alteration="${BASH_REMATCH[1]}"
+	octave="${note: -1}"
+
+	echo "$note_name"
+	echo "$alteration"
+
 	case "${octave}" in
 	0)
-		echo "${note_name},,,"
+		echo ",,,"
 		;;
 	1)
-		echo "${note_name},,"
+		echo ",,"
 		;;
 	2)
-		echo "${note_name},"
+		echo ","
 		;;
 	3)
-		echo "${note_name}"
+		echo ""
 		;;
 	4)
-		echo "${note_name}'"
+		echo "'"
 		;;
 	5)
-		echo "${note_name}''"
+		echo "''"
 		;;
 	6)
-		echo "${note_name}'''"
+		echo "'''"
 		;;
 	7)
-		echo "${note_name}''''"
+		echo "''''"
 		;;
 	8)
-		echo "${note_name}'''''"
+		echo "'''''"
 		;;
 	*)
 		# unreacheable
@@ -87,24 +93,24 @@ generate_octave() {
 	generate "Ab" "$OCTAVE" "$CLEF"
 	generate "A" "$OCTAVE" "$CLEF"
 	generate "A#" "$OCTAVE" "$CLEF"
-	generate "Bb" "$OCTAVE" "$CLEF"
-	generate "B" "$OCTAVE" "$CLEF"
-	generate "B#" "$OCTAVE" "$CLEF"
-	generate "Cb" "$OCTAVE" "$CLEF"
-	generate "C" "$OCTAVE" "$CLEF"
-	generate "C#" "$OCTAVE" "$CLEF"
-	generate "Db" "$OCTAVE" "$CLEF"
-	generate "D" "$OCTAVE" "$CLEF"
-	generate "D#" "$OCTAVE" "$CLEF"
-	generate "Eb" "$OCTAVE" "$CLEF"
-	generate "E" "$OCTAVE" "$CLEF"
-	generate "E#" "$OCTAVE" "$CLEF"
-	generate "Fb" "$OCTAVE" "$CLEF"
-	generate "F" "$OCTAVE" "$CLEF"
-	generate "F#" "$OCTAVE" "$CLEF"
-	generate "Gb" "$OCTAVE" "$CLEF"
-	generate "G" "$OCTAVE" "$CLEF"
-	generate "G#" "$OCTAVE" "$CLEF"
+	# generate "Bb" "$OCTAVE" "$CLEF"
+	# generate "B" "$OCTAVE" "$CLEF"
+	# generate "B#" "$OCTAVE" "$CLEF"
+	# generate "Cb" "$OCTAVE" "$CLEF"
+	# generate "C" "$OCTAVE" "$CLEF"
+	# generate "C#" "$OCTAVE" "$CLEF"
+	# generate "Db" "$OCTAVE" "$CLEF"
+	# generate "D" "$OCTAVE" "$CLEF"
+	# generate "D#" "$OCTAVE" "$CLEF"
+	# generate "Eb" "$OCTAVE" "$CLEF"
+	# generate "E" "$OCTAVE" "$CLEF"
+	# generate "E#" "$OCTAVE" "$CLEF"
+	# generate "Fb" "$OCTAVE" "$CLEF"
+	# generate "F" "$OCTAVE" "$CLEF"
+	# generate "F#" "$OCTAVE" "$CLEF"
+	# generate "Gb" "$OCTAVE" "$CLEF"
+	# generate "G" "$OCTAVE" "$CLEF"
+	# generate "G#" "$OCTAVE" "$CLEF"
 }
 
 #################################################################################
