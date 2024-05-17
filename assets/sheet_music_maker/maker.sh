@@ -2,23 +2,13 @@
 
 # set -o xtrace
 
-parse_cli_args() {
-	if [[ $1 == "--clean" ]]; then
-		clean
-		exit 0
-	fi
-	if [[ $1 == "--mrproper" ]]; then
-		mr_proper
-		exit 0
-	fi
-}
+AUX_DIR="aux"
+TARGET_DIR="target"
 
-parse_instructions() {
-	json="$1"
-	CLEF="$(jq ".clef" "${json}" | sed 's/"//g')"
-	SUBDIVISION="$(jq ".subdivision" "${json}" | sed 's/"//g')"
-	SCIENTIFIC_NOTES="$(jq ".notes" "${json}" | sed 's/"//g')"
-}
+mkdir -p "${AUX_DIR}"
+mkdir -p "${TARGET_DIR}"
+
+TEMPLATE="template/template.ly"
 
 parse_note() {
 	# convert scientific note names like A4 G2 to Lilypond style notation a' g,
@@ -63,60 +53,33 @@ parse_note() {
 	esac
 }
 
-parse_notes() {
-	PARSED_NOTES=""
-	for note in $1; do
-		parsed_note="$(parse_note "${note}")"
-		PARSED_NOTES="${PARSED_NOTES} ${parsed_note}${SUBDIVISION}"
-	done
+generate() {
+	# setup variables
+	NOTE=$1
+	OCTAVE=$2
+	PARSED_NOTE=$(parse_note "$NOTE$OCTAVE")
+	CLEF=$3
+
+	OUTPUT_NAME="$NOTE${OCTAVE}_$CLEF"
+	LILY_FILE="${AUX_DIR}/${OUTPUT_NAME}.ly"
+	OUTPUT_FILE="${TARGET_DIR}/${OUTPUT_NAME}.pdf"
+
+	# fill lilypond file
+	fill_template "${TEMPLATE}" "${LILY_FILE}"
+	lilypond --silent --output="${TARGET_DIR}" "${LILY_FILE}"
+	open "${OUTPUT_FILE}"
 }
 
 fill_template() {
-	NOTES="${PARSED_NOTES}"
+	NOTES="${PARSED_NOTE}1 ${PARSED_NOTE}1"
 	export CLEF NOTES
 
 	envsubst <"$1" >"$2"
 }
 
-clean() {
-	rm -rf "${AUX_DIR}"
-}
-
-mr_proper() {
-	clean
-	rm -rf "${TARGET_DIR}"
-}
-
 #################################################################################
 main() {
-	MAIN="main"
-
-	AUX_DIR="aux"
-	TARGET_DIR="target"
-
-	mkdir -p "${AUX_DIR}"
-	mkdir -p "${TARGET_DIR}"
-
-	TEMPLATE="template/template.ly"
-	LILY_FILE="${AUX_DIR}/${MAIN}.ly"
-	OUTPUT_FILE="${TARGET_DIR}/${MAIN}.pdf"
-
-	parse_cli_args "$@" || {
-		echo "Error: invalid input" >&2
-		return 1
-	}
-
-	parse_instructions "instructions.json"
-
-	parse_notes "${SCIENTIFIC_NOTES}"
-
-	fill_template "${TEMPLATE}" "${LILY_FILE}"
-
-	lilypond --silent --output="${TARGET_DIR}" "${LILY_FILE}"
-
-	open "${OUTPUT_FILE}"
-
-	clean
+	generate "C" "4" "treble"
 }
 
 main "$@"
