@@ -1,16 +1,39 @@
+#![allow(dead_code)]
+
 mod note_repr;
 
 use crate::note_repr::Alteration;
+use crate::note_repr::Clef;
 use crate::note_repr::LilypondThing;
 use crate::note_repr::Note;
 
 fn main() {
     let a4 = Note::new('A', Alteration::NoAlteration, 4);
-    println!("{}", a4.lily_repr());
+    let lily_file = LilypondFile { note: a4, clef: Clef::TrebleClef };
+    println!("{}", lily_file.filename());
+}
 
-    let cbb7 = Note::new('C', Alteration::DoubleFlat, 7);
-    println!("{}", cbb7.lily_repr());
+struct LilypondFile {
+    note: Note,
+    clef: Clef,
+}
 
-    let f_dub_sharp2 = Note::new('F', Alteration::DoubleSharp, 1);
-    println!("{}", f_dub_sharp2.lily_repr());
+impl LilypondFile {
+    fn filename(&self) -> String {
+        let alteration_repr: String = match self.note.alteration {
+            Alteration::NoAlteration => "".to_string(),
+            Alteration::Flat => "b".to_string(),
+            Alteration::DoubleFlat => "bb".to_string(),
+            Alteration::Sharp => "s".to_string(),
+            Alteration::DoubleSharp => "ss".to_string(),
+        };
+
+        format!(
+            "{}{}{}_{}.ly",
+            self.note.name,
+            alteration_repr,
+            self.note.octave,
+            self.clef.lily_repr()
+        )
+    }
 }

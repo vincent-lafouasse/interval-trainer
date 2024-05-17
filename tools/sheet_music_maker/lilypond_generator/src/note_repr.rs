@@ -4,9 +4,9 @@ pub trait LilypondThing {
 
 #[derive(Copy, Clone)]
 pub struct Note {
-    name: NoteName,
-    alteration: Alteration,
-    octave: Octave,
+    pub name: NoteName,
+    pub alteration: Alteration,
+    pub octave: Octave,
 }
 
 impl Note {
