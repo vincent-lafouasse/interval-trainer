@@ -65,7 +65,8 @@ impl eframe::App for IntervalTrainer {
                 ui.label("Cool SVG");
                 ui.add(
                     egui::Image::new(egui::include_image!("assets/svg/a_svg.svg"))
-                        .max_width(800.0)
+                        .max_width(1000.0)
+                        .fit_to_original_size(15.0)
                         .bg_fill(Color32::WHITE),
                 );
             }
