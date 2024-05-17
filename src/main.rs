@@ -40,7 +40,7 @@ fn main() -> Result<()> {
     println!("This is {}", reference_note);
     play_notes(reference_note, mystery_note, Duration::from_millis(1000));
 
-    listen_for_frequency(mystery_note.frequency());
+    listen_for_frequency(mystery_note.frequency(), Duration::from_millis(1500));
     println!(
         "It was {} at a frequency of {} Hz. Did you get it right?",
         mystery_note,
@@ -73,7 +73,7 @@ fn play_notes(n1: Note, n2: Note, note_length: Duration) {
     synth.play(n2.frequency(), note_length, &stream_handle);
 }
 
-fn listen_for_frequency(_f: f64) {
+fn listen_for_frequency(_f: f64, detection_duration: Duration) {
     let (_host, input_device) = setup_input_device().unwrap();
     let config = StreamConfig {
         channels: 1,
@@ -121,7 +121,6 @@ fn listen_for_frequency(_f: f64) {
         )
         .unwrap();
 
-    let detection_duration = Duration::from_millis(1500);
     println!(
         "lauching an input stream for {} ms",
         detection_duration.as_millis()
