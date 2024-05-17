@@ -134,12 +134,8 @@ fn listen_for_frequency(_f: f64, detection_duration: Duration) {
         let tick_start = Instant::now();
 
         let detected_pitch = f64::from_bits(ui_thread_freq.load(Ordering::Relaxed));
-        if detected_pitch > 0.0 {
-            let (note, error) = closest_note(detected_pitch);
-            let cent_precision_threshold = 20;
-            if error.abs() < cent_precision_threshold {
-                println!("{}\t{} cents", note, error);
-            }
+        if let Some((note, error)) = get_note(detected_pitch, 20) {
+            println!("{}\t{} cents", note, error);
         }
 
         regularize_fps(
@@ -149,6 +145,34 @@ fn listen_for_frequency(_f: f64, detection_duration: Duration) {
     }
 
     stream.pause().unwrap();
+}
+
+fn get_note(f: f64, cent_threshold: i8) -> Option<(SimpleNote, i8)> {
+    let (note, error) = match f > 0.0 {
+        true => closest_note(f),
+        false => return None,
+    };
+    match error.abs() < cent_threshold {
+        true => Some((note, error)),
+        false => None,
+    }
+}
+
+fn closest_note(f: f64) -> (SimpleNote, i8) {
+    let distance_from_a4 = distance_cents(440.0, f);
+    let distance_from_c_min_1 = distance_from_a4 + 69 * 100;
+
+    let simple_note: SimpleNote;
+    let error: u8;
+    let positive_error: i8 = distance_from_c_min_1.rem_euclid(100).try_into().unwrap();
+    let floor_note = distance_from_c_min_1 / 100;
+    let floor_note: i8 = floor_note.try_into().unwrap();
+    let floor_note = SimpleNote::new(floor_note);
+
+    match positive_error < 50 {
+        true => (floor_note, positive_error),
+        false => (floor_note.shift(1), 100 - positive_error),
+    }
 }
 
 fn regularize_fps(tick_start: Instant, target_tick_duration: Duration) {
@@ -168,21 +192,8 @@ fn setup_input_device() -> Result<(Host, Device), &'static str> {
     Ok((host, device))
 }
 
-fn closest_note(f: f64) -> (SimpleNote, i8) {
-    let distance_from_a4 = distance_cents(440.0, f);
-    let distance_from_c_min_1 = distance_from_a4 + 69 * 100;
-
-    let simple_note: SimpleNote;
-    let error: u8;
-    let positive_error: i8 = distance_from_c_min_1.rem_euclid(100).try_into().unwrap();
-    let floor_note = distance_from_c_min_1 / 100;
-    let floor_note: i8 = floor_note.try_into().unwrap();
-    let floor_note = SimpleNote::new(floor_note);
-
-    match positive_error < 50 {
-        true => (floor_note, positive_error),
-        false => (floor_note.shift(1), 100 - positive_error),
-    }
+fn are_octaves_away(n1: SimpleNote, n2: SimpleNote) -> bool {
+    (n1.get_i8() - n2.get_i8()) % 12 == 0
 }
 
 fn distance_cents(f0: f64, f: f64) -> i32 {
