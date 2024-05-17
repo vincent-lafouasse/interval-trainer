@@ -2,7 +2,7 @@
 
 main() {
 	for f in target/*.ly; do
-		lilypond --silent --svg --output=target "$f"
+		lilypond --silent --svg --output=svg "$f"
 	done
 }
 
