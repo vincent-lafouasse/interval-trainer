@@ -1,7 +1,7 @@
 /target
 
 # sheet music
-**/**.svg
+**/**.pdf
 **/**.png
 **/**.ps
 **/**.eps
