@@ -8,7 +8,7 @@ use crate::wavetables::*;
 
 pub struct WavetableSynth {
     wavetable: Wavetable,
-    sample_rate: usize,
+    sample_rate: u16,
     vca: VCA,
 }
 
@@ -38,7 +38,7 @@ impl WavetableSynth {
         sink.stop();
     }
 
-    pub fn new(wavetable: Wavetable, sample_rate: usize) -> Self {
+    pub fn new(wavetable: Wavetable, sample_rate: u16) -> Self {
         WavetableSynth {
             wavetable,
             sample_rate,
@@ -93,14 +93,14 @@ impl VCA {
 
 /// A wavetable oscillator that can play sound via the `rodio::source::Source` trait
 pub struct Oscillator {
-    sample_rate: usize,
+    sample_rate: u16,
     wavetable: Wavetable,
     index: f32,
     index_increment: f32,
 }
 
 impl Oscillator {
-    pub fn new(sample_rate: usize, wavetable: Wavetable) -> Self {
+    pub fn new(sample_rate: u16, wavetable: Wavetable) -> Self {
         Oscillator { sample_rate, wavetable, index: 0., index_increment: 0. }
     }
 

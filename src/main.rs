@@ -26,10 +26,11 @@ use std::time::{Duration, Instant};
 use crate::interval::{Direction, Interval};
 use crate::note_range::NoteRange;
 use crate::notes::Note;
+use crate::pitch_detector::MyPitchDetectorConfig;
 use crate::simple_note::SimpleNote;
 use crate::synth::{Wavetable, WavetableSynth};
 
-const SAMPLE_RATE: usize = 44_100;
+const SAMPLE_RATE: u16 = 44_100;
 static SINE: Wavetable = Wavetable::new();
 
 fn main() -> Result<()> {
@@ -75,31 +76,34 @@ fn play_notes(n1: Note, n2: Note, note_length: Duration) {
 }
 
 fn listen_for_frequency(_f: f64, detection_duration: Duration) {
+    let config = MyPitchDetectorConfig {
+        n_channels: 1,
+        sample_rate: SAMPLE_RATE,
+        buffer_size: 1024,
+        power_threshold: 5.0,
+        clarity_threshold: 0.7,
+        precision_threshold_cents: 20,
+    };
     let (_host, input_device) = setup_input_device().unwrap();
-    let config = StreamConfig {
-        channels: 1,
-        sample_rate: cpal::SampleRate(44_100),
+    let stream_config = StreamConfig {
+        channels: config.n_channels,
+        sample_rate: cpal::SampleRate(config.sample_rate.into()),
         buffer_size: cpal::BufferSize::Default,
     };
-
-    const DETECTION_BUFFER_SIZE: usize = 1024;
-    const PADDING: usize = DETECTION_BUFFER_SIZE / 2;
-    const POWER_THRESHOLD: f32 = 5.0;
-    const CLARITY_THRESHOLD: f32 = 0.7;
 
     let audio_thread_freq = Arc::new(AtomicU64::new(0));
     let ui_thread_freq = audio_thread_freq.clone();
     let mut detection_buffer: Vec<f32> = Vec::new();
 
     let input_callback = move |data: &[f32], _: &cpal::InputCallbackInfo| {
-        if detection_buffer.len() >= DETECTION_BUFFER_SIZE {
+        if detection_buffer.len() >= config.buffer_size {
             // buffer is ready to try pitch detection
-            let mut detector = McLeodDetector::new(DETECTION_BUFFER_SIZE, PADDING);
+            let mut detector = McLeodDetector::new(config.buffer_size, config.buffer_size / 2);
             if let Some(pitch) = detector.get_pitch(
-                &detection_buffer[0..DETECTION_BUFFER_SIZE],
-                SAMPLE_RATE,
-                POWER_THRESHOLD,
-                CLARITY_THRESHOLD,
+                &detection_buffer[0..config.buffer_size],
+                config.sample_rate.into(),
+                config.power_threshold,
+                config.clarity_threshold,
             ) {
                 audio_thread_freq.store(
                     Into::<f64>::into(pitch.frequency).to_bits(),
@@ -115,7 +119,7 @@ fn listen_for_frequency(_f: f64, detection_duration: Duration) {
 
     let stream = input_device
         .build_input_stream::<f32, _, _>(
-            &config,
+            &stream_config,
             input_callback,
             |e| eprintln!("An error has occured on the audio thread: {e}"),
             None,

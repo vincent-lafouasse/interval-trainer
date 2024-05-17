@@ -19,8 +19,8 @@ impl MyPitchDetector {
 }
 
 pub struct MyPitchDetectorConfig {
-    pub n_channels: usize,
-    pub sample_rate: usize,
+    pub n_channels: u16,
+    pub sample_rate: u16,
     pub buffer_size: usize,
     pub power_threshold: f32,
     pub clarity_threshold: f32,
