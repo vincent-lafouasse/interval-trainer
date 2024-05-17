@@ -31,10 +31,6 @@ impl eframe::App for IntervalTrainer {
     fn update(&mut self, ctx: &egui::Context, _frame: &mut eframe::Frame) {
         egui::CentralPanel::default().show(ctx, |ui| {
             egui::ScrollArea::both().show(ui, |ui| {
-                ui.add(
-                    egui::Image::new("https://picsum.photos/seed/1.759706314/1024").rounding(10.0),
-                );
-
                 ui.image(egui::include_image!("assets/svg/a_svg.svg"));
             });
         });
@@ -59,6 +55,7 @@ fn main() -> Result<()> {
         }),
     );
 
+    /*
     let range = NoteRange::tenor_voice();
     let (reference_note, mystery_note) = choose_notes(&range);
 
@@ -81,6 +78,7 @@ fn main() -> Result<()> {
         ),
         None => println!("womp womp it was {}", mystery_note),
     }
+    */
 
     Ok(())
 }
