@@ -15,7 +15,7 @@ class LilypondFile:
         full_filename = TARGET_DIR + self.filename + ".ly"
         with open(full_filename, "w") as output:
             output.write('\\version "2.22.2" \n')
-            output.write('#(set-default-paper-size "a9landscape") \n')
+            output.write("#(set-default-paper-size '(cons (* 100 mm) (* 50 mm)))\n")
             output.write("\\header { tagline = \" \" }")
             output.write("\\new Staff \\with { \n")
             output.write("	\\override TimeSignature.stencil = ##f \n")
@@ -28,9 +28,7 @@ class LilypondFile:
 
 
 def main():
-    note = Note("C", NoAlteration(), 3)
-    note = Note("B", Flat(), 7)
-    note = Note("E", DoubleSharp(), 4)
+    note = Note("E", Flat(), 4)
 
     ly_file = LilypondFile(note, TrebleClef())
     ly_file.write()
