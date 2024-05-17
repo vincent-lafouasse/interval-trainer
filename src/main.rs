@@ -98,6 +98,8 @@ fn listen_for_frequency(_f: f64) {
                 CLARITY_THRESHOLD,
             ) {
                 freq.store(pitch.frequency.to_bits(), Ordering::Relaxed);
+                let detected_pitch = f32::from_bits(freq.load(Ordering::Relaxed));
+                println!("freq detected: {}", detected_pitch as u32);
             }
             detection_buffer.clear();
         } else {
@@ -114,7 +116,7 @@ fn listen_for_frequency(_f: f64) {
         )
         .unwrap();
 
-    let detection_duration = Duration::from_millis(100);
+    let detection_duration = Duration::from_millis(1500);
     println!(
         "lauching an input stream for {} ms",
         detection_duration.as_millis()
