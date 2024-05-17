@@ -40,12 +40,13 @@ fn main() -> Result<()> {
     println!("This is {}", reference_note);
     play_notes(reference_note, mystery_note, Duration::from_millis(1000));
 
-    listen_for_note(mystery_note.to_simple(), Duration::from_millis(1500));
-    println!(
-        "It was {} at a frequency of {} Hz. Did you get it right?",
-        mystery_note,
-        mystery_note.frequency() as u32
-    );
+    match listen_for_note(mystery_note.to_simple(), Duration::from_millis(1500)) {
+        Some(cent_deviation) => println!(
+            "you got it ! it was {}\nyou got it within a {} cent deviation",
+            mystery_note, cent_deviation
+        ),
+        None => println!("womp womp it was {}", mystery_note),
+    }
 
     Ok(())
 }
@@ -73,7 +74,7 @@ fn play_notes(n1: Note, n2: Note, note_length: Duration) {
     synth.play(n2.frequency(), note_length, &stream_handle);
 }
 
-fn listen_for_note(target_note: SimpleNote, detection_duration: Duration) {
+fn listen_for_note(target_note: SimpleNote, detection_duration: Duration) -> Option<i8> {
     let (_host, input_device) = setup_input_device().unwrap();
     let config = StreamConfig {
         channels: 1,
@@ -135,10 +136,9 @@ fn listen_for_note(target_note: SimpleNote, detection_duration: Duration) {
 
         let detected_pitch = f64::from_bits(ui_thread_freq.load(Ordering::Relaxed));
         if let Some((note, error)) = get_note(detected_pitch, 20) {
-            println!("{}\t{} cents", note, error);
             if are_octaves_away(note, target_note) {
-                println!("gg !!");
-                break;
+                stream.pause().unwrap();
+                return Some(error);
             }
         }
 
@@ -149,6 +149,7 @@ fn listen_for_note(target_note: SimpleNote, detection_duration: Duration) {
     }
 
     stream.pause().unwrap();
+    None
 }
 
 fn get_note(f: f64, cent_threshold: i8) -> Option<(SimpleNote, i8)> {
