@@ -21,3 +21,36 @@ impl LilypondThing for NoteName {
         }
     }
 }
+
+enum Clef {
+    TrebleClef,
+    BassClef,
+}
+
+impl LilypondThing for Clef {
+    fn lily_repr(&self) -> &str {
+        match *self {
+            Clef::TrebleClef => "treble",
+            Clef::BassClef => "bass",
+        }
+    }
+}
+
+type Octave = i8;
+impl LilypondThing for Octave {
+    fn lily_repr(&self) -> &str {
+        match *self {
+            0 => ",,,",
+            1 => ",,",
+            2 => ",",
+            3 => "",
+            4 => "'",
+            5 => "''",
+            6 => "'''",
+            7 => "''''",
+            8 => "'''''",
+            _ => panic!("invalid octave: {}", *self),
+        }
+    }
+}
+
