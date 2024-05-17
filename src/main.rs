@@ -134,7 +134,13 @@ fn listen_for_frequency(_f: f64, detection_duration: Duration) {
         let tick_start = Instant::now();
 
         let detected_pitch = f64::from_bits(ui_thread_freq.load(Ordering::Relaxed));
-        println!("freq detected: {} Hz", detected_pitch as u32);
+        if detected_pitch > 0.0 {
+            let (note, error) = closest_note(detected_pitch);
+            let cent_precision_threshold = 20;
+            if error.abs() < cent_precision_threshold {
+                println!("{}\t{} cents", note, error);
+            }
+        }
 
         regularize_fps(
             tick_start,
