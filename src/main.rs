@@ -146,9 +146,9 @@ fn listen_for_frequency(_f: f64, detection_duration: Duration) {
 }
 
 fn regularize_fps(tick_start: Instant, target_tick_duration: Duration) {
-    let actual_tick_len = Instant::now().duration_since(tick_start);
-    if actual_tick_len < target_tick_duration {
-        std::thread::sleep(target_tick_duration - actual_tick_len);
+    let actual_tick_duration = Instant::now().duration_since(tick_start);
+    if actual_tick_duration < target_tick_duration {
+        std::thread::sleep(target_tick_duration - actual_tick_duration);
     }
 }
 
