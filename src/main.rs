@@ -35,7 +35,7 @@ impl eframe::App for IntervalTrainer {
                     egui::Image::new("https://picsum.photos/seed/1.759706314/1024").rounding(10.0),
                 );
 
-                ui.image(egui::include_image!("../assets/svg/.svg"));
+                ui.image(egui::include_image!("assets/svg/.svg"));
             });
         });
     }
