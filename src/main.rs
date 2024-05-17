@@ -27,6 +27,12 @@ const SAMPLE_RATE: u16 = 44_100;
 #[derive(Default)]
 struct IntervalTrainer {}
 
+impl IntervalTrainer {
+    fn new(cc: &eframe::CreationContext<'_>) -> Self {
+        Self::default()
+    }
+}
+
 impl eframe::App for IntervalTrainer {
     fn update(&mut self, ctx: &egui::Context, _frame: &mut eframe::Frame) {
         egui::CentralPanel::default().show(ctx, |ui| {
