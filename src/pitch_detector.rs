@@ -19,7 +19,7 @@ impl MyPitchDetector {
         let freq_clone = Arc::clone(&freq);
         MyPitchDetector {
             config,
-            context: MyPitchDetectorContext::setup(config).unwrap(),
+            context: MyPitchDetectorContext::new(config).unwrap(),
             audio_thread_freq: freq,
             ui_thread_freq: freq_clone,
             buffer: Vec::new(),
@@ -39,12 +39,12 @@ pub struct MyPitchDetectorConfig {
 
 pub struct MyPitchDetectorContext {
     host: cpal::Host,
-    input_device: cpal::Device,
-    stream_config: cpal::StreamConfig,
+    pub input_device: cpal::Device,
+    pub stream_config: cpal::StreamConfig,
 }
 
 impl MyPitchDetectorContext {
-    pub fn setup(config: MyPitchDetectorConfig) -> Result<Self, &'static str> {
+    pub fn new(config: MyPitchDetectorConfig) -> Result<Self, &'static str> {
         let host: cpal::Host = cpal::default_host();
         let input_device: cpal::Device = match host.default_input_device() {
             Some(device) => device,

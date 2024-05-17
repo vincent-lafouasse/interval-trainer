@@ -26,7 +26,7 @@ use std::time::{Duration, Instant};
 use crate::interval::{Direction, Interval};
 use crate::note_range::NoteRange;
 use crate::notes::Note;
-use crate::pitch_detector::MyPitchDetectorConfig;
+use crate::pitch_detector::{MyPitchDetectorConfig, MyPitchDetectorContext};
 use crate::simple_note::SimpleNote;
 use crate::synth::{Wavetable, WavetableSynth};
 
@@ -84,12 +84,7 @@ fn listen_for_frequency(_f: f64, detection_duration: Duration) {
         clarity_threshold: 0.7,
         precision_threshold_cents: 20,
     };
-    let (_host, input_device) = setup_input_device().unwrap();
-    let stream_config = StreamConfig {
-        channels: config.n_channels,
-        sample_rate: cpal::SampleRate(config.sample_rate.into()),
-        buffer_size: cpal::BufferSize::Default,
-    };
+    let context = MyPitchDetectorContext::new(config).unwrap();
 
     let audio_thread_freq = Arc::new(AtomicU64::new(0));
     let ui_thread_freq = audio_thread_freq.clone();
@@ -117,9 +112,10 @@ fn listen_for_frequency(_f: f64, detection_duration: Duration) {
         }
     };
 
-    let stream = input_device
+    let stream = context
+        .input_device
         .build_input_stream::<f32, _, _>(
-            &stream_config,
+            &context.stream_config,
             input_callback,
             |e| eprintln!("An error has occured on the audio thread: {e}"),
             None,
