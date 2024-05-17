@@ -2,27 +2,37 @@ from Alteration import NoAlteration, Flat, DoubleFlat, Sharp, DoubleSharp
 from Note import Note
 from Clef import TrebleClef, BassClef
 
-TARGET_DIR = "./target"
+TARGET_DIR = "./target/"
 
 
 class LilypondFile:
     def __init__(self, note, clef):
-        pass
+        self.note = note
+        self.clef = clef
+        self.filename = note.str_repr() + "_" + clef.get()
+
+    def write(self):
+        full_filename = TARGET_DIR + self.filename + ".ly"
+        with open(full_filename, "w") as output:
+            output.write('\\version "2.22.2" \n')
+            output.write('#(set-default-paper-size "a9landscape") \n')
+            output.write("\\new Staff \\with { \n")
+            output.write("	\\override TimeSignature.stencil = ##f \n")
+            output.write("}{ \n")
+            output.write("	\\time 100/2 % no bar lines (probably) \n")
+            output.write("	\\clef ${CLEF} \n")
+            output.write("	\\key c \\major \n")
+            output.write("	| ${NOTES} | \n")
+            output.write("} \n")
 
 
 def main():
     note = Note("C", NoAlteration(), 3)
-    print(note.str_repr())
-    print(note.ly_repr())
-    print()
     note = Note("B", Flat(), 7)
-    print(note.str_repr())
-    print(note.ly_repr())
-    print()
     note = Note("E", DoubleSharp(), 4)
-    print(note.str_repr())
-    print(note.ly_repr())
-    print()
+
+    ly_file = LilypondFile(note, TrebleClef())
+    ly_file.write()
 
 
 if __name__ == "__main__":
