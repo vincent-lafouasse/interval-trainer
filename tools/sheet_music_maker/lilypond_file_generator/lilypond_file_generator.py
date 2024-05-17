@@ -23,7 +23,7 @@ class LilypondFile:
             output.write("	\\time 100/2 % no bar lines (probably) \n")
             output.write(f"	\\clef {self.clef.get()} \n")
             output.write("	\\key c \\major \n")
-            output.write(f"	| {self.note.ly_repr()}1 {self.note.ly_repr()}1 | \n")
+            output.write(f"	| {self.note.ly_repr()}!1 {self.note.ly_repr()}!1 | \n")
             output.write("} \n")
 
 
