@@ -93,7 +93,7 @@ fn listen_for_frequency(_f: f64) {
                 } else {
                     // detection buffer isn't full, use this callback to append a callback buffer
                     detection_buffer.extend_from_slice(data);
-                } 
+                }
             },
             |e| eprintln!("An error has occured on the audio thread: {e}"),
             None,
@@ -101,7 +101,10 @@ fn listen_for_frequency(_f: f64) {
         .unwrap();
 
     let detection_duration = Duration::from_millis(100);
-    println!("lauching an input stream for {} ms", detection_duration.as_millis());
+    println!(
+        "lauching an input stream for {} ms",
+        detection_duration.as_millis()
+    );
     stream.play().unwrap();
     std::thread::sleep(detection_duration);
     stream.pause().unwrap();
