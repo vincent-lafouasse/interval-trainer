@@ -31,8 +31,8 @@ struct IntervalTrainer {
 
 #[derive(Default, Copy, Clone, PartialEq)]
 enum GameState {
-    Hello,
     #[default]
+    Hello,
     CoolSVG,
 }
 
@@ -46,7 +46,9 @@ impl eframe::App for IntervalTrainer {
     fn update(&mut self, ctx: &egui::Context, _frame: &mut eframe::Frame) {
         egui::CentralPanel::default().show(ctx, |ui| {
             if self.state == GameState::Hello {
+                ui.label("Hello");
             } else if self.state == GameState::CoolSVG {
+                ui.label("Cool SVG");
                 ui.image(egui::include_image!("assets/svg/a_svg.svg"));
             }
         });
