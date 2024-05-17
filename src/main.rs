@@ -163,7 +163,20 @@ fn setup_input_device() -> Result<(Host, Device), &'static str> {
 }
 
 fn closest_note(f: f64) {
-    todo!()
+    let distance_from_a4 = distance_cents(440.0, f);
+    let distance_from_c_min_1 = distance_from_a4 + 69 * 100;
+
+    let simple_note: SimpleNote;
+    let error: u8;
+    let positive_error: i8 = distance_from_c_min_1.rem_euclid(100).try_into().unwrap();
+    let floor_note = distance_from_c_min_1 / 100;
+    let floor_note: i8 = floor_note.try_into().unwrap();
+    let floor_note = SimpleNote::new(floor_note);
+
+    let (note, error): (SimpleNote, i8) = match positive_error < 50 {
+        true => (floor_note, positive_error),
+        false => (floor_note.shift(1), 100 - positive_error),
+    };
 }
 
 fn distance_cents(f0: f64, f: f64) -> i32 {
