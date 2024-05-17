@@ -38,7 +38,7 @@ fn main() -> Result<()> {
     let (reference_note, mystery_note) = choose_notes(&range);
 
     println!("This is {}", reference_note);
-    play_notes(reference_note, mystery_note);
+    play_notes(reference_note, mystery_note, Duration::from_millis(1000));
 
     listen_for_frequency(mystery_note.frequency());
     println!(
@@ -63,15 +63,14 @@ fn choose_notes(range: &NoteRange) -> (Note, Note) {
     (reference, reference.up(interval))
 }
 
-fn play_notes(n1: Note, n2: Note) {
+fn play_notes(n1: Note, n2: Note, note_length: Duration) {
     let synth = WavetableSynth::new(SINE, SAMPLE_RATE);
     let (_stream, stream_handle) = OutputStream::try_default().unwrap();
-    const NOTE_LENGTH: u64 = 1000;
 
     // synth needs refactoring to take a Duration instead of a u64
-    synth.play(n1.frequency(), NOTE_LENGTH, &stream_handle);
+    synth.play(n1.frequency(), note_length, &stream_handle);
     sleep(Duration::from_secs(1));
-    synth.play(n2.frequency(), NOTE_LENGTH, &stream_handle);
+    synth.play(n2.frequency(), note_length, &stream_handle);
 }
 
 fn listen_for_frequency(_f: f64) {

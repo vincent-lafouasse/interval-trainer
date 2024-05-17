@@ -13,7 +13,7 @@ pub struct WavetableSynth {
 }
 
 impl WavetableSynth {
-    pub fn play(&self, frequency: f64, note_length_ms: u64, handle: &OutputStreamHandle) {
+    pub fn play(&self, frequency: f64, note_length: Duration, handle: &OutputStreamHandle) {
         let sink = Sink::try_new(handle).expect("Failed to create a new sink for audio playback");
         sink.set_volume(0.0);
 
@@ -21,7 +21,6 @@ impl WavetableSynth {
         oscillator.set_frequency(frequency);
         sink.append(oscillator);
 
-        let note_length = Duration::from_millis(note_length_ms);
         let note_start = Instant::now();
         let update_period = Duration::from_millis(5);
 
