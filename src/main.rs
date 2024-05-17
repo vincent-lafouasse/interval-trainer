@@ -25,7 +25,16 @@ use crate::synth::play_notes;
 const SAMPLE_RATE: u16 = 44_100;
 
 #[derive(Default)]
-struct IntervalTrainer {}
+struct IntervalTrainer {
+    state: GameState,
+}
+
+#[derive(Default, Copy, Clone, PartialEq)]
+enum GameState {
+    #[default]
+    Hello,
+    CoolSVG,
+}
 
 impl IntervalTrainer {
     fn new(cc: &eframe::CreationContext<'_>) -> Self {
@@ -36,7 +45,10 @@ impl IntervalTrainer {
 impl eframe::App for IntervalTrainer {
     fn update(&mut self, ctx: &egui::Context, _frame: &mut eframe::Frame) {
         egui::CentralPanel::default().show(ctx, |ui| {
-            ui.image(egui::include_image!("assets/svg/a_svg.svg"));
+            if self.state == GameState::Hello {
+            } else if self.state == GameState::CoolSVG {
+                ui.image(egui::include_image!("assets/svg/a_svg.svg"));
+            }
         });
     }
 }
