@@ -7,3 +7,5 @@
 **/**.eps
 
 .DS_Store
+**/aux/
+**/target/
