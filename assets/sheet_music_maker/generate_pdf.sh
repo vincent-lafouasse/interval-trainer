@@ -1,6 +1,6 @@
 main() {
 	for f in target/*.ly; do
-		lilypond --silent "$f"
+		lilypond --silent --output=target "$f"
 	done
 }
 
