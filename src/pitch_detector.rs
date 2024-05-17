@@ -6,20 +6,20 @@ use std::task::Context;
 use cpal::traits::{DeviceTrait, HostTrait, StreamTrait};
 
 pub struct MyPitchDetector {
-    config: MyPitchDetectorConfig,
-    context: MyPitchDetectorContext,
-    audio_thread_freq: Arc<AtomicU64>,
-    ui_thread_freq: Arc<AtomicU64>,
-    buffer: Vec<f32>,
+    pub config: MyPitchDetectorConfig,
+    pub context: MyPitchDetectorContext,
+    pub audio_thread_freq: Arc<AtomicU64>,
+    pub ui_thread_freq: Arc<AtomicU64>,
+    pub buffer: Vec<f32>,
 }
 
 impl MyPitchDetector {
-    pub fn new(config: MyPitchDetectorConfig) -> Self {
+    pub fn new(config: MyPitchDetectorConfig, context: MyPitchDetectorContext) -> Self {
         let freq = Arc::new(AtomicU64::new(0));
         let freq_clone = Arc::clone(&freq);
         MyPitchDetector {
             config,
-            context: MyPitchDetectorContext::new(config).unwrap(),
+            context,
             audio_thread_freq: freq,
             ui_thread_freq: freq_clone,
             buffer: Vec::new(),

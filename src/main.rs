@@ -26,7 +26,7 @@ use std::time::{Duration, Instant};
 use crate::interval::{Direction, Interval};
 use crate::note_range::NoteRange;
 use crate::notes::Note;
-use crate::pitch_detector::{MyPitchDetectorConfig, MyPitchDetectorContext};
+use crate::pitch_detector::{MyPitchDetector, MyPitchDetectorConfig, MyPitchDetectorContext};
 use crate::simple_note::SimpleNote;
 use crate::synth::{Wavetable, WavetableSynth};
 
@@ -85,37 +85,35 @@ fn listen_for_frequency(_f: f64, detection_duration: Duration) {
         precision_threshold_cents: 20,
     };
     let context = MyPitchDetectorContext::new(config).unwrap();
-
-    let audio_thread_freq = Arc::new(AtomicU64::new(0));
-    let ui_thread_freq = audio_thread_freq.clone();
-    let mut detection_buffer: Vec<f32> = Vec::new();
+    let mut my_detector = MyPitchDetector::new(config, context);
 
     let input_callback = move |data: &[f32], _: &cpal::InputCallbackInfo| {
-        if detection_buffer.len() >= config.buffer_size {
+        if my_detector.buffer.len() >= config.buffer_size {
             // buffer is ready to try pitch detection
             let mut detector = McLeodDetector::new(config.buffer_size, config.buffer_size / 2);
             if let Some(pitch) = detector.get_pitch(
-                &detection_buffer[0..config.buffer_size],
+                &my_detector.buffer[0..config.buffer_size],
                 config.sample_rate.into(),
                 config.power_threshold,
                 config.clarity_threshold,
             ) {
-                audio_thread_freq.store(
+                my_detector.audio_thread_freq.store(
                     Into::<f64>::into(pitch.frequency).to_bits(),
                     Ordering::Relaxed,
                 );
             }
-            detection_buffer.clear();
+            my_detector.buffer.clear();
         } else {
             // detection buffer isn't full, use this callback to append a callback buffer
-            detection_buffer.extend_from_slice(data);
+            my_detector.buffer.extend_from_slice(data);
         }
     };
 
-    let stream = context
+    let stream = my_detector
+        .context
         .input_device
         .build_input_stream::<f32, _, _>(
-            &context.stream_config,
+            &my_detector.context.stream_config,
             input_callback,
             |e| eprintln!("An error has occured on the audio thread: {e}"),
             None,
@@ -134,7 +132,7 @@ fn listen_for_frequency(_f: f64, detection_duration: Duration) {
     while Instant::now().duration_since(start) < detection_duration {
         let tick_start = Instant::now();
 
-        let detected_pitch = f64::from_bits(ui_thread_freq.load(Ordering::Relaxed));
+        let detected_pitch = f64::from_bits(my_detector.ui_thread_freq.load(Ordering::Relaxed));
         if detected_pitch > 0.0 {
             let (note, error) = closest_note(detected_pitch);
             let cent_precision_threshold = 20;
