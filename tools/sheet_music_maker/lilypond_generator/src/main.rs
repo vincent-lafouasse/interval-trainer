@@ -53,3 +53,22 @@ impl LilypondThing for Octave {
         }
     }
 }
+
+enum Alteration {
+    NoAlteration,
+    Sharp,
+    DoubleSharp,
+    Flat,
+    DoubleFlat,
+}
+impl LilypondThing for Alteration {
+    fn lily_repr(&self) -> &str {
+        match *self {
+            Alteration::NoAlteration => "",
+            Alteration::Flat => "es",
+            Alteration::DoubleFlat => "eses",
+            Alteration::Sharp => "is",
+            Alteration::DoubleSharp => "isis",
+        }
+    }
+}
