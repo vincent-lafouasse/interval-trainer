@@ -26,10 +26,9 @@ use crate::interval::{Direction, Interval};
 use crate::note_range::NoteRange;
 use crate::notes::Note;
 use crate::simple_note::SimpleNote;
-use crate::synth::{Wavetable, WavetableSynth};
+use crate::synth::play_notes;
 
 const SAMPLE_RATE: u16 = 44_100;
-static SQUARE8: Wavetable = Wavetable::square8();
 
 fn main() -> Result<()> {
     color_eyre::install()?;
@@ -38,7 +37,12 @@ fn main() -> Result<()> {
     let (reference_note, mystery_note) = choose_notes(&range);
 
     println!("This is {}", reference_note);
-    play_notes(reference_note, mystery_note, Duration::from_millis(1000));
+    play_notes(
+        reference_note,
+        mystery_note,
+        Duration::from_millis(1000),
+        SAMPLE_RATE,
+    );
 
     match listen_for_note(mystery_note.to_simple(), Duration::from_millis(1500)) {
         Some(cent_deviation) => println!(
@@ -62,16 +66,6 @@ fn choose_notes(range: &NoteRange) -> (Note, Note) {
 
     let reference = new_range.rand();
     (reference, reference.up(interval))
-}
-
-fn play_notes(n1: Note, n2: Note, note_length: Duration) {
-    let synth = WavetableSynth::new(SQUARE8, SAMPLE_RATE);
-    let (_stream, stream_handle) = OutputStream::try_default().unwrap();
-
-    // synth needs refactoring to take a Duration instead of a u64
-    synth.play(n1.frequency(), note_length, &stream_handle);
-    sleep(Duration::from_secs(1));
-    synth.play(n2.frequency(), note_length, &stream_handle);
 }
 
 fn listen_for_note(target_note: SimpleNote, detection_duration: Duration) -> Option<i8> {
