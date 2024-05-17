@@ -35,7 +35,7 @@ fn main() -> Result<()> {
     let (reference_note, mystery_note) = choose_notes(&range);
 
     println!("This is {}", reference_note);
-    play_notes(reference_note, mystery_note);
+    //play_notes(reference_note, mystery_note);
 
     listen_for_frequency(mystery_note.frequency());
     println!("It was {}. Did you get it right?", mystery_note);
@@ -75,25 +75,35 @@ fn listen_for_frequency(_f: f64) {
         buffer_size: cpal::BufferSize::Default,
     };
 
-    const SIZE: usize = 1024;
-    const PADDING: usize = SIZE / 2;
+    const DETECTION_BUFFER_SIZE: usize = 1024;
+    const PADDING: usize = DETECTION_BUFFER_SIZE / 2;
     const POWER_THRESHOLD: f64 = 5.0;
     const CLARITY_THRESHOLD: f64 = 0.7;
 
-    //let input_callback = move |data: &[f32], _: &cpal::InputCallbackInfo| todo!();
+    let mut detection_buffer: Vec<f32> = Vec::new();
+
     let stream = input_device
         .build_input_stream::<f32, _, _>(
             &config,
             move |data: &[f32], _: &cpal::InputCallbackInfo| {
-                // audio callback
-                // println!("{:?}", data);
+                if detection_buffer.len() >= DETECTION_BUFFER_SIZE {
+                    println!("detection attempt");
+                    // buffer is ready to try pitch detection
+                    detection_buffer.clear();
+                } else {
+                    // detection buffer isn't full, use this callback to append a callback buffer
+                    detection_buffer.extend_from_slice(data);
+                } 
             },
             |e| eprintln!("An error has occured on the audio thread: {e}"),
             None,
         )
         .unwrap();
+
+    let detection_duration = Duration::from_millis(100);
+    println!("lauching an input stream for {} ms", detection_duration.as_millis());
     stream.play().unwrap();
-    //std::thread::sleep(Duration::from_secs(3));
+    std::thread::sleep(detection_duration);
     stream.pause().unwrap();
 }
 
@@ -109,4 +119,8 @@ fn setup_input_device() -> Result<(Host, Device), &'static str> {
 
 fn distance_cents(f0: f64, f: f64) -> i32 {
     (1200.0 * f64::log2(f / f0)) as i32
+}
+
+fn print_type_of<T>(_: &T) {
+    println!("{}", std::any::type_name::<T>())
 }
