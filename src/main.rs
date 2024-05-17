@@ -125,19 +125,23 @@ fn listen_for_frequency(_f: f64, detection_duration: Duration) {
         "lauching an input stream for {} ms",
         detection_duration.as_millis()
     );
-    stream.play().unwrap();
 
-    let update_fps = 10;
-    let update_tick_len = Duration::from_millis(1000 / update_fps);
+    let update_fps = 10.0;
     let start = Instant::now();
+
+    stream.play().unwrap();
     while Instant::now().duration_since(start) < detection_duration {
         let tick_start = Instant::now();
 
         let detected_pitch = f64::from_bits(ui_thread_freq.load(Ordering::Relaxed));
         println!("freq detected: {} Hz", detected_pitch as u32);
 
-        regularize_fps(tick_start, update_tick_len);
+        regularize_fps(
+            tick_start,
+            Duration::from_millis((1000.0 / update_fps) as u64),
+        );
     }
+
     stream.pause().unwrap();
 }
 
