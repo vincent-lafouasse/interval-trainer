@@ -77,9 +77,36 @@ fill_template() {
 	envsubst <"$1" >"$2"
 }
 
+generate_octave() {
+	CLEF=$1
+	OCTAVE=$2
+
+	generate "Ab" "$OCTAVE" "$CLEF"
+	generate "A" "$OCTAVE" "$CLEF"
+	generate "A#" "$OCTAVE" "$CLEF"
+	generate "Bb" "$OCTAVE" "$CLEF"
+	generate "B" "$OCTAVE" "$CLEF"
+	generate "B#" "$OCTAVE" "$CLEF"
+	generate "Cb" "$OCTAVE" "$CLEF"
+	generate "C" "$OCTAVE" "$CLEF"
+	generate "C#" "$OCTAVE" "$CLEF"
+	generate "Db" "$OCTAVE" "$CLEF"
+	generate "D" "$OCTAVE" "$CLEF"
+	generate "D#" "$OCTAVE" "$CLEF"
+	generate "Eb" "$OCTAVE" "$CLEF"
+	generate "E" "$OCTAVE" "$CLEF"
+	generate "E#" "$OCTAVE" "$CLEF"
+	generate "Fb" "$OCTAVE" "$CLEF"
+	generate "F" "$OCTAVE" "$CLEF"
+	generate "F#" "$OCTAVE" "$CLEF"
+	generate "Gb" "$OCTAVE" "$CLEF"
+	generate "G" "$OCTAVE" "$CLEF"
+	generate "G#" "$OCTAVE" "$CLEF"
+}
+
 #################################################################################
 main() {
-	generate "C" "4" "treble"
+	generate_octave bass 2
 }
 
 main "$@"
