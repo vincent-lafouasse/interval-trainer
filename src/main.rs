@@ -16,7 +16,7 @@ use pitch_detection::detector::PitchDetector;
 use rodio::{OutputStream, OutputStreamHandle};
 
 use color_eyre::eyre::Result;
-use std::sync::atomic::AtomicU32;
+use std::sync::atomic::AtomicU64;
 use std::sync::atomic::Ordering;
 use std::sync::Arc;
 use std::thread::sleep;
@@ -38,10 +38,14 @@ fn main() -> Result<()> {
     let (reference_note, mystery_note) = choose_notes(&range);
 
     println!("This is {}", reference_note);
-    //play_notes(reference_note, mystery_note);
+    play_notes(reference_note, mystery_note);
 
     listen_for_frequency(mystery_note.frequency());
-    println!("It was {}. Did you get it right?", mystery_note);
+    println!(
+        "It was {} at a frequency of {}. Did you get it right?",
+        mystery_note,
+        mystery_note.frequency() as u32
+    );
 
     Ok(())
 }
@@ -83,13 +87,12 @@ fn listen_for_frequency(_f: f64) {
     const POWER_THRESHOLD: f32 = 5.0;
     const CLARITY_THRESHOLD: f32 = 0.7;
 
-    let freq = Arc::new(AtomicU32::new(0));
+    let freq = Arc::new(AtomicU64::new(0));
     let mut detection_buffer: Vec<f32> = Vec::new();
 
     let input_callback = move |data: &[f32], _: &cpal::InputCallbackInfo| {
         if detection_buffer.len() >= DETECTION_BUFFER_SIZE {
             // buffer is ready to try pitch detection
-            println!("detection attempt");
             let mut detector = McLeodDetector::new(DETECTION_BUFFER_SIZE, PADDING);
             if let Some(pitch) = detector.get_pitch(
                 &detection_buffer[0..DETECTION_BUFFER_SIZE],
@@ -97,8 +100,11 @@ fn listen_for_frequency(_f: f64) {
                 POWER_THRESHOLD,
                 CLARITY_THRESHOLD,
             ) {
-                freq.store(pitch.frequency.to_bits(), Ordering::Relaxed);
-                let detected_pitch = f32::from_bits(freq.load(Ordering::Relaxed));
+                freq.store(
+                    Into::<f64>::into(pitch.frequency).to_bits(),
+                    Ordering::Relaxed,
+                );
+                let detected_pitch = f64::from_bits(freq.load(Ordering::Relaxed));
                 println!("freq detected: {}", detected_pitch as u32);
             }
             detection_buffer.clear();
@@ -134,6 +140,10 @@ fn setup_input_device() -> Result<(Host, Device), &'static str> {
     };
 
     Ok((host, device))
+}
+
+fn closest_note(f: f64) {
+    todo!()
 }
 
 fn distance_cents(f0: f64, f: f64) -> i32 {
