@@ -3,12 +3,18 @@ fn main() {
 }
 
 trait LilypondThing {
-    fn lily_repr(&self) -> &str;
+    fn lily_repr(&self) -> &'static str;
+}
+
+struct Note {
+    name: NoteName,
+    alteration: Alteration,
+    octave: Octave,
 }
 
 type NoteName = char;
 impl LilypondThing for NoteName {
-    fn lily_repr(&self) -> &str {
+    fn lily_repr(&self) -> &'static str {
         match *self {
             'C' => "c",
             'D' => "d",
@@ -28,7 +34,7 @@ enum Clef {
 }
 
 impl LilypondThing for Clef {
-    fn lily_repr(&self) -> &str {
+    fn lily_repr(&self) -> &'static str {
         match *self {
             Clef::TrebleClef => "treble",
             Clef::BassClef => "bass",
@@ -38,7 +44,7 @@ impl LilypondThing for Clef {
 
 type Octave = i8;
 impl LilypondThing for Octave {
-    fn lily_repr(&self) -> &str {
+    fn lily_repr(&self) -> &'static str {
         match *self {
             0 => ",,,",
             1 => ",,",
@@ -62,7 +68,7 @@ enum Alteration {
     DoubleFlat,
 }
 impl LilypondThing for Alteration {
-    fn lily_repr(&self) -> &str {
+    fn lily_repr(&self) -> &'static str {
         match *self {
             Alteration::NoAlteration => "",
             Alteration::Flat => "es",
