@@ -13,7 +13,10 @@ TEMPLATE="template/template.ly"
 parse_note() {
 	# convert scientific note names like A4 G2 to Lilypond style notation a' g,
 	note="$1"
-	if ! [[ ${note} =~ ^[A-G][0-8]$ ]]; then
+	
+	note_regex='^[A-G][#b]?[0-8]$'
+
+	if ! [[ ${note} =~ $note_regex ]]; then
 		echo "Error: invalid note $1" >&2
 		return 1
 	fi
