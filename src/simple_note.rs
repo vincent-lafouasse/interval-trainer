@@ -35,7 +35,8 @@ impl SimpleNote {
         let sharp: bool = rng.gen::<bool>();
 
         match self.data % 12 {
-            0 => Note { name: NoteName::C, alteration: 0, octave: self.octave() },
+            0 => Note::parse_from_string(&("C".to_owned() + &self.octave().to_string())).unwrap(),
+            // both are ugly, idk what to do, nothing, this is fine ig
             1 => match sharp {
                 true => Note { name: NoteName::C, alteration: 1, octave: self.octave() },
                 false => Note { name: NoteName::D, alteration: -1, octave: self.octave() },
