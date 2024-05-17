@@ -86,28 +86,29 @@ fn listen_for_frequency(_f: f64) {
     let freq = Arc::new(AtomicU32::new(0));
     let mut detection_buffer: Vec<f32> = Vec::new();
 
+    let input_callback = move |data: &[f32], _: &cpal::InputCallbackInfo| {
+        if detection_buffer.len() >= DETECTION_BUFFER_SIZE {
+            // buffer is ready to try pitch detection
+            println!("detection attempt");
+            let mut detector = McLeodDetector::new(DETECTION_BUFFER_SIZE, PADDING);
+            if let Some(pitch) = detector.get_pitch(
+                &detection_buffer[0..DETECTION_BUFFER_SIZE],
+                SAMPLE_RATE,
+                POWER_THRESHOLD,
+                CLARITY_THRESHOLD,
+            ) {
+                freq.store(pitch.frequency.to_bits(), Ordering::Relaxed);
+            }
+            detection_buffer.clear();
+        } else {
+            // detection buffer isn't full, use this callback to append a callback buffer
+            detection_buffer.extend_from_slice(data);
+        }
+    };
     let stream = input_device
         .build_input_stream::<f32, _, _>(
             &config,
-            move |data: &[f32], _: &cpal::InputCallbackInfo| {
-                if detection_buffer.len() >= DETECTION_BUFFER_SIZE {
-                    // buffer is ready to try pitch detection
-                    println!("detection attempt");
-                    let mut detector = McLeodDetector::new(DETECTION_BUFFER_SIZE, PADDING);
-                    if let Some(pitch) = detector.get_pitch(
-                        &detection_buffer[0..DETECTION_BUFFER_SIZE],
-                        SAMPLE_RATE,
-                        POWER_THRESHOLD,
-                        CLARITY_THRESHOLD,
-                    ) {
-                        freq.store(pitch.frequency.to_bits(), Ordering::Relaxed);
-                    }
-                    detection_buffer.clear();
-                } else {
-                    // detection buffer isn't full, use this callback to append a callback buffer
-                    detection_buffer.extend_from_slice(data);
-                }
-            },
+            input_callback,
             |e| eprintln!("An error has occured on the audio thread: {e}"),
             None,
         )
