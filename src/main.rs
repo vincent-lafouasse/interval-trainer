@@ -5,6 +5,7 @@
 mod interval;
 mod note_range;
 mod notes;
+mod pitch_detector;
 mod simple_note;
 mod synth;
 mod wavetables;
