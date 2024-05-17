@@ -11,23 +11,24 @@ class LilypondFile:
 def octave_ly_repr(octave):
     assert octave in range(9)
     if octave == 0:
-		return """,,,"""
+        return """,,,"""
     if octave == 1:
-		return """,,"""
+        return """,,"""
     if octave == 2:
-		return ""","""
+        return ""","""
     if octave == 3:
-		return ""
+        return ""
     if octave == 4:
-		return """'"""
+        return """'"""
     if octave == 5:
-		return """''"""
+        return """''"""
     if octave == 6:
-		return """'''"""
+        return """'''"""
     if octave == 7:
-		return """''''"""
+        return """''''"""
     if octave == 8:
-		return """'''''"""
+        return """'''''"""
+
 
 class Note:
     def __init__(self, name, alteration, octave):
@@ -38,16 +39,25 @@ class Note:
         self.octave = octave
 
     def str_repr(self):
-        return f"{name.to_upper()}{self.alteration.str_repr()}{self.octave}"
+        return f"{self.name.upper()}{self.alteration.str_repr()}{self.octave}"
 
     def ly_repr(self):
-        return f"{name.to_lower()}{self.alteration.ly_repr()}{self.octave}"
+        return f"{self.name.lower()}{self.alteration.ly_repr()}{octave_ly_repr(self.octave)}"
 
 
 def main():
     note = Note("C", NoAlteration(), 3)
+    print(note.str_repr())
+    print(note.ly_repr())
+    print()
     note = Note("B", Flat(), 7)
+    print(note.str_repr())
+    print(note.ly_repr())
+    print()
     note = Note("E", DoubleSharp(), 4)
+    print(note.str_repr())
+    print(note.ly_repr())
+    print()
 
 
 if __name__ == "__main__":
