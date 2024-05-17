@@ -16,6 +16,7 @@ class LilypondFile:
         with open(full_filename, "w") as output:
             output.write('\\version "2.22.2" \n')
             output.write('#(set-default-paper-size "a9landscape") \n')
+            output.write("\\header { tagline = \" \" }")
             output.write("\\new Staff \\with { \n")
             output.write("	\\override TimeSignature.stencil = ##f \n")
             output.write("}{ \n")
