@@ -2,7 +2,7 @@ class Alteration:
     def __init__(self):
         pass
 
-    def lilypond_repr(self):
+    def ly_repr(self):
         pass
 
     def str_repr(self):
@@ -13,7 +13,7 @@ class NoAlteration(Alteration):
     def __init__(self):
         pass
 
-    def lilypond_repr(self):
+    def ly_repr(self):
         return ""
 
     def str_repr(self):
@@ -24,7 +24,7 @@ class Sharp(Alteration):
     def __init__(self):
         pass
 
-    def lilypond_repr(self):
+    def ly_repr(self):
         return "is"
 
     def str_repr(self):
@@ -35,7 +35,7 @@ class DoubleSharp(Alteration):
     def __init__(self):
         pass
 
-    def lilypond_repr(self):
+    def ly_repr(self):
         return "isis"
 
     def str_repr(self):
@@ -46,7 +46,7 @@ class Flat(Alteration):
     def __init__(self):
         pass
 
-    def lilypond_repr(self):
+    def ly_repr(self):
         return "es"
 
     def str_repr(self):
@@ -57,7 +57,7 @@ class DoubleFlat(Alteration):
     def __init__(self):
         pass
 
-    def lilypond_repr(self):
+    def ly_repr(self):
         return "eses"
 
     def str_repr(self):
