@@ -8,7 +8,8 @@ class Alteration:
     def str_repr(self):
         pass
 
-class NoAlteration (Alteration):
+
+class NoAlteration(Alteration):
     def __init__(self):
         pass
 
@@ -18,7 +19,8 @@ class NoAlteration (Alteration):
     def str_repr(self):
         return ""
 
-class Sharp (Alteration):
+
+class Sharp(Alteration):
     def __init__(self):
         pass
 
@@ -28,7 +30,8 @@ class Sharp (Alteration):
     def str_repr(self):
         return "#"
 
-class DoubleSharp (Alteration):
+
+class DoubleSharp(Alteration):
     def __init__(self):
         pass
 
@@ -38,7 +41,8 @@ class DoubleSharp (Alteration):
     def str_repr(self):
         return "##"
 
-class Flat (Alteration):
+
+class Flat(Alteration):
     def __init__(self):
         pass
 
@@ -48,7 +52,8 @@ class Flat (Alteration):
     def str_repr(self):
         return "b"
 
-class DoubleFlat (Alteration):
+
+class DoubleFlat(Alteration):
     def __init__(self):
         pass
 
