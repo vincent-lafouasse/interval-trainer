@@ -35,7 +35,7 @@ impl eframe::App for IntervalTrainer {
                     egui::Image::new("https://picsum.photos/seed/1.759706314/1024").rounding(10.0),
                 );
 
-                ui.image(egui::include_image!("assets/svg/.svg"));
+                ui.image(egui::include_image!("assets/svg/a_svg.svg"));
             });
         });
     }
@@ -49,7 +49,7 @@ fn main() -> Result<()> {
         viewport: egui::ViewportBuilder::default().with_inner_size([600.0, 800.0]),
         ..Default::default()
     };
-    eframe::run_native(
+    let _ = eframe::run_native(
         "Interval Trainer",
         options,
         Box::new(|cc| {
