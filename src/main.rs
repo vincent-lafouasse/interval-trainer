@@ -34,7 +34,7 @@ static SINE: Wavetable = Wavetable::new();
 fn main() -> Result<()> {
     color_eyre::install()?;
 
-    let range = NoteRange::from_str("C2", "C5").unwrap();
+    let range = NoteRange::tenor_voice();
     let (reference_note, mystery_note) = choose_notes(&range);
 
     println!("This is {}", reference_note);

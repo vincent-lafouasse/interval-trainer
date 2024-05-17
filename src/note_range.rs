@@ -57,6 +57,10 @@ impl NoteRange {
     pub fn alto_sax() -> Self {
         Self::from_str("Db3", "F6").unwrap()
     }
+
+    pub fn tenor_voice() -> Self {
+        Self::from_str("Bb2", "G4").unwrap()
+    }
 }
 
 impl fmt::Display for NoteRange {
