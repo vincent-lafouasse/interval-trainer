@@ -16,6 +16,8 @@ use pitch_detection::detector::PitchDetector;
 use rodio::{OutputStream, OutputStreamHandle};
 
 use color_eyre::eyre::Result;
+use std::sync::atomic::AtomicU32;
+use std::sync::Arc;
 use std::thread::sleep;
 use std::time::Duration;
 
@@ -80,6 +82,7 @@ fn listen_for_frequency(_f: f64) {
     const POWER_THRESHOLD: f64 = 5.0;
     const CLARITY_THRESHOLD: f64 = 0.7;
 
+    let freq = Arc::new(AtomicU32::new(0));
     let mut detection_buffer: Vec<f32> = Vec::new();
 
     let stream = input_device
@@ -87,8 +90,8 @@ fn listen_for_frequency(_f: f64) {
             &config,
             move |data: &[f32], _: &cpal::InputCallbackInfo| {
                 if detection_buffer.len() >= DETECTION_BUFFER_SIZE {
-                    println!("detection attempt");
                     // buffer is ready to try pitch detection
+                    println!("detection attempt");
                     detection_buffer.clear();
                 } else {
                     // detection buffer isn't full, use this callback to append a callback buffer
