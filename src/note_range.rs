@@ -1,4 +1,5 @@
-use crate::{notes::Note, simple_note::SimpleNote};
+use crate::notes::Note;
+use crate::simple_note::SimpleNote;
 
 use rand::Rng;
 use std::fmt;

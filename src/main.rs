@@ -10,11 +10,8 @@ mod simple_note;
 mod synth;
 mod wavetables;
 
-use rodio::{OutputStream, OutputStreamHandle};
-
 use color_eyre::eyre::Result;
-use std::thread::sleep;
-use std::time::{Duration, Instant};
+use std::time::Duration;
 
 use crate::interval::{Direction, Interval};
 use crate::listen::listen_for_note;
