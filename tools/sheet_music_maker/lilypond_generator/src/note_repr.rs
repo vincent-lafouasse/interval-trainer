@@ -39,17 +39,17 @@ impl LilypondThing for NoteName {
 
 #[derive(Copy, Clone)]
 pub enum Clef {
-    TrebleClef,
-    BassClef,
-    TrebleClefSubOctave,
+    Treble,
+    Bass,
+    SubOctaveTreble,
 }
 
 impl LilypondThing for Clef {
     fn lily_repr(&self) -> String {
         match *self {
-            Clef::TrebleClef => "treble".to_string(),
-            Clef::BassClef => "bass".to_string(),
-            Clef::TrebleClefSubOctave => "treble_8".to_string(),
+            Clef::Treble => "treble".to_string(),
+            Clef::Bass => "bass".to_string(),
+            Clef::SubOctaveTreble => "treble_8".to_string(),
         }
     }
 }
@@ -74,7 +74,7 @@ impl LilypondThing for Octave {
 
 #[derive(Copy, Clone)]
 pub enum Alteration {
-    NoAlteration,
+    None,
     Sharp,
     DoubleSharp,
     Flat,
@@ -83,7 +83,7 @@ pub enum Alteration {
 impl LilypondThing for Alteration {
     fn lily_repr(&self) -> String {
         match *self {
-            Alteration::NoAlteration => "".to_string(),
+            Alteration::None => "".to_string(),
             Alteration::Flat => "es".to_string(),
             Alteration::DoubleFlat => "eses".to_string(),
             Alteration::Sharp => "is".to_string(),

@@ -12,8 +12,8 @@ use crate::note_repr::LilypondThing;
 use crate::note_repr::Note;
 
 fn main() -> std::io::Result<()> {
-    let note = Note::new('E', Alteration::NoAlteration, 5);
-    let clef = Clef::TrebleClef;
+    let note = Note::new('E', Alteration::None, 5);
+    let clef = Clef::Treble;
     let lily_file = LilypondFile { note, clef };
     lily_file.write("./target/".to_string())?;
 
@@ -61,7 +61,7 @@ impl LilypondFile {
 
     fn filename(&self) -> String {
         let alteration_repr: String = match self.note.alteration {
-            Alteration::NoAlteration => "".to_string(),
+            Alteration::None => "".to_string(),
             Alteration::Flat => "b".to_string(),
             Alteration::DoubleFlat => "bb".to_string(),
             Alteration::Sharp => "s".to_string(),
