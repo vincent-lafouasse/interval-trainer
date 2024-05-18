@@ -2,6 +2,8 @@
 #![allow(dead_code)]
 #![allow(unused_variables)]
 
+//! # A cool ear trainer
+
 mod interval;
 mod listen;
 mod note_range;
