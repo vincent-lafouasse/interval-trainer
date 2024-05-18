@@ -31,7 +31,7 @@ impl SimpleNote {
 
     // spell(&self, policy: NamingPolicy) -> SpelledNote ?
     // with to_note_rand == spell(NamingPolicy::Rand)
-    pub fn to_note_rand(&self) -> Note {
+    pub fn to_note_rand(self) -> Note {
         let mut rng = rand::thread_rng();
         let sharp: bool = rng.gen::<bool>();
 

@@ -40,11 +40,9 @@ impl Note {
         self.to_simple().get_i8() - other.to_simple().get_i8()
     }
 
-    pub fn to_simple(&self) -> SimpleNote {
+    pub fn to_simple(self) -> SimpleNote {
         SimpleNote {
-            data: 12 * (self.octave + 1)
-                + self.name.semitones_from_c() as i8
-                + self.alteration as i8,
+            data: 12 * (self.octave + 1) + self.name.semitones_from_c() as i8 + self.alteration,
         }
     }
 

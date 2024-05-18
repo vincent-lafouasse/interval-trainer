@@ -22,7 +22,7 @@ pub fn play_notes(n1: Note, n2: Note, note_length: Duration, sample_rate: u16) {
 pub struct WavetableSynth {
     wavetable: Wavetable,
     sample_rate: u16,
-    vca: VCA,
+    vca: Vca,
 }
 
 impl WavetableSynth {
@@ -55,7 +55,7 @@ impl WavetableSynth {
         WavetableSynth {
             wavetable,
             sample_rate,
-            vca: VCA {
+            vca: Vca {
                 attack: Duration::from_millis(500),
                 sustain: 1.0,
                 release: Duration::from_millis(500),
@@ -64,15 +64,15 @@ impl WavetableSynth {
     }
 }
 
-pub struct VCA {
+pub struct Vca {
     attack: Duration,
     sustain: f32,
     release: Duration,
 }
 
-impl VCA {
+impl Vca {
     pub fn new(attack: Duration, sustain: f32, release: Duration) -> Self {
-        VCA { attack, sustain, release }
+        Vca { attack, sustain, release }
     }
 
     pub fn get(&self, from_start: Duration, length: Duration) -> f32 {
