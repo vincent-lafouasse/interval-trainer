@@ -4,8 +4,8 @@ use std::time::{Duration, Instant};
 use rodio::source::Source;
 use rodio::{OutputStream, OutputStreamHandle, Sink};
 
+use crate::notes::Note;
 use crate::wavetables::*;
-use crate::Note;
 
 static SQUARE8: Wavetable = Wavetable::square8();
 

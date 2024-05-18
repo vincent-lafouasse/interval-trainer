@@ -1,8 +1,8 @@
 use int_enum::IntEnum;
 use std::fmt;
 
-use crate::interval::*;
-use crate::SimpleNote;
+use crate::interval::Interval;
+use crate::simple_note::SimpleNote;
 
 #[derive(Debug, Copy, Clone)]
 pub struct Note {
