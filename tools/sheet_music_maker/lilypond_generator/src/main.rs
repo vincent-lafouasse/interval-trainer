@@ -4,6 +4,7 @@
 mod note_repr;
 
 use std::fs::File;
+use std::io::Write;
 
 use crate::note_repr::Alteration;
 use crate::note_repr::Clef;
@@ -25,22 +26,28 @@ struct LilypondFile {
 
 impl LilypondFile {
     fn write(&self, output_dir: String) -> std::io::Result<()> {
-        let mut file = File::options()
+        let mut file: File = File::options()
             .append(true)
             .open(output_dir + &self.filename())?;
 
         writeln!(&mut file, "\\version \"2.22.2\"")?;
-        writeln!(&mut file, "#(set-default-paper-size '(cons (* 125 pt) (* 50 pt)))")?;
+        writeln!(
+            &mut file,
+            "#(set-default-paper-size '(cons (* 125 pt) (* 50 pt)))"
+        )?;
         writeln!(&mut file, "\\header {{ tagline = \" \" }}")?;
         writeln!(&mut file, "\\new Staff \\with {{")?;
         writeln!(&mut file, "	\\override TimeSignature.stencil = ##f")?;
         writeln!(&mut file, "}}{{")?;
         writeln!(&mut file, "	\\time 100/2 % no bar lines (probably)")?;
-        writeln!(&mut file, "	\\clef {self.clef.get()}")?;
         writeln!(&mut file, "	\\clef {}", self.clef.lily_repr())?;
         writeln!(&mut file, "	\\key c \\major")?;
-        writeln!(&mut file, "	| {self.note.ly_repr()}!1 {self.note.ly_repr()}!1 | \n")?;
-        writeln!(&mut file, "	| {}!1 {}!1 |", self.note.lily_repr(), self.note.lily_repr())?;
+        writeln!(
+            &mut file,
+            "	| {}!1 {}!1 |",
+            self.note.lily_repr(),
+            self.note.lily_repr()
+        )?;
         writeln!(&mut file, "}}")?;
 
         Ok(())
