@@ -12,8 +12,9 @@ use crate::note_repr::LilypondThing;
 use crate::note_repr::Note;
 
 fn main() -> std::io::Result<()> {
-    let a4 = Note::new('A', Alteration::NoAlteration, 4);
-    let lily_file = LilypondFile { note: a4, clef: Clef::TrebleClef };
+    let note = Note::new('E', Alteration::NoAlteration, 5);
+    let clef = Clef::TrebleClef;
+    let lily_file = LilypondFile { note, clef };
     lily_file.write("./target/".to_string())?;
 
     Ok(())
