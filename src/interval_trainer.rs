@@ -46,7 +46,7 @@ impl eframe::App for IntervalTrainer {
                 Scene::CoolSVG => {
                     ui.label("Cool SVG");
                     ui.add(
-                        egui::Image::new(egui::include_image!("assets/svg/Eb4_treble.svg"))
+                        egui::Image::new(egui::include_image!("assets/svg/A4_treble.svg"))
                             .fit_to_exact_size([1000.0, 500.0].into())
                             .bg_fill(Color32::WHITE),
                     );
