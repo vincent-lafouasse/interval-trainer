@@ -1,13 +1,13 @@
 use std::time::{Duration, Instant};
 
-use cpal::traits::{DeviceTrait, HostTrait, StreamTrait};
-use cpal::{Device, Host, StreamConfig};
-use pitch_detection::detector::mcleod::McLeodDetector;
-use pitch_detection::detector::PitchDetector;
+use cpal::{
+    traits::{DeviceTrait, HostTrait, StreamTrait},
+    Device, Host, StreamConfig,
+};
 
-use std::sync::atomic::AtomicU64;
-use std::sync::atomic::Ordering;
-use std::sync::Arc;
+use pitch_detection::detector::{mcleod::McLeodDetector, PitchDetector};
+
+use std::sync::{atomic::AtomicU64, atomic::Ordering, Arc};
 
 use crate::simple_note::SimpleNote;
 
