@@ -14,7 +14,7 @@ use crate::note_repr::Note;
 fn main() -> std::io::Result<()> {
     let a4 = Note::new('A', Alteration::NoAlteration, 4);
     let lily_file = LilypondFile { note: a4, clef: Clef::TrebleClef };
-    println!("{}", lily_file.filename());
+    lily_file.write("./target/".to_string())?;
 
     Ok(())
 }
@@ -28,7 +28,8 @@ impl LilypondFile {
     fn write(&self, output_dir: String) -> std::io::Result<()> {
         let mut file: File = File::options()
             .append(true)
-            .open(output_dir + &self.filename())?;
+            .create(true)
+            .open(output_dir + &self.filename()).expect("couldnt create file");
 
         writeln!(&mut file, "\\version \"2.22.2\"")?;
         writeln!(
