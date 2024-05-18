@@ -27,17 +27,17 @@ const SAMPLE_RATE: u16 = 44_100;
 
 #[derive(Default)]
 struct IntervalTrainer {
-    state: GameState,
+    scene: Scene,
 }
 
 impl IntervalTrainer {
-    fn set_state(&mut self, new_state: GameState) {
-        self.state = new_state;
+    fn set_scene(&mut self, new_scene: Scene) {
+        self.scene = new_scene;
     }
 }
 
 #[derive(Default, Copy, Clone, PartialEq)]
-enum GameState {
+enum Scene {
     #[default]
     Hello,
     CoolSVG,
@@ -53,15 +53,15 @@ impl eframe::App for IntervalTrainer {
     fn update(&mut self, ctx: &egui::Context, _frame: &mut eframe::Frame) {
         egui::CentralPanel::default().show(ctx, |ui| {
             if ui.button("Click me").clicked() {
-                match self.state {
-                    GameState::Hello => self.set_state(GameState::CoolSVG),
-                    GameState::CoolSVG => self.set_state(GameState::Hello),
+                match self.scene {
+                    Scene::Hello => self.set_scene(Scene::CoolSVG),
+                    Scene::CoolSVG => self.set_scene(Scene::Hello),
                 }
             }
 
-            if self.state == GameState::Hello {
+            if self.scene == Scene::Hello {
                 ui.label("Hello");
-            } else if self.state == GameState::CoolSVG {
+            } else if self.scene == Scene::CoolSVG {
                 ui.label("Cool SVG");
                 ui.add(
                     egui::Image::new(egui::include_image!("assets/svg/Eb4_treble.svg"))
