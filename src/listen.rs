@@ -19,7 +19,7 @@ pub fn listen_for_note(
     let (_host, input_device) = setup_input_device().unwrap();
     let config = StreamConfig {
         channels: 1,
-        sample_rate: cpal::SampleRate(44_100),
+        sample_rate: cpal::SampleRate(sample_rate.into()),
         buffer_size: cpal::BufferSize::Default,
     };
 
