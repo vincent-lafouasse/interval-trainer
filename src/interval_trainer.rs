@@ -7,14 +7,17 @@ use crate::{
     notes::Note,
 };
 
-#[derive(Default)]
 pub struct IntervalTrainer {
     scene: Scene,
 }
 
 impl IntervalTrainer {
-    fn new(cc: &eframe::CreationContext<'_>) -> Self {
-        Self::default()
+    pub fn new(cc: &eframe::CreationContext<'_>) -> Self {
+        println!("hello from IntervalTrainer constructor");
+
+        let slf = Self { scene: Scene::Hello };
+
+        slf
     }
 
     fn set_scene(&mut self, new_scene: Scene) {
@@ -22,9 +25,8 @@ impl IntervalTrainer {
     }
 }
 
-#[derive(Default, Copy, Clone, PartialEq)]
+#[derive(Copy, Clone, PartialEq)]
 enum Scene {
-    #[default]
     Hello,
     CoolSVG,
 }
