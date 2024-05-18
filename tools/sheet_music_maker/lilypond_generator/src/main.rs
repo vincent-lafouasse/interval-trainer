@@ -32,10 +32,13 @@ impl LilypondFile {
             .open(output_dir + &self.filename())
             .expect("couldnt create file");
 
+        const WIDTH: usize = 125;
+        const HEIGHT: usize = 50;
+
         writeln!(&mut file, "\\version \"2.22.2\"")?;
         writeln!(
             &mut file,
-            "#(set-default-paper-size '(cons (* 125 pt) (* 50 pt)))"
+            "#(set-default-paper-size '(cons (* {WIDTH} pt) (* {HEIGHT} pt)))"
         )?;
         writeln!(&mut file, "\\header {{ tagline = \" \" }}")?;
         writeln!(&mut file, "\\new Staff \\with {{")?;
