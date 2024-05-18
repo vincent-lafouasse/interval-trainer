@@ -33,6 +33,10 @@ struct IntervalTrainer {
 }
 
 impl IntervalTrainer {
+    fn new(cc: &eframe::CreationContext<'_>) -> Self {
+        Self::default()
+    }
+
     fn set_scene(&mut self, new_scene: Scene) {
         self.scene = new_scene;
     }
@@ -43,12 +47,6 @@ enum Scene {
     #[default]
     Hello,
     CoolSVG,
-}
-
-impl IntervalTrainer {
-    fn new(cc: &eframe::CreationContext<'_>) -> Self {
-        Self::default()
-    }
 }
 
 impl eframe::App for IntervalTrainer {
