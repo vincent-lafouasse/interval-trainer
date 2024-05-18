@@ -118,7 +118,7 @@ fn closest_note(f: f64) -> (SimpleNote, i8) {
 
 fn regularize_fps(tick_start: Instant, target_tick_duration: Duration) {
     let actual_tick_duration = Instant::now().duration_since(tick_start);
-    let to_wait: Option<Duration> = actual_tick_duration.checked_sub(target_tick_duration);
+    let to_wait: Option<Duration> = target_tick_duration.checked_sub(actual_tick_duration);
 
     match to_wait {
         Some(delay) => std::thread::sleep(delay),
