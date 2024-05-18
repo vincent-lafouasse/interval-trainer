@@ -59,15 +59,18 @@ impl eframe::App for IntervalTrainer {
                 }
             }
 
-            if self.scene == Scene::Hello {
-                ui.label("Hello");
-            } else if self.scene == Scene::CoolSVG {
-                ui.label("Cool SVG");
-                ui.add(
-                    egui::Image::new(egui::include_image!("assets/svg/Eb4_treble.svg"))
-                        .fit_to_exact_size([1000.0, 500.0].into())
-                        .bg_fill(Color32::WHITE),
-                );
+            match self.scene {
+                Scene::Hello => {
+                    ui.label("Hello");
+                }
+                Scene::CoolSVG => {
+                    ui.label("Cool SVG");
+                    ui.add(
+                        egui::Image::new(egui::include_image!("assets/svg/Eb4_treble.svg"))
+                            .fit_to_exact_size([1000.0, 500.0].into())
+                            .bg_fill(Color32::WHITE),
+                    );
+                }
             }
         });
     }
