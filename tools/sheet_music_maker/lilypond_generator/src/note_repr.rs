@@ -41,6 +41,7 @@ impl LilypondThing for NoteName {
 pub enum Clef {
     TrebleClef,
     BassClef,
+    TrebleClefSubOctave,
 }
 
 impl LilypondThing for Clef {
@@ -48,6 +49,7 @@ impl LilypondThing for Clef {
         match *self {
             Clef::TrebleClef => "treble".to_string(),
             Clef::BassClef => "bass".to_string(),
+            Clef::TrebleClefSubOctave => "treble_8".to_string(),
         }
     }
 }
