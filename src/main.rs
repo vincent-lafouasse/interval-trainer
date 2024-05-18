@@ -22,12 +22,14 @@ const SAMPLE_RATE: u16 = 44_100;
 
 fn main() -> Result<()> {
     color_eyre::install()?;
-    env_logger::init(); // Log to stderr (if you run with `RUST_LOG=debug`).
+    env_logger::init();
 
     let options = eframe::NativeOptions {
         viewport: egui::ViewportBuilder::default().with_inner_size([1000.0, 500.0]),
         ..Default::default()
     };
+
+    // run gui in main thread
     let _ = eframe::run_native(
         "Interval Trainer",
         options,
@@ -37,31 +39,6 @@ fn main() -> Result<()> {
             Box::new(IntervalTrainer::new(cc))
         }),
     );
-
-    /*
-    let range = NoteRange::tenor_voice();
-    let (reference_note, mystery_note) = choose_notes(&range);
-
-    println!("This is {}", reference_note);
-    play_notes(
-        reference_note,
-        mystery_note,
-        Duration::from_millis(1000),
-        SAMPLE_RATE,
-    );
-
-    match listen_for_note(
-        mystery_note.to_simple(),
-        Duration::from_millis(1500),
-        SAMPLE_RATE,
-    ) {
-        Some(cent_deviation) => println!(
-            "you got it ! it was {}\nyou got it within a {} cent deviation",
-            mystery_note, cent_deviation
-        ),
-        None => println!("womp womp it was {}", mystery_note),
-    }
-    */
 
     Ok(())
 }
