@@ -29,7 +29,8 @@ impl LilypondFile {
         let mut file: File = File::options()
             .append(true)
             .create(true)
-            .open(output_dir + &self.filename()).expect("couldnt create file");
+            .open(output_dir + &self.filename())
+            .expect("couldnt create file");
 
         writeln!(&mut file, "\\version \"2.22.2\"")?;
         writeln!(
