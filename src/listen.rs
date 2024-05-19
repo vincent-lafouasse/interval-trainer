@@ -64,7 +64,7 @@ pub fn listen_for_note(
         )
         .unwrap();
 
-    let update_fps = 10.0;
+    const UPDATE_FPS: u8 = 10;
     let start = Instant::now();
 
     stream.play().unwrap();
@@ -79,10 +79,7 @@ pub fn listen_for_note(
             }
         }
 
-        regularize_fps(
-            tick_start,
-            Duration::from_millis((1000.0 / update_fps) as u64),
-        );
+        regularize_fps(tick_start, UPDATE_FPS);
     }
 
     stream.pause().unwrap();
@@ -116,7 +113,8 @@ fn closest_note(f: f64) -> (SimpleNote, CentDeviation) {
     }
 }
 
-fn regularize_fps(tick_start: Instant, target_tick_duration: Duration) {
+fn regularize_fps(tick_start: Instant, target_fps: u8) {
+    let target_tick_duration = Duration::from_millis((1000.0 / target_fps as f64) as u64);
     let actual_tick_duration = Instant::now().duration_since(tick_start);
     let to_wait = target_tick_duration.saturating_sub(actual_tick_duration);
     std::thread::sleep(to_wait);
