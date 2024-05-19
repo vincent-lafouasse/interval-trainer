@@ -5,17 +5,17 @@ use cpal::{
     Device, Host, StreamConfig,
 };
 
+use crate::simple_note::SimpleNote;
 use pitch_detection::detector::{mcleod::McLeodDetector, PitchDetector};
-
 use std::sync::{atomic::AtomicU64, atomic::Ordering, Arc};
 
-use crate::simple_note::SimpleNote;
+pub type CentDeviation = i8;
 
 pub fn listen_for_note(
     target_note: SimpleNote,
     detection_duration: Duration,
     sample_rate: u16,
-) -> Option<i8> {
+) -> Option<CentDeviation> {
     let (_host, input_device) = setup_input_device().unwrap();
     let config = StreamConfig {
         channels: 1,
@@ -88,29 +88,30 @@ pub fn listen_for_note(
     None
 }
 
-fn get_note(f: f64, cent_threshold: i8) -> Option<(SimpleNote, i8)> {
-    let (note, error) = match f > 0.0 {
+fn get_note(f: f64, cent_threshold: i8) -> Option<(SimpleNote, CentDeviation)> {
+    let (note, deviation) = match f > 0.0 {
         true => closest_note(f),
         false => return None,
     };
-    match error.abs() < cent_threshold {
-        true => Some((note, error)),
+    match deviation.abs() < cent_threshold {
+        true => Some((note, deviation)),
         false => None,
     }
 }
 
-fn closest_note(f: f64) -> (SimpleNote, i8) {
+fn closest_note(f: f64) -> (SimpleNote, CentDeviation) {
     let distance_from_a4 = distance_cents(440.0, f);
     let distance_from_c_min_1 = distance_from_a4 + 69 * 100;
 
-    let positive_error: i8 = distance_from_c_min_1.rem_euclid(100).try_into().unwrap();
+    let positive_deviation: CentDeviation =
+        distance_from_c_min_1.rem_euclid(100).try_into().unwrap();
     let floor_note = distance_from_c_min_1 / 100;
     let floor_note: i8 = floor_note.try_into().unwrap();
     let floor_note = SimpleNote::new(floor_note);
 
-    match positive_error < 50 {
-        true => (floor_note, positive_error),
-        false => (floor_note.shift(1), 100 - positive_error),
+    match positive_deviation < 50 {
+        true => (floor_note, positive_deviation),
+        false => (floor_note.shift(1), 100 - positive_deviation),
     }
 }
 
