@@ -27,6 +27,7 @@ pub fn listen_for_note(
     const PADDING: usize = DETECTION_BUFFER_SIZE / 2;
     const POWER_THRESHOLD: f32 = 5.0;
     const CLARITY_THRESHOLD: f32 = 0.7;
+    const CENT_DEVIATION_THRESHOLD: CentDeviation = 20;
 
     let audio_thread_freq = Arc::new(AtomicU64::new(0));
     let ui_thread_freq = audio_thread_freq.clone();
@@ -71,10 +72,10 @@ pub fn listen_for_note(
         let tick_start = Instant::now();
 
         let detected_pitch = f64::from_bits(ui_thread_freq.load(Ordering::Relaxed));
-        if let Some((note, error)) = get_note(detected_pitch, 20) {
+        if let Some((note, deviation)) = get_note(detected_pitch, CENT_DEVIATION_THRESHOLD) {
             if are_octaves_away(note, target_note) {
                 stream.pause().unwrap();
-                return Some(error);
+                return Some(deviation);
             }
         }
 
@@ -88,7 +89,7 @@ pub fn listen_for_note(
     None
 }
 
-fn get_note(f: f64, cent_threshold: i8) -> Option<(SimpleNote, CentDeviation)> {
+fn get_note(f: f64, cent_threshold: CentDeviation) -> Option<(SimpleNote, CentDeviation)> {
     let (note, deviation) = match f > 0.0 {
         true => closest_note(f),
         false => return None,
