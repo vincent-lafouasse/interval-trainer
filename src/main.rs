@@ -16,6 +16,9 @@ mod wavetables;
 use color_eyre::eyre::Result;
 use eframe::egui;
 
+use std::thread;
+use std::time::Duration;
+
 use crate::interval_trainer::IntervalTrainer;
 
 const SAMPLE_RATE: u16 = 44_100;
@@ -28,6 +31,12 @@ fn main() -> Result<()> {
         viewport: egui::ViewportBuilder::default().with_inner_size([1000.0, 500.0]),
         ..Default::default()
     };
+
+    std::thread::spawn(|| {
+        println!("before");
+        std::thread::sleep(Duration::from_secs(1));
+        println!("after");
+    });
 
     // run gui in main thread
     let _ = eframe::run_native(
