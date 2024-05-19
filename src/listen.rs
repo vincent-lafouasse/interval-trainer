@@ -103,9 +103,12 @@ fn closest_note(f: f64) -> (SimpleNote, CentDeviation) {
 
     let positive_deviation: CentDeviation =
         distance_from_c_min_1.rem_euclid(100).try_into().unwrap();
-    let floor_note = distance_from_c_min_1 / 100;
-    let floor_note: i8 = floor_note.try_into().unwrap();
-    let floor_note = SimpleNote::new(floor_note);
+
+    let floor_note = {
+        let midi_style_note = distance_from_c_min_1 / 100;
+        let midi_style_note: i8 = midi_style_note.try_into().unwrap();
+        SimpleNote::new(midi_style_note)
+    };
 
     match positive_deviation < 50 {
         true => (floor_note, positive_deviation),
