@@ -98,16 +98,15 @@ fn get_note(f: f64, cent_threshold: CentDeviation) -> Option<(SimpleNote, CentDe
 }
 
 fn closest_note(f: f64) -> (SimpleNote, CentDeviation) {
-    let distance_from_a4 = distance_cents(440.0, f);
-    let distance_from_c_min_1 = distance_from_a4 + 69 * 100;
+    let cents_from_a4 = cents_between(440.0, f);
+    let cents_from_c_min_1 = cents_from_a4 + 69 * 100;
 
-    let positive_deviation: CentDeviation =
-        distance_from_c_min_1.rem_euclid(100).try_into().unwrap();
+    let positive_deviation: CentDeviation = cents_from_c_min_1.rem_euclid(100).try_into().unwrap();
 
     let floor_note = {
-        let midi_style_note = distance_from_c_min_1 / 100;
-        let midi_style_note: i8 = midi_style_note.try_into().unwrap();
-        SimpleNote::new(midi_style_note)
+        let semitones_from_c_min_1 = cents_from_c_min_1 / 100;
+        let semitones_from_c_min_1: i8 = semitones_from_c_min_1.try_into().unwrap();
+        SimpleNote::new(semitones_from_c_min_1)
     };
 
     match positive_deviation < 50 {
@@ -137,6 +136,6 @@ fn are_octaves_away(n1: SimpleNote, n2: SimpleNote) -> bool {
     (n1.get_i8() - n2.get_i8()) % 12 == 0
 }
 
-fn distance_cents(f0: f64, f: f64) -> i32 {
+fn cents_between(f0: f64, f: f64) -> i32 {
     (1200.0 * f64::log2(f / f0)) as i32
 }
