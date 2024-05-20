@@ -12,19 +12,11 @@ pub struct IntervalTrainer {
 }
 
 impl IntervalTrainer {
-    pub fn new() -> Self {
-        println!("hello from IntervalTrainer constructor");
-
-        let slf = Self { scene: Scene::Hello };
-
-        slf
-    }
-
     pub fn run(&self) {
         println!("hi");
     }
 
-    pub fn new_from_egui_context(cc: &eframe::CreationContext<'_>) -> Self {
+    pub fn new(cc: &eframe::CreationContext<'_>) -> Self {
         println!("hello from IntervalTrainer constructor");
 
         let slf = Self { scene: Scene::Hello };
