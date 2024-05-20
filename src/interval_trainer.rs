@@ -1,5 +1,4 @@
 use eframe::egui;
-use egui::Color32;
 
 use std::time::Duration;
 
@@ -67,7 +66,7 @@ impl eframe::App for IntervalTrainer {
                 ui.add(
                     egui::Image::new(egui::include_image!("assets/svg/A4_treble.svg"))
                         .fit_to_exact_size([1000.0, 500.0].into())
-                        .bg_fill(Color32::WHITE),
+                        .bg_fill(egui::Color32::WHITE),
                 );
                 play_notes(
                     reference_note,
