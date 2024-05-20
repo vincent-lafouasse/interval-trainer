@@ -1,3 +1,4 @@
+use std::sync::mpsc::Sender;
 use std::thread::sleep;
 use std::time::{Duration, Instant};
 
@@ -9,7 +10,7 @@ use crate::wavetables::*;
 
 static SQUARE8: Wavetable = Wavetable::square8();
 
-pub fn play_notes(n1: Note, n2: Note, note_length: Duration, sample_rate: u16) {
+pub fn play_notes(n1: Note, n2: Note, note_length: Duration, sample_rate: u16, signal: Sender<()>) {
     let synth = WavetableSynth::new(SQUARE8, sample_rate);
     let (_stream, stream_handle) = OutputStream::try_default().unwrap();
 
@@ -17,6 +18,7 @@ pub fn play_notes(n1: Note, n2: Note, note_length: Duration, sample_rate: u16) {
     synth.play(n1.frequency(), note_length, &stream_handle);
     sleep(Duration::from_secs(1));
     synth.play(n2.frequency(), note_length, &stream_handle);
+    signal.send(()).ok();
 }
 
 pub struct WavetableSynth {

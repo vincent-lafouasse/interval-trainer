@@ -1,6 +1,6 @@
 use eframe::egui;
 
-use std::time::Duration;
+use std::{sync::mpsc, time::Duration};
 
 use crate::{
     interval::{Direction, Interval},
@@ -10,7 +10,14 @@ use crate::{
     synth::play_notes,
 };
 
+enum TrainerState {
+    SoundNotPlaying,
+    PlayingSound(mpsc::Receiver<()>, Note),
+    AwaitingUserGuess(Note),
+}
+
 pub struct IntervalTrainer {
+    state: TrainerState,
     message: String,
     sample_rate: u16,
 }
@@ -24,7 +31,7 @@ impl IntervalTrainer {
         let sample_rate: u16 = 44100;
         println!("hello from IntervalTrainer constructor");
 
-        Self { message: "".to_string(), sample_rate }
+        Self { state: TrainerState::SoundNotPlaying, message: "".to_string(), sample_rate }
     }
 }
 
@@ -60,33 +67,48 @@ backend usage:
 impl eframe::App for IntervalTrainer {
     fn update(&mut self, ctx: &egui::Context, _frame: &mut eframe::Frame) {
         egui::CentralPanel::default().show(ctx, |ui| {
-            if ui.button("Click me").clicked() {
+            if ui.button("Play sound").clicked() {
                 let range = NoteRange::tenor_voice();
                 let (reference_note, mystery_note) = choose_notes(&range);
-                ui.add(
-                    egui::Image::new(egui::include_image!("assets/svg/A4_treble.svg"))
-                        .fit_to_exact_size([1000.0, 500.0].into())
-                        .bg_fill(egui::Color32::WHITE),
-                );
-                play_notes(
-                    reference_note,
-                    mystery_note,
-                    Duration::from_millis(1000),
-                    self.sample_rate,
-                );
+                let (sender, receiver) = mpsc::channel();
+                std::thread::spawn({
+                    let (r, m) = (reference_note, mystery_note);
+                    let sample_rate = self.sample_rate;
+                    move || play_notes(r, m, Duration::from_millis(1000), sample_rate, sender)
+                });
+                self.state = TrainerState::PlayingSound(receiver, mystery_note);
+            }
 
-                self.message = match listen_for_note(
-                    mystery_note.to_simple(),
-                    Duration::from_millis(1500),
-                    self.sample_rate,
-                ) {
-                    Some(cent_deviation) => format!(
-                        "you got it ! it was {}\nyou got it within a {} cent deviation",
-                        mystery_note, cent_deviation
-                    ),
-                    None => format!("womp womp it was {}", mystery_note),
+            use TrainerState::*;
+            match &self.state {
+                SoundNotPlaying => {}
+                PlayingSound(receiver, note) => {
+                    ui.add(
+                        egui::Image::new(egui::include_image!("assets/svg/A4_treble.svg"))
+                            .fit_to_exact_size([1000.0, 500.0].into())
+                            .bg_fill(egui::Color32::WHITE),
+                    );
+                    if let Ok(()) = receiver.try_recv() {
+                        self.state = TrainerState::AwaitingUserGuess(*note);
+                    }
                 }
-            };
+                TrainerState::AwaitingUserGuess(note) => {
+                    match listen_for_note(
+                        note.to_simple(),
+                        Duration::from_millis(1500),
+                        self.sample_rate,
+                    ) {
+                        Some(cent_deviation) => {
+                            self.message = format!(
+                                "you got it ! it was {}\nyou got it within a {} cent deviation",
+                                note, cent_deviation
+                            )
+                        }
+                        None => self.message = format!("womp womp it was {}", note),
+                    }
+                    self.state = TrainerState::SoundNotPlaying;
+                }
+            }
             ui.label(&self.message);
         });
     }
