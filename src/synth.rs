@@ -47,7 +47,7 @@ impl WavetableSynth {
                     .get(Instant::now().duration_since(note_start), note_length),
             );
 
-            sleep(update_period - Instant::now().duration_since(start_tick));
+            sleep(update_period.saturating_sub(Instant::now().duration_since(start_tick)));
         }
 
         sink.stop();
