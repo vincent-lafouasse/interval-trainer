@@ -9,6 +9,7 @@ use crate::{
 
 pub struct IntervalTrainer {
     scene: Scene,
+    sample_rate: u16,
 }
 
 impl IntervalTrainer {
@@ -17,12 +18,10 @@ impl IntervalTrainer {
     }
 
     pub fn new(cc: &eframe::CreationContext<'_>) -> Self {
+        let sample_rate: u16 = 44100;
         println!("hello from IntervalTrainer constructor");
 
-        let slf = Self { scene: Scene::Hello };
-        slf.run();
-
-        slf
+        Self { scene: Scene::Hello, sample_rate}
     }
 
     fn set_scene(&mut self, new_scene: Scene) {
