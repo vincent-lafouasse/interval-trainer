@@ -67,7 +67,8 @@ backend usage:
 impl eframe::App for IntervalTrainer {
     fn update(&mut self, ctx: &egui::Context, _frame: &mut eframe::Frame) {
         egui::CentralPanel::default().show(ctx, |ui| {
-            if ui.button("Play sound").clicked() {
+            if ui.button("Play sound").clicked() &&
+                !matches!(self.state, TrainerState::PlayingSound(_, _)) {
                 let range = NoteRange::tenor_voice();
                 let (reference_note, mystery_note) = choose_notes(&range);
                 let (sender, receiver) = mpsc::channel();
