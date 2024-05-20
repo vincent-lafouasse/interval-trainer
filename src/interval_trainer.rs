@@ -20,6 +20,10 @@ impl IntervalTrainer {
         slf
     }
 
+    pub fn run(&self) {
+        println!("hi");
+    }
+
     pub fn new_from_egui_context(cc: &eframe::CreationContext<'_>) -> Self {
         println!("hello from IntervalTrainer constructor");
 

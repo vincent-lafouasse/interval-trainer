@@ -60,14 +60,6 @@ fn main() -> Result<()> {
         ..Default::default()
     };
 
-    let interval_trainer = Arc::new(IntervalTrainer::new());
-
-    std::thread::spawn(|| {
-        println!("before");
-        std::thread::sleep(Duration::from_secs(1));
-        println!("after");
-    });
-
     // run gui in main thread
     let _ = eframe::run_native(
         "Interval Trainer",
