@@ -1,14 +1,18 @@
 use eframe::egui;
 use egui::Color32;
 
+use std::time::Duration;
+
 use crate::{
     interval::{Direction, Interval},
+    listen::listen_for_note,
     note_range::NoteRange,
     notes::Note,
+    synth::play_notes,
 };
 
 pub struct IntervalTrainer {
-    scene: Scene,
+    message: String,
     sample_rate: u16,
 }
 
@@ -21,43 +25,41 @@ impl IntervalTrainer {
         let sample_rate: u16 = 44100;
         println!("hello from IntervalTrainer constructor");
 
-        Self { scene: Scene::Hello, sample_rate}
+        Self { message: "".to_string(), sample_rate }
     }
-
-    fn set_scene(&mut self, new_scene: Scene) {
-        self.scene = new_scene;
-    }
-}
-
-#[derive(Copy, Clone, PartialEq)]
-enum Scene {
-    Hello,
-    CoolSVG,
 }
 
 impl eframe::App for IntervalTrainer {
     fn update(&mut self, ctx: &egui::Context, _frame: &mut eframe::Frame) {
         egui::CentralPanel::default().show(ctx, |ui| {
             if ui.button("Click me").clicked() {
-                match self.scene {
-                    Scene::Hello => self.set_scene(Scene::CoolSVG),
-                    Scene::CoolSVG => self.set_scene(Scene::Hello),
-                }
-            }
+                let range = NoteRange::tenor_voice();
+                let (reference_note, mystery_note) = choose_notes(&range);
+                ui.add(
+                    egui::Image::new(egui::include_image!("assets/svg/A4_treble.svg"))
+                        .fit_to_exact_size([1000.0, 500.0].into())
+                        .bg_fill(Color32::WHITE),
+                );
+                play_notes(
+                    reference_note,
+                    mystery_note,
+                    Duration::from_millis(1000),
+                    self.sample_rate,
+                );
 
-            match self.scene {
-                Scene::Hello => {
-                    ui.label("Hello");
+                self.message = match listen_for_note(
+                    mystery_note.to_simple(),
+                    Duration::from_millis(1500),
+                    self.sample_rate,
+                ) {
+                    Some(cent_deviation) => format!(
+                        "you got it ! it was {}\nyou got it within a {} cent deviation",
+                        mystery_note, cent_deviation
+                    ),
+                    None => format!("womp womp it was {}", mystery_note),
                 }
-                Scene::CoolSVG => {
-                    ui.label("Cool SVG");
-                    ui.add(
-                        egui::Image::new(egui::include_image!("assets/svg/A4_treble.svg"))
-                            .fit_to_exact_size([1000.0, 500.0].into())
-                            .bg_fill(Color32::WHITE),
-                    );
-                }
-            }
+            };
+            ui.label(&self.message);
         });
     }
 }
