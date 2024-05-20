@@ -4,7 +4,7 @@ use std::{sync::mpsc, time::Duration};
 
 use crate::{
     interval::{Direction, Interval},
-    listen::listen_for_note,
+    listen::{listen_for_note, CentDeviation},
     note_range::NoteRange,
     notes::Note,
     synth::play_notes,
@@ -13,7 +13,7 @@ use crate::{
 enum TrainerState {
     SoundNotPlaying,
     PlayingSound(mpsc::Receiver<()>, Note),
-    AwaitingUserGuess(Note),
+    AwaitingUserGuess(mpsc::Receiver<Option<CentDeviation>>, Note),
 }
 
 pub struct IntervalTrainer {
@@ -75,30 +75,43 @@ impl eframe::App for IntervalTrainer {
                 std::thread::spawn({
                     let (r, m) = (reference_note, mystery_note);
                     let sample_rate = self.sample_rate;
-                    move || play_notes(r, m, Duration::from_millis(1000), sample_rate, sender)
+                    let context = ctx.clone();
+                    move || {
+                        play_notes(r, m, Duration::from_millis(1000), sample_rate, sender);
+                        context.request_repaint();
+                    }
                 });
                 self.state = TrainerState::PlayingSound(receiver, mystery_note);
             }
 
             use TrainerState::*;
-            match &self.state {
-                SoundNotPlaying => {}
-                PlayingSound(receiver, note) => {
-                    ui.add(
-                        egui::Image::new(egui::include_image!("assets/svg/A4_treble.svg"))
-                            .fit_to_exact_size([1000.0, 500.0].into())
-                            .bg_fill(egui::Color32::WHITE),
-                    );
-                    if let Ok(()) = receiver.try_recv() {
-                        self.state = TrainerState::AwaitingUserGuess(*note);
-                    }
+            if let SoundNotPlaying = self.state {}
+
+            if let PlayingSound(ref receiver, note) = self.state {
+                ui.add(
+                    egui::Image::new(egui::include_image!("assets/svg/A4_treble.svg"))
+                        .fit_to_exact_size([1000.0, 500.0].into())
+                        .bg_fill(egui::Color32::WHITE),
+                );
+                if let Ok(()) = receiver.try_recv() {
+                    println!("signal received");
+                    let (sender, receiver) = mpsc::channel();
+                    std::thread::spawn({
+                        let (note_copy, sample_rate) = (note, self.sample_rate);
+                        let context = ctx.clone();
+                        move || {
+                            listen_for_note(note_copy.to_simple(), Duration::from_millis(1500), sample_rate, sender);
+                            context.request_repaint();
+                        }
+                    });
+                    self.state = TrainerState::AwaitingUserGuess(receiver, note);
                 }
-                TrainerState::AwaitingUserGuess(note) => {
-                    match listen_for_note(
-                        note.to_simple(),
-                        Duration::from_millis(1500),
-                        self.sample_rate,
-                    ) {
+            }
+
+            if let AwaitingUserGuess(ref receiver, note) = self.state {
+                if let Ok(deviation) = receiver.try_recv() {
+                    self.state = TrainerState::SoundNotPlaying;
+                    match deviation {
                         Some(cent_deviation) => {
                             self.message = format!(
                                 "you got it ! it was {}\nyou got it within a {} cent deviation",
@@ -107,7 +120,6 @@ impl eframe::App for IntervalTrainer {
                         }
                         None => self.message = format!("womp womp it was {}", note),
                     }
-                    self.state = TrainerState::SoundNotPlaying;
                 }
             }
             ui.label(&self.message);

@@ -7,7 +7,7 @@ use cpal::{
 
 use crate::simple_note::SimpleNote;
 use pitch_detection::detector::{mcleod::McLeodDetector, PitchDetector};
-use std::sync::{atomic::AtomicU64, atomic::Ordering, Arc};
+use std::sync::{mpsc, atomic::AtomicU64, atomic::Ordering, Arc};
 
 pub type CentDeviation = i8;
 
@@ -15,6 +15,7 @@ pub fn listen_for_note(
     target_note: SimpleNote,
     detection_duration: Duration,
     sample_rate: u16,
+    sender: mpsc::Sender<Option<CentDeviation>>,
 ) -> Option<CentDeviation> {
     let (_host, input_device) = setup_input_device().unwrap();
     let config = StreamConfig {
@@ -75,6 +76,7 @@ pub fn listen_for_note(
         if let Some((note, deviation)) = get_note(detected_pitch, CENT_DEVIATION_THRESHOLD) {
             if are_octaves_away(note, target_note) {
                 stream.pause().unwrap();
+                sender.send(Some(deviation)).ok();
                 return Some(deviation);
             }
         }
@@ -83,6 +85,7 @@ pub fn listen_for_note(
     }
 
     stream.pause().unwrap();
+    sender.send(None).ok();
     None
 }
 
