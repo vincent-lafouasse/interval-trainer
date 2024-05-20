@@ -16,6 +16,7 @@ mod wavetables;
 use color_eyre::eyre::Result;
 use eframe::egui;
 
+use std::sync::Arc;
 use std::thread;
 use std::time::Duration;
 
@@ -59,6 +60,8 @@ fn main() -> Result<()> {
         ..Default::default()
     };
 
+    let interval_trainer = Arc::new(IntervalTrainer::new());
+
     std::thread::spawn(|| {
         println!("before");
         std::thread::sleep(Duration::from_secs(1));
@@ -72,7 +75,7 @@ fn main() -> Result<()> {
         Box::new(|cc| {
             // This gives us image support:
             egui_extras::install_image_loaders(&cc.egui_ctx);
-            Box::new(IntervalTrainer::new(cc))
+            Box::new(IntervalTrainer::new_from_context(cc))
         }),
     );
 
