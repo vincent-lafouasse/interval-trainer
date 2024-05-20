@@ -75,7 +75,7 @@ fn main() -> Result<()> {
         Box::new(|cc| {
             // This gives us image support:
             egui_extras::install_image_loaders(&cc.egui_ctx);
-            Box::new(IntervalTrainer::new_from_context(cc))
+            Box::new(IntervalTrainer::new_from_egui_context(cc))
         }),
     );
 
