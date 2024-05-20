@@ -20,6 +20,7 @@ impl IntervalTrainer {
         println!("hello from IntervalTrainer constructor");
 
         let slf = Self { scene: Scene::Hello };
+        slf.run();
 
         slf
     }
