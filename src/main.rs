@@ -58,7 +58,6 @@ backend usage:
     let (reference_note, mystery_note) = choose_notes(&range);
 
     println!("This is {}", reference_note);
-    // show reference_note in sheet music
     play_notes(
         reference_note,
         mystery_note,
@@ -77,5 +76,4 @@ backend usage:
         ),
         None => println!("womp womp it was {}", mystery_note),
     }
-    // show both notes in sheet music
 */
