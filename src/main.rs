@@ -22,8 +22,6 @@ use std::time::Duration;
 
 use crate::interval_trainer::IntervalTrainer;
 
-const SAMPLE_RATE: u16 = 44_100;
-
 fn main() -> Result<()> {
     color_eyre::install()?;
     env_logger::init();
@@ -52,8 +50,10 @@ fn print_type_of<T>(_: &T) {
 }
 
 /*
-* backend usage:
-*
+backend usage:
+
+    const SAMPLE_RATE: u16 = 44_100;
+
     let range = NoteRange::tenor_voice();
     let (reference_note, mystery_note) = choose_notes(&range);
 
