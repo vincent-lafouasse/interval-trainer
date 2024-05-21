@@ -32,7 +32,7 @@ use crate::{notes::Note, synth::play_notes_in_thread};
 #[derive(Default, Copy, Clone, Debug)]
 enum Scene {
     #[default]
-    Welcome,
+    Idle,
     PlayingSound,
     Listening,
     Concluding,
@@ -68,7 +68,7 @@ fn main() -> Result<(), String> {
     let texture_creator = canvas.texture_creator();
     let empty_treble_staff = texture_creator.load_texture(empty_treble_staff_path)?;
 
-    let (sender, receiver): (Sender<()>, Receiver<()>) = mpsc::channel();
+    let (playback_tx, playback_rx): (Sender<()>, Receiver<()>) = mpsc::channel();
 
     let scene: Scene = Default::default();
 
@@ -80,21 +80,21 @@ fn main() -> Result<(), String> {
                 Event::KeyDown { keycode: Option::Some(Keycode::A), .. } => {
                     println!("here comes some notes");
                     let n1 = Note::parse_from_string("A4")?;
-                    let n2 = Note::parse_from_string("E4")?;
+                    let n2 = Note::parse_from_string("E5")?;
                     let note_length = Duration::from_millis(1000);
                     crate::synth::play_notes_in_thread(
                         n1,
                         n2,
                         note_length,
                         SAMPLE_RATE,
-                        sender.clone(),
+                        playback_tx.clone(),
                     );
                 }
                 _ => {}
             }
         }
 
-        match receiver.try_recv() {
+        match playback_rx.try_recv() {
             Ok(()) => println!("man those were some nice notes"),
             Err(_) => {}
         }
