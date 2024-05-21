@@ -21,7 +21,7 @@ main() {
 
 	base_name="${name/\.svg/}"    
 
-	inkscape -w 500 "$1" -o "${TARGET_DIR}/${base_name}".png
+	inkscape -w 1000 "$1" -o "${TARGET_DIR}/${base_name}".png
 }
 
 main "$@"
