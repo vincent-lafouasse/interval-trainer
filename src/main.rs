@@ -38,6 +38,9 @@ enum Scene {
 
 const WHITE: Color = Color::RGB(255, 255, 255);
 
+const WINDOW_WIDTH: u32 = 1000;
+const WINDOW_HEIGHT: u32 = 400;
+
 fn main() -> Result<(), String> {
     let png_dir = Path::new("src/assets/png");
     let empty_treble_staff_path = png_dir.join("treble_staff.png");
@@ -47,7 +50,7 @@ fn main() -> Result<(), String> {
     let _image_context = sdl2::image::init(InitFlag::PNG)?;
 
     let window = video_subsystem
-        .window("Interval Trainer", 1000, 400)
+        .window("Interval Trainer", WINDOW_WIDTH, WINDOW_HEIGHT)
         .position_centered()
         .build()
         .map_err(|e| e.to_string())?;
