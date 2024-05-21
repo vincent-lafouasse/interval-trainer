@@ -9,5 +9,5 @@
 	\time 100/2 % no bar lines (probably)
 	\clef treble
 	\key c \major
-	| c'!1 |
+	| c'1 |
 }
