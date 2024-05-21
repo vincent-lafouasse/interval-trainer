@@ -23,7 +23,7 @@ use sdl2::{
 
 fn main() -> Result<(), String> {
     let png_dir = Path::new("src/assets/png");
-    let cool_png = png_dir.join("treble_staff.png");
+    let empty_treble_staff_path = png_dir.join("treble_staff.png");
 
     let sdl_context = sdl2::init()?;
     let video_subsystem = sdl_context.video()?;
@@ -42,11 +42,11 @@ fn main() -> Result<(), String> {
         .map_err(|e| e.to_string())?;
 
     let texture_creator = canvas.texture_creator();
-    let texture = texture_creator.load_texture(cool_png)?;
+    let empty_treble_staff = texture_creator.load_texture(empty_treble_staff_path)?;
 
     canvas.set_draw_color(Color::RGB(255, 255, 255));
     canvas.clear();
-    canvas.copy(&texture, None, None)?;
+    canvas.copy(&empty_treble_staff, None, None)?;
     canvas.present();
 
     'mainloop: loop {
