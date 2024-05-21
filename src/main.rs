@@ -27,7 +27,14 @@ use sdl2::{
     pixels::Color,
 };
 
-use crate::{notes::Note, synth::play_notes_in_thread};
+use crate::{note_range::NoteRange, notes::Note, synth::play_notes_in_thread};
+
+struct IntervalTrainer {
+    scene: Scene,
+    note_ramge: NoteRange,
+    reference_note: Note,
+    mystery_note: Note,
+}
 
 #[derive(Default, Copy, Clone, Debug)]
 enum Scene {
