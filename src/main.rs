@@ -71,10 +71,9 @@ fn main() -> Result<(), String> {
                 Event::Quit { .. }
                 | Event::KeyDown { keycode: Option::Some(Keycode::Escape), .. } => break 'mainloop,
                 Event::KeyDown { keycode: Option::Some(Keycode::A), .. } => {
-                    std::thread::spawn(move || {
+                    std::thread::spawn(|| {
                         println!("zzzzzzz");
                         std::thread::sleep(Duration::from_millis(1000));
-                        sender.send(());
                     });
                 }
                 _ => {}
