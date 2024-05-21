@@ -12,11 +12,7 @@ mod simple_note;
 mod synth;
 mod wavetables;
 
-use std::{
-    path::Path,
-    thread,
-    time::Duration
-};
+use std::{path::Path, thread, time::Duration};
 
 use sdl2::{
     event::Event,
@@ -32,7 +28,6 @@ enum Scene {
     PlayingSound,
     Listening,
     Concluding,
-
 }
 
 fn main() -> Result<(), String> {
@@ -76,7 +71,7 @@ fn main() -> Result<(), String> {
                         std::thread::sleep(Duration::from_millis(1000));
                         println!("i am awake");
                     });
-                },
+                }
                 _ => {}
             }
         }
