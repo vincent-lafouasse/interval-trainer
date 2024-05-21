@@ -7,7 +7,7 @@ use cpal::{
 
 use crate::simple_note::SimpleNote;
 use pitch_detection::detector::{mcleod::McLeodDetector, PitchDetector};
-use std::sync::{mpsc, atomic::AtomicU64, atomic::Ordering, Arc};
+use std::sync::{atomic::AtomicU64, atomic::Ordering, mpsc, Arc};
 
 pub type CentDeviation = i8;
 

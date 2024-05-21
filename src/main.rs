@@ -5,7 +5,6 @@
 //! # A cool ear trainer
 
 mod interval;
-mod interval_trainer;
 mod listen;
 mod note_range;
 mod notes;
@@ -13,30 +12,79 @@ mod simple_note;
 mod synth;
 mod wavetables;
 
-use color_eyre::eyre::Result;
-use eframe::egui;
+use std::{
+    path::Path,
+    sync::mpsc,
+    sync::mpsc::{Receiver, Sender},
+    thread,
+    time::Duration,
+};
 
-use crate::interval_trainer::IntervalTrainer;
+use sdl2::{
+    event::Event,
+    image::{InitFlag, LoadTexture},
+    keyboard::Keycode,
+    pixels::Color,
+};
 
-fn main() -> Result<()> {
-    color_eyre::install()?;
-    env_logger::init();
+#[derive(Default, Copy, Clone, Debug)]
+enum Scene {
+    #[default]
+    Welcome,
+    PlayingSound,
+    Listening,
+    Concluding,
+}
 
-    let options = eframe::NativeOptions {
-        viewport: egui::ViewportBuilder::default().with_inner_size([1000.0, 500.0]),
-        ..Default::default()
-    };
+const WHITE: Color = Color::RGB(255, 255, 255);
 
-    // run gui in main thread
-    let _ = eframe::run_native(
-        "Interval Trainer",
-        options,
-        Box::new(|cc| {
-            // This gives us image support:
-            egui_extras::install_image_loaders(&cc.egui_ctx);
-            Box::new(IntervalTrainer::new(cc))
-        }),
-    );
+fn main() -> Result<(), String> {
+    let png_dir = Path::new("src/assets/png");
+    let empty_treble_staff_path = png_dir.join("treble_staff.png");
+
+    let sdl_context = sdl2::init()?;
+    let video_subsystem = sdl_context.video()?;
+    let _image_context = sdl2::image::init(InitFlag::PNG)?;
+
+    let window = video_subsystem
+        .window("Interval Trainer", 1000, 400)
+        .position_centered()
+        .build()
+        .map_err(|e| e.to_string())?;
+
+    let mut canvas = window
+        .into_canvas()
+        .software()
+        .build()
+        .map_err(|e| e.to_string())?;
+
+    let texture_creator = canvas.texture_creator();
+    let empty_treble_staff = texture_creator.load_texture(empty_treble_staff_path)?;
+
+    let (sender, receiver): (Sender<()>, Receiver<()>) = mpsc::channel();
+
+    let scene: Scene = Default::default();
+
+    'mainloop: loop {
+        for event in sdl_context.event_pump()?.poll_iter() {
+            match event {
+                Event::Quit { .. }
+                | Event::KeyDown { keycode: Option::Some(Keycode::Escape), .. } => break 'mainloop,
+                Event::KeyDown { keycode: Option::Some(Keycode::A), .. } => {
+                    std::thread::spawn(|| {
+                        println!("zzzzzzz");
+                        std::thread::sleep(Duration::from_millis(1000));
+                    });
+                }
+                _ => {}
+            }
+        }
+
+        canvas.set_draw_color(WHITE);
+        canvas.clear();
+        canvas.copy(&empty_treble_staff, None, None)?;
+        canvas.present();
+    }
 
     Ok(())
 }
@@ -46,7 +94,7 @@ fn print_type_of<T>(_: &T) {
 }
 
 /*
-backend usage:
+backend usage for reference:
 
     const SAMPLE_RATE: u16 = 44_100;
 

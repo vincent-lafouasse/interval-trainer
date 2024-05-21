@@ -17,7 +17,7 @@ jobs:
     steps:
     - uses: actions/checkout@v4
 
-    - name: install eframe dependencies
-      run: sudo apt-get install libxcb-render0-dev libxcb-shape0-dev libxcb-xfixes0-dev libxkbcommon-dev libssl-dev libasound2-dev
+    - name: install sdl2
+      run: sudo apt-get install libsdl2-dev libsdl2-image-dev
     - name: Build
       run: cargo build --verbose
