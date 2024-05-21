@@ -5,7 +5,6 @@
 //! # A cool ear trainer
 
 mod interval;
-mod interval_trainer;
 mod listen;
 mod note_range;
 mod notes;
@@ -14,29 +13,10 @@ mod synth;
 mod wavetables;
 
 use color_eyre::eyre::Result;
-use eframe::egui;
 
-use crate::interval_trainer::IntervalTrainer;
 
 fn main() -> Result<()> {
     color_eyre::install()?;
-    env_logger::init();
-
-    let options = eframe::NativeOptions {
-        viewport: egui::ViewportBuilder::default().with_inner_size([1000.0, 500.0]),
-        ..Default::default()
-    };
-
-    // run gui in main thread
-    let _ = eframe::run_native(
-        "Interval Trainer",
-        options,
-        Box::new(|cc| {
-            // This gives us image support:
-            egui_extras::install_image_loaders(&cc.egui_ctx);
-            Box::new(IntervalTrainer::new(cc))
-        }),
-    );
 
     Ok(())
 }
@@ -46,7 +26,7 @@ fn print_type_of<T>(_: &T) {
 }
 
 /*
-backend usage:
+backend usage for reference:
 
     const SAMPLE_RATE: u16 = 44_100;
 
