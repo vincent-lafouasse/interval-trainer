@@ -69,6 +69,7 @@ fn main() -> Result<(), String> {
     let empty_treble_staff = texture_creator.load_texture(empty_treble_staff_path)?;
 
     let (playback_tx, playback_rx): (Sender<()>, Receiver<()>) = mpsc::channel();
+    let (pitch_detection_tx, pitch_detection_rx): (Sender<()>, Receiver<()>) = mpsc::channel();
 
     let scene: Scene = Default::default();
 
