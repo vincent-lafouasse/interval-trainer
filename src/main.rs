@@ -98,25 +98,50 @@ fn main() -> Result<(), String> {
                 | Event::KeyDown { keycode: Option::Some(Keycode::Escape), .. } => break 'mainloop,
                 Event::KeyDown { keycode: Option::Some(Keycode::A), .. } => {
                     if matches!(trainer.scene, Scene::Idle) {
-                        let (reference_note, mystery_note) = choose_notes(&trainer.range);
+                        let (reference, mystery_note) = choose_notes(&trainer.range);
                         let note_length = Duration::from_millis(1000);
                         crate::synth::play_notes_in_thread(
-                            reference_note,
+                            reference,
                             mystery_note,
                             note_length,
                             SAMPLE_RATE,
                             playback_tx.clone(),
                         );
-                        trainer.scene = Scene::PlayingSound(reference_note, mystery_note);
+                        trainer.scene = Scene::PlayingSound(reference, mystery_note);
                     }
                 }
                 _ => {}
             }
         }
 
-        match playback_rx.try_recv() {
-            Ok(()) => println!("man those were some nice notes"),
-            Err(_) => {}
+        if let Scene::PlayingSound(_, mystery_note) = trainer.scene {
+            match playback_rx.try_recv() {
+                Ok(()) => {
+                    let detection_duration = Duration::from_millis(1500);
+                    listen_for_note_in_thread(
+                        mystery_note.to_simple(),
+                        detection_duration,
+                        SAMPLE_RATE,
+                        pitch_detection_tx.clone(),
+                    );
+                    trainer.scene = Scene::Listening(mystery_note.to_simple());
+                }
+                Err(_) => {}
+            }
+        }
+
+        if let Scene::Listening(mystery_note) = trainer.scene {
+            match pitch_detection_rx.try_recv() {
+                Ok(true) => {
+                    println!("gg");
+                    break 'mainloop;
+                }
+                Ok(false) => {
+                    println!("womp womp");
+                    break 'mainloop;
+                }
+                Err(_) => {}
+            }
         }
 
         canvas.set_draw_color(WHITE);
