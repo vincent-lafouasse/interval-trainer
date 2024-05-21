@@ -30,7 +30,7 @@ fn main() -> Result<(), String> {
     let _image_context = sdl2::image::init(InitFlag::PNG)?;
 
     let window = video_subsystem
-        .window("Interval Trainer", 1000, 500)
+        .window("Interval Trainer", 1000, 400)
         .position_centered()
         .build()
         .map_err(|e| e.to_string())?;
