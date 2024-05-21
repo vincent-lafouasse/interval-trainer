@@ -14,9 +14,12 @@ mod wavetables;
 
 use std::path::Path;
 
-use sdl2::event::Event;
-use sdl2::image::{InitFlag, LoadTexture};
-use sdl2::keyboard::Keycode;
+use sdl2::{
+    event::Event,
+    image::{InitFlag, LoadTexture},
+    keyboard::Keycode,
+    pixels::Color,
+};
 
 fn main() -> Result<(), String> {
     let png_dir = Path::new("src/assets/png");
@@ -41,6 +44,8 @@ fn main() -> Result<(), String> {
     let texture_creator = canvas.texture_creator();
     let texture = texture_creator.load_texture(cool_png)?;
 
+    canvas.set_draw_color(Color::RGB(255, 255, 255));
+    canvas.clear();
     canvas.copy(&texture, None, None)?;
     canvas.present();
 
