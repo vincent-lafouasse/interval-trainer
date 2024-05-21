@@ -21,6 +21,16 @@ use sdl2::{
     pixels::Color,
 };
 
+#[derive(Default, Copy, Clone, Debug)]
+enum Scene {
+    #[default]
+    Welcome,
+    PlayingSound,
+    Listening,
+    Concluding,
+
+}
+
 fn main() -> Result<(), String> {
     let png_dir = Path::new("src/assets/png");
     let empty_treble_staff_path = png_dir.join("treble_staff.png");
@@ -43,6 +53,8 @@ fn main() -> Result<(), String> {
 
     let texture_creator = canvas.texture_creator();
     let empty_treble_staff = texture_creator.load_texture(empty_treble_staff_path)?;
+
+    let scene: Scene = Default::default();
 
     canvas.set_draw_color(Color::RGB(255, 255, 255));
     canvas.clear();
