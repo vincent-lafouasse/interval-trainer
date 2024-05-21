@@ -12,7 +12,13 @@ mod simple_note;
 mod synth;
 mod wavetables;
 
-use std::{path::Path, thread, time::Duration};
+use std::{
+    path::Path,
+    sync::mpsc,
+    sync::mpsc::{Receiver, Sender},
+    thread,
+    time::Duration,
+};
 
 use sdl2::{
     event::Event,
@@ -54,6 +60,8 @@ fn main() -> Result<(), String> {
 
     let texture_creator = canvas.texture_creator();
     let empty_treble_staff = texture_creator.load_texture(empty_treble_staff_path)?;
+
+    let (sender, receiver): (Sender<()>, Receiver<()>) = mpsc::channel();
 
     let scene: Scene = Default::default();
 
