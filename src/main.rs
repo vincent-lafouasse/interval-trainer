@@ -27,6 +27,8 @@ use sdl2::{
     pixels::Color,
 };
 
+use crate::notes::Note;
+
 #[derive(Default, Copy, Clone, Debug)]
 enum Scene {
     #[default]
@@ -40,6 +42,8 @@ const WHITE: Color = Color::RGB(255, 255, 255);
 
 const WINDOW_WIDTH: u32 = 1000;
 const WINDOW_HEIGHT: u32 = 400;
+
+const SAMPLE_RATE: u16 = 44_100;
 
 fn main() -> Result<(), String> {
     let png_dir = Path::new("src/assets/png");
@@ -75,10 +79,15 @@ fn main() -> Result<(), String> {
                 | Event::KeyDown { keycode: Option::Some(Keycode::Escape), .. } => break 'mainloop,
                 Event::KeyDown { keycode: Option::Some(Keycode::A), .. } => {
                     let sender_ = sender.clone();
-                    println!("zzzzzzz");
+                    println!("here comes some notes");
                     std::thread::spawn(move || {
-                        std::thread::sleep(Duration::from_millis(1000));
-                        sender_.send(()).ok();
+                        crate::synth::play_notes(
+                            Note::parse_from_string("A4").unwrap(),
+                            Note::parse_from_string("E5").unwrap(),
+                            Duration::from_millis(1000),
+                            SAMPLE_RATE,
+                            sender_,
+                        );
                     });
                 }
                 _ => {}
@@ -86,7 +95,7 @@ fn main() -> Result<(), String> {
         }
 
         match receiver.try_recv() {
-            Ok(()) => println!("i am awake"),
+            Ok(()) => println!("man those were some nice notes"),
             Err(_) => {}
         }
 
