@@ -9,7 +9,6 @@ license-file = "LICENSE"
 [dependencies]
 rand = "0.8.0"
 int-enum = "1.1"
-color-eyre = "0.6"
 rodio = "0.14.0"
 pitch-detection = "0.3.0"
 cpal = "0.15.3"
