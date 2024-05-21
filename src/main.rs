@@ -71,9 +71,11 @@ fn main() -> Result<(), String> {
                 Event::Quit { .. }
                 | Event::KeyDown { keycode: Option::Some(Keycode::Escape), .. } => break 'mainloop,
                 Event::KeyDown { keycode: Option::Some(Keycode::A), .. } => {
-                    std::thread::spawn(|| {
+                    let sender_ = sender.clone();
+                    std::thread::spawn(move || {
                         println!("zzzzzzz");
                         std::thread::sleep(Duration::from_millis(1000));
+                        sender_.send(()).ok();
                     });
                 }
                 _ => {}
