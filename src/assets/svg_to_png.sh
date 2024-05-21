@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 
+TARGET_DIR="./png"
 
 die() {
 	>&2 echo "$1"
@@ -20,7 +21,7 @@ main() {
 
 	base_name="${name/\.svg/}"    
 
-	inkscape -w 500 "$base_name".svg -o "$base_name".png
+	inkscape -w 500 "$1" -o "${TARGET_DIR}/${base_name}".png
 }
 
 main "$@"
