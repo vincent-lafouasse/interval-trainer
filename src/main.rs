@@ -18,7 +18,6 @@ use sdl2::event::Event;
 use sdl2::image::{InitFlag, LoadTexture};
 use sdl2::keyboard::Keycode;
 
-
 fn main() -> Result<(), String> {
     let png_dir = Path::new("src/assets/png");
     let cool_png = png_dir.join("treble_staff.png");
@@ -46,10 +45,7 @@ fn main() -> Result<(), String> {
         for event in sdl_context.event_pump()?.poll_iter() {
             match event {
                 Event::Quit { .. }
-                    | Event::KeyDown {
-                    keycode: Option::Some(Keycode::Escape),
-                    ..
-                } => break 'mainloop,
+                | Event::KeyDown { keycode: Option::Some(Keycode::Escape), .. } => break 'mainloop,
                 _ => {}
             }
         }
