@@ -30,6 +30,8 @@ enum Scene {
     Concluding,
 }
 
+const WHITE: Color = Color::RGB(255, 255, 255);
+
 fn main() -> Result<(), String> {
     let png_dir = Path::new("src/assets/png");
     let empty_treble_staff_path = png_dir.join("treble_staff.png");
@@ -55,11 +57,6 @@ fn main() -> Result<(), String> {
 
     let scene: Scene = Default::default();
 
-    canvas.set_draw_color(Color::RGB(255, 255, 255));
-    canvas.clear();
-    canvas.copy(&empty_treble_staff, None, None)?;
-    canvas.present();
-
     'mainloop: loop {
         for event in sdl_context.event_pump()?.poll_iter() {
             match event {
@@ -75,6 +72,11 @@ fn main() -> Result<(), String> {
                 _ => {}
             }
         }
+
+        canvas.set_draw_color(WHITE);
+        canvas.clear();
+        canvas.copy(&empty_treble_staff, None, None)?;
+        canvas.present();
     }
 
     Ok(())
