@@ -28,18 +28,22 @@ use sdl2::{
 };
 
 use crate::{
-    listen::listen_for_note_in_thread, note_range::NoteRange, notes::Note, simple_note::SimpleNote,
+    interval::{Direction, Interval},
+    listen::listen_for_note_in_thread,
+    note_range::NoteRange,
+    notes::Note,
+    simple_note::SimpleNote,
     synth::play_notes_in_thread,
 };
 
 struct IntervalTrainer {
     scene: Scene,
-    note_range: NoteRange,
+    range: NoteRange,
 }
 
 impl IntervalTrainer {
-    fn init(note_range: NoteRange) -> Self {
-        Self { scene: Scene::Idle, note_range }
+    fn init(range: NoteRange) -> Self {
+        Self { scene: Scene::Idle, range }
     }
 }
 
@@ -85,7 +89,7 @@ fn main() -> Result<(), String> {
     let (playback_tx, playback_rx): (Sender<()>, Receiver<()>) = mpsc::channel();
     let (pitch_detection_tx, pitch_detection_rx): (Sender<bool>, Receiver<bool>) = mpsc::channel();
 
-    let trainer = IntervalTrainer::init(NoteRange::tenor_voice());
+    let mut trainer = IntervalTrainer::init(NoteRange::tenor_voice());
 
     'mainloop: loop {
         for event in sdl_context.event_pump()?.poll_iter() {
@@ -93,17 +97,18 @@ fn main() -> Result<(), String> {
                 Event::Quit { .. }
                 | Event::KeyDown { keycode: Option::Some(Keycode::Escape), .. } => break 'mainloop,
                 Event::KeyDown { keycode: Option::Some(Keycode::A), .. } => {
-                    println!("here comes some notes");
-                    let n1 = Note::parse_from_string("A4")?;
-                    let n2 = Note::parse_from_string("E5")?;
-                    let note_length = Duration::from_millis(1000);
-                    crate::synth::play_notes_in_thread(
-                        n1,
-                        n2,
-                        note_length,
-                        SAMPLE_RATE,
-                        playback_tx.clone(),
-                    );
+                    if matches!(trainer.scene, Scene::Idle) {
+                        let (reference_note, mystery_note) = choose_notes(&trainer.range);
+                        let note_length = Duration::from_millis(1000);
+                        crate::synth::play_notes_in_thread(
+                            reference_note,
+                            mystery_note,
+                            note_length,
+                            SAMPLE_RATE,
+                            playback_tx.clone(),
+                        );
+                        trainer.scene = Scene::PlayingSound(reference_note, mystery_note);
+                    }
                 }
                 _ => {}
             }
@@ -121,6 +126,18 @@ fn main() -> Result<(), String> {
     }
 
     Ok(())
+}
+fn choose_notes(range: &NoteRange) -> (Note, Note) {
+    let interval = Interval::get_random_diatonic();
+    let direction = Direction::Up;
+
+    let new_range = match direction {
+        Direction::Up => range.crop_top(interval.size_i8()),
+        Direction::Down => range.crop_bottom(interval.size_i8()),
+    };
+
+    let reference = new_range.rand();
+    (reference, reference.up(interval))
 }
 
 fn print_type_of<T>(_: &T) {
