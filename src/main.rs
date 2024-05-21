@@ -27,7 +27,10 @@ use sdl2::{
     pixels::Color,
 };
 
-use crate::{note_range::NoteRange, notes::Note, synth::play_notes_in_thread};
+use crate::{
+    listen::listen_for_note_in_thread, note_range::NoteRange, notes::Note,
+    synth::play_notes_in_thread,
+};
 
 struct IntervalTrainer {
     scene: Scene,
