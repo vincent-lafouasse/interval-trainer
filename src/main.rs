@@ -28,20 +28,18 @@ use sdl2::{
 };
 
 use crate::{
-    listen::listen_for_note_in_thread, note_range::NoteRange, notes::Note,
+    listen::listen_for_note_in_thread, note_range::NoteRange, notes::Note, simple_note::SimpleNote,
     synth::play_notes_in_thread,
 };
 
 struct IntervalTrainer {
     scene: Scene,
     note_range: NoteRange,
-    reference_note: Option<Note>,
-    mystery_note: Option<Note>,
 }
 
 impl IntervalTrainer {
     fn init(note_range: NoteRange) -> Self {
-        Self { scene: Scene::Idle, note_range, mystery_note: None, reference_note: None }
+        Self { scene: Scene::Idle, note_range }
     }
 }
 
@@ -49,8 +47,8 @@ impl IntervalTrainer {
 enum Scene {
     #[default]
     Idle,
-    PlayingSound,
-    Listening,
+    PlayingSound(Note, Note),
+    Listening(SimpleNote),
     Concluding,
 }
 
