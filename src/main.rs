@@ -72,14 +72,19 @@ fn main() -> Result<(), String> {
                 | Event::KeyDown { keycode: Option::Some(Keycode::Escape), .. } => break 'mainloop,
                 Event::KeyDown { keycode: Option::Some(Keycode::A), .. } => {
                     let sender_ = sender.clone();
+                    println!("zzzzzzz");
                     std::thread::spawn(move || {
-                        println!("zzzzzzz");
                         std::thread::sleep(Duration::from_millis(1000));
                         sender_.send(()).ok();
                     });
                 }
                 _ => {}
             }
+        }
+
+        match receiver.try_recv() {
+            Ok(()) => println!("i am awake"),
+            Err(_) => {}
         }
 
         canvas.set_draw_color(WHITE);
