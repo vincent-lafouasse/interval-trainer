@@ -12,7 +12,11 @@ mod simple_note;
 mod synth;
 mod wavetables;
 
-use std::path::Path;
+use std::{
+    path::Path,
+    thread,
+    time::Duration
+};
 
 use sdl2::{
     event::Event,
@@ -66,6 +70,13 @@ fn main() -> Result<(), String> {
             match event {
                 Event::Quit { .. }
                 | Event::KeyDown { keycode: Option::Some(Keycode::Escape), .. } => break 'mainloop,
+                Event::KeyDown { keycode: Option::Some(Keycode::A), .. } => {
+                    std::thread::spawn(|| {
+                        println!("zzzzzzz");
+                        std::thread::sleep(Duration::from_millis(1000));
+                        println!("i am awake");
+                    });
+                },
                 _ => {}
             }
         }
