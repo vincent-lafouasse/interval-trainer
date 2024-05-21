@@ -31,9 +31,15 @@ use crate::{note_range::NoteRange, notes::Note, synth::play_notes_in_thread};
 
 struct IntervalTrainer {
     scene: Scene,
-    note_ramge: NoteRange,
-    reference_note: Note,
-    mystery_note: Note,
+    note_range: NoteRange,
+    reference_note: Option<Note>,
+    mystery_note: Option<Note>,
+}
+
+impl IntervalTrainer {
+    fn init(note_range: NoteRange) -> Self {
+        Self { scene: Scene::Idle, note_range, mystery_note: None, reference_note: None }
+    }
 }
 
 #[derive(Default, Copy, Clone, Debug)]
@@ -78,7 +84,7 @@ fn main() -> Result<(), String> {
     let (playback_tx, playback_rx): (Sender<()>, Receiver<()>) = mpsc::channel();
     let (pitch_detection_tx, pitch_detection_rx): (Sender<()>, Receiver<()>) = mpsc::channel();
 
-    let scene: Scene = Default::default();
+    let trainer = IntervalTrainer::init(NoteRange::tenor_voice());
 
     'mainloop: loop {
         for event in sdl_context.event_pump()?.poll_iter() {
