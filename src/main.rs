@@ -27,7 +27,7 @@ use sdl2::{
     pixels::Color,
 };
 
-use crate::notes::Note;
+use crate::{notes::Note, synth::play_notes_in_thread};
 
 #[derive(Default, Copy, Clone, Debug)]
 enum Scene {
@@ -78,17 +78,17 @@ fn main() -> Result<(), String> {
                 Event::Quit { .. }
                 | Event::KeyDown { keycode: Option::Some(Keycode::Escape), .. } => break 'mainloop,
                 Event::KeyDown { keycode: Option::Some(Keycode::A), .. } => {
-                    let sender_ = sender.clone();
                     println!("here comes some notes");
-                    std::thread::spawn(move || {
-                        crate::synth::play_notes(
-                            Note::parse_from_string("A4").unwrap(),
-                            Note::parse_from_string("E5").unwrap(),
-                            Duration::from_millis(1000),
-                            SAMPLE_RATE,
-                            sender_,
-                        );
-                    });
+                    let n1 = Note::parse_from_string("A4")?;
+                    let n2 = Note::parse_from_string("E4")?;
+                    let note_length = Duration::from_millis(1000);
+                    crate::synth::play_notes_in_thread(
+                        n1,
+                        n2,
+                        note_length,
+                        SAMPLE_RATE,
+                        sender.clone(),
+                    );
                 }
                 _ => {}
             }

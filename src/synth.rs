@@ -10,7 +10,7 @@ use crate::wavetables::*;
 
 static SQUARE8: Wavetable = Wavetable::square8();
 
-pub fn play_notes(n1: Note, n2: Note, note_length: Duration, sample_rate: u16, signal: Sender<()>) {
+pub fn play_notes(n1: Note, n2: Note, note_length: Duration, sample_rate: u16) {
     let synth = WavetableSynth::new(SQUARE8, sample_rate);
     let (_stream, stream_handle) = OutputStream::try_default().unwrap();
 
@@ -18,7 +18,24 @@ pub fn play_notes(n1: Note, n2: Note, note_length: Duration, sample_rate: u16, s
     synth.play(n1.frequency(), note_length, &stream_handle);
     sleep(Duration::from_secs(1));
     synth.play(n2.frequency(), note_length, &stream_handle);
-    signal.send(()).ok();
+}
+
+pub fn play_notes_in_thread(
+    n1: Note,
+    n2: Note,
+    note_length: Duration,
+    sample_rate: u16,
+    signal: Sender<()>,
+) {
+    std::thread::spawn(move || {
+        play_notes(
+            Note::parse_from_string("A4").unwrap(),
+            Note::parse_from_string("E5").unwrap(),
+            Duration::from_millis(1000),
+            sample_rate,
+        );
+        signal.send(()).ok();
+    });
 }
 
 pub struct WavetableSynth {
