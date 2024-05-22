@@ -9,3 +9,6 @@
 **/aux/
 **/target/
 **/__pycache__/
+
+# ableton files
+**/**.asd
