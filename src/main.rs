@@ -34,7 +34,7 @@ use crate::{
     listen::listen_for_note_in_thread,
     note_range::NoteRange,
     notes::Note,
-    render::{render_note, render_staff},
+    render::{render_note, render_staff, Sprites},
     simple_note::SimpleNote,
     synth::play_notes_in_thread,
 };
@@ -65,23 +65,6 @@ const WINDOW_WIDTH: u32 = 1000;
 const WINDOW_HEIGHT: u32 = 400;
 
 const SAMPLE_RATE: u16 = 44_100;
-
-struct Sprites<'a> {
-    staff: sdl2::render::Texture<'a>,
-    note_head: sdl2::render::Texture<'a>,
-    ledger_line: sdl2::render::Texture<'a>,
-}
-
-impl<'a> Sprites<'a> {
-    pub fn init<T>(texture_creator: &'a sdl2::render::TextureCreator<T>) -> Result<Self, String> {
-        let png_dir = Path::new("src/assets/png");
-        let treble_staff = texture_creator.load_texture(&png_dir.join("treble_staff.png"))?;
-        let note_head = texture_creator.load_texture(&png_dir.join("WholeNote.png"))?;
-        let ledger_line = texture_creator.load_texture(&png_dir.join("ledger_line.png"))?;
-
-        Ok(Self { staff: treble_staff, note_head, ledger_line })
-    }
-}
 
 fn main() -> Result<(), String> {
     let sdl_context = sdl2::init()?;

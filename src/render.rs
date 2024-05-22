@@ -1,4 +1,5 @@
 use std::cmp::Ordering;
+use std::path::Path;
 
 use sdl2::{
     event::Event,
@@ -83,6 +84,23 @@ pub fn render_texture_at<T: RenderTarget>(
     let render_rect = sdl2::rect::Rect::new(pos.x, pos.y, size.w, size.h);
     canvas.copy(texture, None, Some(render_rect))?;
     Ok(())
+}
+
+pub struct Sprites<'a> {
+    staff: sdl2::render::Texture<'a>,
+    note_head: sdl2::render::Texture<'a>,
+    ledger_line: sdl2::render::Texture<'a>,
+}
+
+impl<'a> Sprites<'a> {
+    pub fn init<T>(texture_creator: &'a sdl2::render::TextureCreator<T>) -> Result<Self, String> {
+        let png_dir = Path::new("src/assets/png");
+        let treble_staff = texture_creator.load_texture(&png_dir.join("treble_staff.png"))?;
+        let note_head = texture_creator.load_texture(&png_dir.join("WholeNote.png"))?;
+        let ledger_line = texture_creator.load_texture(&png_dir.join("ledger_line.png"))?;
+
+        Ok(Self { staff: treble_staff, note_head, ledger_line })
+    }
 }
 
 pub struct Position {
