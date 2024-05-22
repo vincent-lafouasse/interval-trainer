@@ -16,7 +16,7 @@ const BOTTOM_LINE_Y: i32 = 249;
 const N_MAX_LEDGER_LINES: u8 = 3;
 const TREBLE_BOTTOM_NOTE: Note = Note { name: NoteName::E, alteration: 0, octave: 4 };
 
-pub fn render_staff<T: RenderTarget>(
+pub fn render_empty_staff<T: RenderTarget>(
     staff: &sdl2::render::Texture,
     canvas: &mut sdl2::render::Canvas<T>,
 ) -> Result<(), String> {

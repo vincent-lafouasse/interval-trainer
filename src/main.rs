@@ -87,7 +87,7 @@ fn main() -> Result<(), String> {
 
         canvas.set_draw_color(WHITE);
         canvas.clear();
-        crate::render::render_staff(&sprites.staff, &mut canvas)?;
+        crate::render::render_empty_staff(&sprites.staff, &mut canvas)?;
 
         let left_x: i32 = 420;
         let right_x: i32 = 800;
