@@ -84,12 +84,7 @@ fn main() -> Result<(), String> {
         .map_err(|e| e.to_string())?;
 
     let texture_creator = canvas.texture_creator();
-
-    let png_dir = Path::new("src/assets/png");
-    let treble_staff = texture_creator.load_texture(&png_dir.join("treble_staff.png"))?;
-    let note_head = texture_creator.load_texture(&png_dir.join("WholeNote.png"))?;
-    let ledger_line = texture_creator.load_texture(&png_dir.join("ledger_line.png"))?;
-    let sprites = Sprites::init(&texture_creator);
+    let sprites = Sprites::init(&texture_creator)?;
 
     let (playback_tx, playback_rx): (Sender<()>, Receiver<()>) = mpsc::channel();
     let (pitch_detection_tx, pitch_detection_rx): (Sender<bool>, Receiver<bool>) = mpsc::channel();
@@ -153,8 +148,8 @@ fn main() -> Result<(), String> {
 
         canvas.set_draw_color(WHITE);
         canvas.clear();
-        render_staff(&treble_staff, &mut canvas)?;
-        render_note(cool_note, &note_head, &ledger_line, &mut canvas)?;
+        render_staff(&sprites.staff, &mut canvas)?;
+        render_note(cool_note, &sprites, &mut canvas)?;
         canvas.present();
     }
 

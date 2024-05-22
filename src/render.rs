@@ -28,8 +28,7 @@ pub fn render_staff<T: RenderTarget>(
 
 pub fn render_note<T: RenderTarget>(
     note: Note,
-    note_head: &sdl2::render::Texture,
-    ledger_line: &sdl2::render::Texture,
+    sprites: &Sprites,
     canvas: &mut sdl2::render::Canvas<T>,
 ) -> Result<(), String> {
     let staff_position: i32 = Note::diatonic_distance(TREBLE_BOTTOM_NOTE, note).into();
@@ -44,18 +43,18 @@ pub fn render_note<T: RenderTarget>(
     match ledgers {
         i32::MIN..=-1 => {
             for i in 1..=ledgers.abs() {
-                render_ledger_line(pos.x, -i, ledger_line, canvas)?;
+                render_ledger_line(pos.x, -i, &sprites.ledger_line, canvas)?;
             }
         }
         1..=i32::MAX => {
             for i in 1..=ledgers {
-                render_ledger_line(pos.x, i, ledger_line, canvas)?;
+                render_ledger_line(pos.x, i, &sprites.ledger_line, canvas)?;
             }
         }
         0 => {}
     }
 
-    render_texture_at(note_head, pos, canvas)
+    render_texture_at(&sprites.note_head, pos, canvas)
 }
 
 pub fn render_ledger_line<T: RenderTarget>(
@@ -87,9 +86,9 @@ pub fn render_texture_at<T: RenderTarget>(
 }
 
 pub struct Sprites<'a> {
-    staff: sdl2::render::Texture<'a>,
-    note_head: sdl2::render::Texture<'a>,
-    ledger_line: sdl2::render::Texture<'a>,
+    pub staff: sdl2::render::Texture<'a>,
+    pub note_head: sdl2::render::Texture<'a>,
+    pub ledger_line: sdl2::render::Texture<'a>,
 }
 
 impl<'a> Sprites<'a> {
