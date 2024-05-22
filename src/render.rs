@@ -6,7 +6,8 @@ use sdl2::{
     render::RenderTarget,
 };
 
-const STAFF_SPACING: u32 = 40;
+const HALF_SPACE: i32 = 20;
+const BOTTOM_LINE_Y: i32 = 249;
 
 pub fn render_staff<T: RenderTarget>(
     staff: &sdl2::render::Texture,
@@ -21,7 +22,7 @@ pub fn render_note<T: RenderTarget>(
     note_head: &sdl2::render::Texture,
     canvas: &mut sdl2::render::Canvas<T>,
 ) -> Result<(), String> {
-    let pos = Position { x: 420, y: 153 };
+    let pos = Position { x: 420, y: BOTTOM_LINE_Y };
 
     render_at(pos, note_head, canvas)
 }
