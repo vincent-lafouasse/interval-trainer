@@ -34,8 +34,26 @@ pub fn render_note<T: RenderTarget>(
     let staff_position: i32 = Note::diatonic_distance(TREBLE_BOTTOM_NOTE, note).into();
     let pos = Position { x: 420, y: BOTTOM_LINE_Y - staff_position * HALF_SPACE };
 
-    render_ledger_line(pos.x, 1, ledger_line, canvas)?;
-    render_ledger_line(pos.x, 2, ledger_line, canvas)?;
+    let ledgers = match staff_position {
+        i32::MIN..=-2 => staff_position / 2,
+        10..=i32::MAX => (staff_position - 8) / 2,
+        _ => 0,
+    };
+
+    match ledgers {
+        i32::MIN..=-1 => {
+            for i in 1..=ledgers.abs() {
+                render_ledger_line(pos.x, -i, ledger_line, canvas)?;
+            }
+        }
+        1..=i32::MAX => {
+            for i in 1..=ledgers {
+                render_ledger_line(pos.x, i, ledger_line, canvas)?;
+            }
+        }
+        0 => {}
+    }
+
     render_at(pos, note_head, canvas)
 }
 
