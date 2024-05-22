@@ -50,11 +50,16 @@ make_png_with_h() {
 	inkscape -h "$2" "$1" -o "${TARGET_DIR}/${base_name}".png
 }
 
+# 1000 -> 274
+# ?    -> 117 ?
+# 117 * 1000 / 274 = 427
+
 main() {
-	make_png_with_w "svg/from_lilypond/treble_staff.svg" 1000
-	make_png_with_h "svg/from_wikipedia/WholeNote.svg" "$NOTE_HEAD_HEIGHT"
-	make_png_with_h "svg/public_domain/Flat.svg" "$FLAT_SIGN_HEIGHT"
-	make_png_with_h "svg/public_domain/DoubleFlat.svg" "$FLAT_SIGN_HEIGHT"
+	# make_png_with_w "svg/from_lilypond/treble_staff.svg" 1000
+	# make_png_with_h "svg/from_wikipedia/WholeNote.svg" "$NOTE_HEAD_HEIGHT"
+	# make_png_with_h "svg/public_domain/Flat.svg" "$FLAT_SIGN_HEIGHT"
+	# make_png_with_h "svg/public_domain/DoubleFlat.svg" "$FLAT_SIGN_HEIGHT"
+	make_png_with_w "svg/from_lilypond/ledger_line.svg" 427
 }
 
 main
