@@ -40,6 +40,15 @@ impl Note {
         self.to_simple().get_i8() - other.to_simple().get_i8()
     }
 
+    // disgusting i know but there is no risk of panic
+    pub fn diatonic_distance_up_from(&self, other: Note) -> i8 {
+        if self.octave == other.octave {
+            return <u8 as TryInto<i8>>::try_into(u8::from(self.name)).unwrap()
+                - <u8 as TryInto<i8>>::try_into(u8::from(other.name)).unwrap();
+        }
+        todo!()
+    }
+
     pub fn to_simple(self) -> SimpleNote {
         SimpleNote {
             data: 12 * (self.octave + 1) + self.name.semitones_from_c() as i8 + self.alteration,
