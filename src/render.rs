@@ -6,6 +6,8 @@ use sdl2::{
     render::RenderTarget,
 };
 
+use crate::notes::Note;
+
 const HALF_SPACE: i32 = 20;
 const BOTTOM_LINE_Y: i32 = 249;
 const N_MAX_LEDGER_LINES: u8 = 3;
@@ -19,11 +21,15 @@ pub fn render_staff<T: RenderTarget>(
     render_at(pos, staff, canvas)
 }
 
+type StaffPosition = i8;
+
 pub fn render_note<T: RenderTarget>(
+    note: Note,
     note_head: &sdl2::render::Texture,
     canvas: &mut sdl2::render::Canvas<T>,
 ) -> Result<(), String> {
-    let pos = Position { x: 420, y: BOTTOM_LINE_Y };
+    let staff_position = 2;
+    let pos = Position { x: 420, y: BOTTOM_LINE_Y - staff_position * HALF_SPACE };
 
     render_at(pos, note_head, canvas)
 }
