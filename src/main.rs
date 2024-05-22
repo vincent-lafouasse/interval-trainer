@@ -160,7 +160,10 @@ fn render_staff<T: RenderTarget>(
     staff: &sdl2::render::Texture,
     canvas: &mut sdl2::render::Canvas<T>,
 ) -> Result<(), String> {
-    canvas.copy(staff, None, None)?;
+    let size = Dimension { w: staff.query().width, h: staff.query().height };
+    let pos = Position { x: 0, y: 0 };
+    let render_rect = sdl2::rect::Rect::new(pos.x, pos.y, size.w, size.h);
+    canvas.copy(staff, None, Some(render_rect))?;
     Ok(())
 }
 
