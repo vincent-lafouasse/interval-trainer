@@ -30,13 +30,13 @@ impl Note {
 
         let name: NoteName = NoteName::try_from(new_notename % 7).unwrap();
         let octave: i8 = self.octave + octave_shift;
-        let alteration: i8 =
-            interval.size_i8() - Note { name, alteration: 0, octave }.distance_up_from(*self);
+        let alteration: i8 = interval.size_i8()
+            - Note { name, alteration: 0, octave }.chromatic_distance_up_from(*self);
 
         Note { name, alteration, octave }
     }
 
-    pub fn distance_up_from(&self, other: Note) -> i8 {
+    pub fn chromatic_distance_up_from(&self, other: Note) -> i8 {
         self.to_simple().get_i8() - other.to_simple().get_i8()
     }
 
