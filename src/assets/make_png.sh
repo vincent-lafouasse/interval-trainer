@@ -2,6 +2,13 @@
 
 TARGET_DIR="./png"
 
+# measured in a lilypond output file
+# it's ugly and hardcoded but it should work
+
+# in pts
+NOTE_HEAD_HEIGHT=44
+FLAT_SIGN_HEIGHT=100
+
 die() {
 	>&2 echo "$1"
 	exit 1
@@ -43,7 +50,9 @@ make_png_with_h() {
 
 main() {
 	make_png_with_w "svg/from_lilypond/treble_staff.svg" 1000
-	make_png_with_h "svg/from_wikipedia/WholeNote.svg" 44
+	make_png_with_h "svg/from_wikipedia/WholeNote.svg" "$NOTE_HEAD_HEIGHT"
+	make_png_with_h "svg/public_domain/Flat.svg" "$FLAT_SIGN_HEIGHT"
+	make_png_with_h "svg/public_domain/DoubleFlat.svg" "$FLAT_SIGN_HEIGHT"
 }
 
 main
