@@ -10,11 +10,9 @@ pub fn render_staff<T: RenderTarget>(
     staff: &sdl2::render::Texture,
     canvas: &mut sdl2::render::Canvas<T>,
 ) -> Result<(), String> {
-    let size = Dimension { w: staff.query().width, h: staff.query().height };
     let pos = Position { x: 0, y: 0 };
-    let render_rect = sdl2::rect::Rect::new(pos.x, pos.y, size.w, size.h);
-    canvas.copy(staff, None, Some(render_rect))?;
-    Ok(())
+
+    render_at(pos, staff, canvas)
 }
 
 pub fn render_note<T: RenderTarget>(
@@ -23,17 +21,17 @@ pub fn render_note<T: RenderTarget>(
 ) -> Result<(), String> {
     let pos = Position { x: 420, y: 69 };
 
-    render_note_at(pos, note_head, canvas)
+    render_at(pos, note_head, canvas)
 }
 
-pub fn render_note_at<T: RenderTarget>(
+pub fn render_at<T: RenderTarget>(
     pos: Position,
-    note_head: &sdl2::render::Texture,
+    texture: &sdl2::render::Texture,
     canvas: &mut sdl2::render::Canvas<T>,
 ) -> Result<(), String> {
-    let size = Dimension { w: note_head.query().width, h: note_head.query().height };
+    let size = Dimension { w: texture.query().width, h: texture.query().height };
     let render_rect = sdl2::rect::Rect::new(pos.x, pos.y, size.w, size.h);
-    canvas.copy(note_head, None, Some(render_rect))?;
+    canvas.copy(texture, None, Some(render_rect))?;
     Ok(())
 }
 
