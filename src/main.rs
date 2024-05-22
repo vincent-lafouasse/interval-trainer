@@ -54,7 +54,6 @@ enum Scene {
     Idle,
     PlayingSound(Note, Note),
     Listening(Note, Note),
-    Concluding,
 }
 
 const WHITE: Color = Color::RGB(255, 255, 255);
@@ -135,12 +134,11 @@ fn main() -> Result<(), String> {
                 Ok(true) => {
                     crate::play_wav::play_ding_in_thread();
                     println!("gg");
-                    std::thread::sleep(Duration::from_millis(300));
-                    break 'mainloop;
+                    trainer.scene = Scene::Idle;
                 }
                 Ok(false) => {
                     println!("womp womp");
-                    break 'mainloop;
+                    trainer.scene = Scene::Idle;
                 }
                 Err(_) => {}
             }
