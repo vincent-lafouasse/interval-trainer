@@ -8,6 +8,7 @@ mod interval;
 mod listen;
 mod note_range;
 mod notes;
+mod render;
 mod simple_note;
 mod synth;
 mod wavetables;
@@ -33,6 +34,7 @@ use crate::{
     listen::listen_for_note_in_thread,
     note_range::NoteRange,
     notes::Note,
+    render::{render_note, render_staff},
     simple_note::SimpleNote,
     synth::play_notes_in_thread,
 };
@@ -156,28 +158,6 @@ fn main() -> Result<(), String> {
     Ok(())
 }
 
-fn render_staff<T: RenderTarget>(
-    staff: &sdl2::render::Texture,
-    canvas: &mut sdl2::render::Canvas<T>,
-) -> Result<(), String> {
-    let size = Dimension { w: staff.query().width, h: staff.query().height };
-    let pos = Position { x: 0, y: 0 };
-    let render_rect = sdl2::rect::Rect::new(pos.x, pos.y, size.w, size.h);
-    canvas.copy(staff, None, Some(render_rect))?;
-    Ok(())
-}
-
-fn render_note<T: RenderTarget>(
-    note_head: &sdl2::render::Texture,
-    canvas: &mut sdl2::render::Canvas<T>,
-) -> Result<(), String> {
-    let size = Dimension { w: note_head.query().width, h: note_head.query().height };
-    let pos = Position { x: 420, y: 69 };
-    let render_rect = sdl2::rect::Rect::new(pos.x, pos.y, size.w, size.h);
-    canvas.copy(note_head, None, Some(render_rect))?;
-    Ok(())
-}
-
 fn choose_notes(range: &NoteRange) -> (Note, Note) {
     let interval = Interval::get_random_diatonic();
     let direction = Direction::Up;
@@ -189,16 +169,6 @@ fn choose_notes(range: &NoteRange) -> (Note, Note) {
 
     let reference = new_range.rand();
     (reference, reference.up(interval))
-}
-
-struct Position {
-    x: i32,
-    y: i32,
-}
-
-struct Dimension {
-    w: u32,
-    h: u32,
 }
 
 fn print_type_of<T>(_: &T) {
