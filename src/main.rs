@@ -128,7 +128,7 @@ fn main() -> Result<(), String> {
     let (playback_tx, playback_rx): (Sender<()>, Receiver<()>) = mpsc::channel();
     let (pitch_detection_tx, pitch_detection_rx): (Sender<bool>, Receiver<bool>) = mpsc::channel();
 
-    let mut trainer = IntervalTrainer::init(NoteRange::tenor_voice());
+    let mut trainer = IntervalTrainer::init(NoteRange::treble_staff());
 
     // let cool_note = Note::parse_from_string("F3")?;
 

@@ -61,6 +61,10 @@ impl NoteRange {
     pub fn tenor_voice() -> Self {
         Self::from_str("Bb2", "G4").unwrap()
     }
+
+    pub fn treble_staff() -> Self {
+        Self::from_str("E3", "F6").unwrap()
+    }
 }
 
 impl fmt::Display for NoteRange {
