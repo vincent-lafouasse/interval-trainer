@@ -57,6 +57,11 @@ enum Scene {
     Concluding,
 }
 
+struct Sprites {
+    treble_staff: sdl2::render::Texture<'static>,
+    note_head: sdl2::render::Texture<'static>,
+}
+
 const WHITE: Color = Color::RGB(255, 255, 255);
 
 const WINDOW_WIDTH: u32 = 1000;
@@ -65,9 +70,6 @@ const WINDOW_HEIGHT: u32 = 400;
 const SAMPLE_RATE: u16 = 44_100;
 
 fn main() -> Result<(), String> {
-    let png_dir = Path::new("src/assets/png");
-    let empty_treble_staff_path = png_dir.join("treble_staff.png");
-
     let sdl_context = sdl2::init()?;
     let video_subsystem = sdl_context.video()?;
     let _image_context = sdl2::image::init(InitFlag::PNG)?;
@@ -85,7 +87,13 @@ fn main() -> Result<(), String> {
         .map_err(|e| e.to_string())?;
 
     let texture_creator = canvas.texture_creator();
-    let empty_treble_staff = texture_creator.load_texture(empty_treble_staff_path)?;
+    let png_dir = Path::new("src/assets/png");
+    let treble_staff_path = png_dir.join("treble_staff.png");
+    let notehead_path = png_dir.join("WholeNote.png");
+    let sprites = Sprites {
+        treble_staff: texture_creator.load_texture(&treble_staff_path)?,
+        note_head: texture_creator.load_texture(&notehead_path)?,
+    };
 
     let (playback_tx, playback_rx): (Sender<()>, Receiver<()>) = mpsc::channel();
     let (pitch_detection_tx, pitch_detection_rx): (Sender<bool>, Receiver<bool>) = mpsc::channel();
@@ -145,9 +153,10 @@ fn main() -> Result<(), String> {
             }
         }
 
-        render_staff(&empty_treble_staff, &mut canvas)?;
         canvas.present();
     }
+
+    drop(sprites);
 
     Ok(())
 }
