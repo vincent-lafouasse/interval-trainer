@@ -1,4 +1,4 @@
-use crate::{notes::Note, simple_note::SimpleNote};
+use crate::music::{note::Note, simple_note::SimpleNote};
 
 use rand::Rng;
 use std::fmt;

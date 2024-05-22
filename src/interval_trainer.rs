@@ -5,10 +5,10 @@ use std::{
     time::Duration,
 };
 
-use crate::{
+use crate::music::{
     interval::{Direction, Interval},
+    note::Note,
     note_range::NoteRange,
-    notes::Note,
     simple_note::SimpleNote,
 };
 

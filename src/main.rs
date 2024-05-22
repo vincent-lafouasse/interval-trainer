@@ -4,14 +4,11 @@
 
 //! # A cool ear trainer
 
-mod interval;
 mod interval_trainer;
 mod listen;
-mod note_range;
-mod notes;
+mod music;
 mod play_wav;
 mod render;
-mod simple_note;
 mod synth;
 mod wavetables;
 
@@ -31,12 +28,14 @@ use sdl2::{
 };
 
 use crate::{
-    interval::{Direction, Interval},
     interval_trainer::{IntervalTrainer, Scene},
-    note_range::NoteRange,
-    notes::Note,
+    music::{
+        interval::{Direction, Interval},
+        note::Note,
+        note_range::NoteRange,
+        simple_note::SimpleNote,
+    },
     render::Sprites,
-    simple_note::SimpleNote,
 };
 
 const WHITE: Color = Color::RGB(255, 255, 255);

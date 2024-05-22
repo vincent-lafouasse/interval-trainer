@@ -9,8 +9,7 @@ use sdl2::{
     render::RenderTarget,
 };
 
-use crate::notes::Note;
-use crate::notes::NoteName;
+use crate::music::note::{Note, NoteName};
 
 const HALF_SPACE: i32 = 20;
 const BOTTOM_LINE_Y: i32 = 249;

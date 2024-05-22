@@ -2,7 +2,7 @@ use int_enum::IntEnum;
 use std::cmp::Ordering;
 use std::fmt;
 
-use crate::{interval::Interval, simple_note::SimpleNote};
+use crate::music::{interval::Interval, simple_note::SimpleNote};
 
 #[derive(Debug, Copy, Clone)]
 pub struct Note {

@@ -1,6 +1,6 @@
 use std::fmt;
 
-use crate::notes::{Note, NoteName};
+use crate::music::note::{Note, NoteName};
 use rand::Rng;
 
 #[derive(Debug, PartialEq, PartialOrd, Copy, Clone)]
