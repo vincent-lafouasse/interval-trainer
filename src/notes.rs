@@ -44,6 +44,13 @@ impl Note {
         if self.octave == other.octave {
             return NoteName::diatonic_distance(other.name, self.name);
         }
+        if self.octave > other.octave {
+            let octave_difference = self.octave - other.octave;
+            return 7 * (octave_difference - 1)
+                + 1
+                + NoteName::diatonic_distance(other.name, NoteName::B)
+                + NoteName::diatonic_distance(NoteName::C, self.name);
+        }
         todo!()
     }
 
