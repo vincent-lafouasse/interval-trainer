@@ -97,7 +97,7 @@ fn main() -> Result<(), String> {
                 Event::Quit { .. }
                 | Event::KeyDown { keycode: Option::Some(Keycode::Escape), .. } => break 'mainloop,
                 Event::KeyDown { keycode: Option::Some(Keycode::A), .. } => {
-                    if matches!(trainer.scene, Scene::Idle) {
+                    if let Scene::Idle = trainer.scene {
                         let (reference, mystery_note) = choose_notes(&trainer.range);
                         let note_length = Duration::from_millis(1000);
                         crate::synth::play_notes_in_thread(
