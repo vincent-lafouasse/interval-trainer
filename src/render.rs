@@ -43,6 +43,7 @@ pub fn render_ledger_line<T: RenderTarget>(
     canvas: &mut sdl2::render::Canvas<T>,
 ) -> Result<(), String> {
     let pos = Position { x, y: BOTTOM_LINE_Y - staff_position * HALF_SPACE };
+    let pos = Position { x: pos.x - 22, y: pos.y + 17 };
 
     render_at(pos, ledger_line, canvas)
 }
