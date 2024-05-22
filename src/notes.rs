@@ -40,11 +40,9 @@ impl Note {
         self.to_simple().get_i8() - other.to_simple().get_i8()
     }
 
-    // disgusting i know but there is no risk of panic
     pub fn diatonic_distance_up_from(&self, other: Note) -> i8 {
         if self.octave == other.octave {
-            return <u8 as TryInto<i8>>::try_into(u8::from(self.name)).unwrap()
-                - <u8 as TryInto<i8>>::try_into(u8::from(other.name)).unwrap();
+            return NoteName::diatonic_distance(other.name, self.name);
         }
         todo!()
     }
@@ -125,6 +123,12 @@ impl NoteName {
             NoteName::A => 9,
             NoteName::B => 11,
         }
+    }
+
+    // disgusting i know but there is no risk of panic
+    pub fn diatonic_distance(from: Self, to: Self) -> i8 {
+        <u8 as TryInto<i8>>::try_into(u8::from(to)).unwrap()
+            - <u8 as TryInto<i8>>::try_into(u8::from(from)).unwrap()
     }
 }
 
