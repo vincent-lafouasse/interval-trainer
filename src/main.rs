@@ -168,7 +168,10 @@ fn render_note<T: RenderTarget>(
     note_head: &sdl2::render::Texture,
     canvas: &mut sdl2::render::Canvas<T>,
 ) -> Result<(), String> {
-    canvas.copy(note_head, None, None)?;
+    let size = Dimension { w: note_head.query().width, h: note_head.query().height };
+    let pos = Position { x: 420, y: 69 };
+    let render_rect = sdl2::rect::Rect::new(pos.x, pos.y, size.w, size.h);
+    canvas.copy(note_head, None, Some(render_rect))?;
     Ok(())
 }
 
@@ -186,13 +189,13 @@ fn choose_notes(range: &NoteRange) -> (Note, Note) {
 }
 
 struct Position {
-    x: u16,
-    y: u16,
+    x: i32,
+    y: i32,
 }
 
 struct Dimension {
-    w: u16,
-    h: u16,
+    w: u32,
+    h: u32,
 }
 
 fn print_type_of<T>(_: &T) {
