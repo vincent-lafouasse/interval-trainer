@@ -94,7 +94,7 @@ fn main() -> Result<(), String> {
 
     let mut trainer = IntervalTrainer::init(NoteRange::tenor_voice());
 
-    let cool_note = Note::parse_from_string("G5")?;
+    let cool_note = Note::parse_from_string("C4")?;
 
     'mainloop: loop {
         for event in sdl_context.event_pump()?.poll_iter() {
@@ -152,7 +152,7 @@ fn main() -> Result<(), String> {
         canvas.set_draw_color(WHITE);
         canvas.clear();
         render_staff(&treble_staff, &mut canvas)?;
-        render_note(cool_note, &note_head, &mut canvas)?;
+        render_note(cool_note, &note_head, &ledger_line, &mut canvas)?;
         canvas.present();
     }
 
