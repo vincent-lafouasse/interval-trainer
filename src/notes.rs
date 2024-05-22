@@ -166,11 +166,31 @@ mod tests {
     const A4: Note = Note { name: NoteName::A, alteration: 0, octave: 4 };
     const B4: Note = Note { name: NoteName::B, alteration: 0, octave: 4 };
 
+    const C5: Note = Note { name: NoteName::C, alteration: 0, octave: 5 };
+    const D5: Note = Note { name: NoteName::D, alteration: 0, octave: 5 };
+    const A5: Note = Note { name: NoteName::A, alteration: 0, octave: 5 };
+    const B5: Note = Note { name: NoteName::B, alteration: 0, octave: 5 };
+
+    const C6: Note = Note { name: NoteName::C, alteration: 0, octave: 6 };
+    const D6: Note = Note { name: NoteName::D, alteration: 0, octave: 6 };
+    const A6: Note = Note { name: NoteName::A, alteration: 0, octave: 6 };
+    const B6: Note = Note { name: NoteName::B, alteration: 0, octave: 6 };
+
     #[test]
     fn diatonic_distance_same_octave() {
         assert_eq!(C4.diatonic_distance_up_from(A4), -5);
         assert_eq!(A4.diatonic_distance_up_from(C4), 5);
         assert_eq!(D4.diatonic_distance_up_from(C4), 1);
         assert_eq!(D4.diatonic_distance_up_from(B4), -5);
+    }
+
+    #[test]
+    fn diatonic_distance_octave_up() {
+        assert_eq!(C5.diatonic_distance_up_from(A4), 2);
+        assert_eq!(A5.diatonic_distance_up_from(C4), 5 + 7);
+        assert_eq!(A6.diatonic_distance_up_from(C4), 5 + 7 + 7);
+        assert_eq!(D5.diatonic_distance_up_from(C4), 1 + 7);
+        assert_eq!(D6.diatonic_distance_up_from(C4), 1 + 7 + 7);
+        assert_eq!(B6.diatonic_distance_up_from(C4), 6 + 7 + 7);
     }
 }
