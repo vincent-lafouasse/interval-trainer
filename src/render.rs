@@ -22,7 +22,7 @@ pub fn render_staff<T: RenderTarget>(
 ) -> Result<(), String> {
     let pos = Position { x: 0, y: 0 };
 
-    render_at(pos, staff, canvas)
+    render_texture_at(staff, pos, canvas)
 }
 
 pub fn render_note<T: RenderTarget>(
@@ -54,7 +54,7 @@ pub fn render_note<T: RenderTarget>(
         0 => {}
     }
 
-    render_at(pos, note_head, canvas)
+    render_texture_at(note_head, pos, canvas)
 }
 
 pub fn render_ledger_line<T: RenderTarget>(
@@ -71,12 +71,12 @@ pub fn render_ledger_line<T: RenderTarget>(
     let pos = Position { x, y: BOTTOM_LINE_Y - staff_position * HALF_SPACE };
     let pos = Position { x: pos.x - 22, y: pos.y + 17 };
 
-    render_at(pos, ledger_line, canvas)
+    render_texture_at(ledger_line, pos, canvas)
 }
 
-pub fn render_at<T: RenderTarget>(
-    pos: Position,
+pub fn render_texture_at<T: RenderTarget>(
     texture: &sdl2::render::Texture,
+    pos: Position,
     canvas: &mut sdl2::render::Canvas<T>,
 ) -> Result<(), String> {
     let size = Dimension { w: texture.query().width, h: texture.query().height };
