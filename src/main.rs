@@ -57,11 +57,6 @@ enum Scene {
     Concluding,
 }
 
-struct Sprites {
-    treble_staff: sdl2::render::Texture<'static>,
-    note_head: sdl2::render::Texture<'static>,
-}
-
 const WHITE: Color = Color::RGB(255, 255, 255);
 
 const WINDOW_WIDTH: u32 = 1000;
@@ -90,10 +85,8 @@ fn main() -> Result<(), String> {
     let png_dir = Path::new("src/assets/png");
     let treble_staff_path = png_dir.join("treble_staff.png");
     let notehead_path = png_dir.join("WholeNote.png");
-    let sprites = Sprites {
-        treble_staff: texture_creator.load_texture(&treble_staff_path)?,
-        note_head: texture_creator.load_texture(&notehead_path)?,
-    };
+    let treble_staff = texture_creator.load_texture(&treble_staff_path)?;
+    let note_head = texture_creator.load_texture(&notehead_path)?;
 
     let (playback_tx, playback_rx): (Sender<()>, Receiver<()>) = mpsc::channel();
     let (pitch_detection_tx, pitch_detection_rx): (Sender<bool>, Receiver<bool>) = mpsc::channel();
@@ -153,21 +146,29 @@ fn main() -> Result<(), String> {
             }
         }
 
+        canvas.set_draw_color(WHITE);
+        canvas.clear();
+        render_staff(&treble_staff, &mut canvas)?;
+        render_note(&note_head, &mut canvas)?;
         canvas.present();
     }
-
-    drop(sprites);
 
     Ok(())
 }
 
 fn render_staff<T: RenderTarget>(
-    staff_sprite: &sdl2::render::Texture,
+    staff: &sdl2::render::Texture,
     canvas: &mut sdl2::render::Canvas<T>,
 ) -> Result<(), String> {
-    canvas.set_draw_color(WHITE);
-    canvas.clear();
-    canvas.copy(staff_sprite, None, None)?;
+    canvas.copy(staff, None, None)?;
+    Ok(())
+}
+
+fn render_note<T: RenderTarget>(
+    note_head: &sdl2::render::Texture,
+    canvas: &mut sdl2::render::Canvas<T>,
+) -> Result<(), String> {
+    canvas.copy(note_head, None, None)?;
     Ok(())
 }
 
