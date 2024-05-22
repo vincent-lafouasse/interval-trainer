@@ -156,3 +156,21 @@ impl fmt::Display for Note {
         write!(f, "{}{}{}", self.name, alteration_repr, self.octave)
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    const C4: Note = Note { name: NoteName::C, alteration: 0, octave: 4 };
+    const D4: Note = Note { name: NoteName::D, alteration: 0, octave: 4 };
+    const A4: Note = Note { name: NoteName::A, alteration: 0, octave: 4 };
+    const B4: Note = Note { name: NoteName::B, alteration: 0, octave: 4 };
+
+    #[test]
+    fn diatonic_distance_same_octave() {
+        assert_eq!(C4.diatonic_distance_up_from(A4), -5);
+        assert_eq!(A4.diatonic_distance_up_from(C4), 5);
+        assert_eq!(D4.diatonic_distance_up_from(C4), 1);
+        assert_eq!(D4.diatonic_distance_up_from(B4), -5);
+    }
+}
