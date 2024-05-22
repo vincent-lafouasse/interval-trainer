@@ -54,6 +54,10 @@ impl IntervalTrainer {
         audio::play_sample::play_ding_in_thread();
     }
 
+    pub fn bad_ding(&self) {
+        audio::play_sample::play_wrong_sound_effect_in_thread();
+    }
+
     fn choose_notes(&self) -> (Note, Note) {
         let interval = Interval::get_random_diatonic();
         let direction = Direction::Up;

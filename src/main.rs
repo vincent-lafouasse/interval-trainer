@@ -106,6 +106,8 @@ fn main() -> Result<(), String> {
                     trainer.scene = Scene::Concluding(reference, mystery_note);
                 }
                 Ok(false) => {
+                    // bad indeed, it crashes everything
+                    // trainer.bad_ding();
                     trainer.scene = Scene::Concluding(reference, mystery_note);
                 }
                 Err(_) => {}
