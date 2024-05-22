@@ -14,7 +14,6 @@ pub fn play_notes(n1: Note, n2: Note, note_length: Duration, sample_rate: u16) {
     let synth = WavetableSynth::new(SQUARE8_WAVETABLE, sample_rate);
     let (_stream, stream_handle) = OutputStream::try_default().unwrap();
 
-    // synth needs refactoring to take a Duration instead of a u64
     synth.play(n1.frequency(), note_length, &stream_handle);
     sleep(Duration::from_secs(1));
     synth.play(n2.frequency(), note_length, &stream_handle);
