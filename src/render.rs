@@ -28,11 +28,12 @@ pub fn render_staff<T: RenderTarget>(
 
 pub fn render_note<T: RenderTarget>(
     note: Note,
+    x: i32,
     sprites: &Sprites,
     canvas: &mut sdl2::render::Canvas<T>,
 ) -> Result<(), String> {
     let staff_position: i32 = Note::diatonic_distance(TREBLE_BOTTOM_NOTE, note).into();
-    let pos = Position { x: 420, y: BOTTOM_LINE_Y - staff_position * HALF_SPACE };
+    let pos = Position { x, y: BOTTOM_LINE_Y - staff_position * HALF_SPACE };
 
     let ledgers = match staff_position {
         i32::MIN..=-2 => staff_position / 2,
@@ -100,6 +101,11 @@ impl<'a> Sprites<'a> {
 
         Ok(Self { staff: treble_staff, note_head, ledger_line })
     }
+}
+
+pub enum Side {
+    Right,
+    Left,
 }
 
 pub struct Position {

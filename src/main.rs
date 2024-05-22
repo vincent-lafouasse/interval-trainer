@@ -54,6 +54,7 @@ enum Scene {
     Idle,
     PlayingSound(Note, Note),
     Listening(Note, Note),
+    Concluding(Note, Note),
 }
 
 const WHITE: Color = Color::RGB(255, 255, 255);
@@ -96,6 +97,9 @@ fn main() -> Result<(), String> {
                 Event::Quit { .. }
                 | Event::KeyDown { keycode: Option::Some(Keycode::Escape), .. } => break 'mainloop,
                 Event::KeyDown { keycode: Option::Some(Keycode::A), .. } => {
+                    if let Scene::Concluding(_, _) = trainer.scene {
+                        trainer.scene = Scene::Idle;
+                    }
                     if let Scene::Idle = trainer.scene {
                         let (reference, mystery_note) = choose_notes(&trainer.range);
                         let note_length = Duration::from_millis(1000);
@@ -117,8 +121,11 @@ fn main() -> Result<(), String> {
         canvas.clear();
         crate::render::render_staff(&sprites.staff, &mut canvas)?;
 
+        let left_x: i32 = 420;
+        let right_x: i32 = 800;
+
         if let Scene::PlayingSound(reference, mystery_note) = trainer.scene {
-            crate::render::render_note(reference, &sprites, &mut canvas)?;
+            crate::render::render_note(reference, left_x, &sprites, &mut canvas)?;
             match playback_rx.try_recv() {
                 Ok(()) => {
                     let detection_duration = Duration::from_millis(1500);
@@ -135,20 +142,26 @@ fn main() -> Result<(), String> {
         }
 
         if let Scene::Listening(reference, mystery_note) = trainer.scene {
-            crate::render::render_note(reference, &sprites, &mut canvas)?;
+            crate::render::render_note(reference, left_x, &sprites, &mut canvas)?;
             match pitch_detection_rx.try_recv() {
                 Ok(true) => {
                     crate::play_wav::play_ding_in_thread();
                     println!("gg");
-                    trainer.scene = Scene::Idle;
+                    trainer.scene = Scene::Concluding(reference, mystery_note);
                 }
                 Ok(false) => {
                     println!("womp womp");
-                    trainer.scene = Scene::Idle;
+                    trainer.scene = Scene::Concluding(reference, mystery_note);
                 }
                 Err(_) => {}
             }
         }
+
+        if let Scene::Concluding(reference, mystery_note) = trainer.scene {
+            crate::render::render_note(reference, left_x, &sprites, &mut canvas)?;
+            crate::render::render_note(mystery_note, right_x, &sprites, &mut canvas)?;
+        }
+
         canvas.present();
     }
 
