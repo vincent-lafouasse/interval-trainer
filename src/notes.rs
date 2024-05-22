@@ -42,11 +42,6 @@ impl Note {
     }
 
     pub fn diatonic_distance(from: Note, to: Note) -> i8 {
-        if to.octave == from.octave {
-            return NoteName::diatonic_distance(from.name, to.name);
-        }
-        if to.octave > from.octave {}
-
         match from.octave.cmp(&to.octave) {
             Ordering::Equal => NoteName::diatonic_distance(from.name, to.name),
             Ordering::Greater => {
