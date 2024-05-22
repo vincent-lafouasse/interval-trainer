@@ -21,19 +21,28 @@ pub fn render_note<T: RenderTarget>(
     note_head: &sdl2::render::Texture,
     canvas: &mut sdl2::render::Canvas<T>,
 ) -> Result<(), String> {
-    let size = Dimension { w: note_head.query().width, h: note_head.query().height };
     let pos = Position { x: 420, y: 69 };
+
+    render_note_at(pos, note_head, canvas)
+}
+
+pub fn render_note_at<T: RenderTarget>(
+    pos: Position,
+    note_head: &sdl2::render::Texture,
+    canvas: &mut sdl2::render::Canvas<T>,
+) -> Result<(), String> {
+    let size = Dimension { w: note_head.query().width, h: note_head.query().height };
     let render_rect = sdl2::rect::Rect::new(pos.x, pos.y, size.w, size.h);
     canvas.copy(note_head, None, Some(render_rect))?;
     Ok(())
 }
 
-struct Position {
+pub struct Position {
     x: i32,
     y: i32,
 }
 
-struct Dimension {
+pub struct Dimension {
     w: u32,
     h: u32,
 }
