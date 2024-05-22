@@ -35,8 +35,6 @@ use crate::{
     render::Sprites,
 };
 
-const WHITE: Color = Color::RGB(255, 255, 255);
-
 const WINDOW_WIDTH: u32 = 1000;
 const WINDOW_HEIGHT: u32 = 400;
 
@@ -85,15 +83,12 @@ fn main() -> Result<(), String> {
             }
         }
 
-        canvas.set_draw_color(WHITE);
-        canvas.clear();
-        crate::render::render_empty_staff(&sprites.staff, &mut canvas)?;
-
-        let left_x: i32 = 420;
-        let right_x: i32 = 800;
+        if let Scene::Idle = trainer.scene {
+            render::render_staff(None, None, &sprites, &mut canvas)?;
+        }
 
         if let Scene::PlayingSound(reference, mystery_note) = trainer.scene {
-            crate::render::render_note(reference, left_x, &sprites, &mut canvas)?;
+            render::render_staff(Some(reference), None, &sprites, &mut canvas)?;
             match playback_rx.try_recv() {
                 Ok(()) => {
                     trainer.listen_for(mystery_note, pitch_detection_tx.clone());
@@ -104,7 +99,7 @@ fn main() -> Result<(), String> {
         }
 
         if let Scene::Listening(reference, mystery_note) = trainer.scene {
-            crate::render::render_note(reference, left_x, &sprites, &mut canvas)?;
+            render::render_staff(Some(reference), None, &sprites, &mut canvas)?;
             match pitch_detection_rx.try_recv() {
                 Ok(true) => {
                     trainer.ding();
@@ -118,8 +113,7 @@ fn main() -> Result<(), String> {
         }
 
         if let Scene::Concluding(reference, mystery_note) = trainer.scene {
-            crate::render::render_note(reference, left_x, &sprites, &mut canvas)?;
-            crate::render::render_note(mystery_note, right_x, &sprites, &mut canvas)?;
+            render::render_staff(Some(reference), Some(mystery_note), &sprites, &mut canvas)?;
         }
 
         canvas.present();

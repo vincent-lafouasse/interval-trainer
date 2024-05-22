@@ -16,6 +16,32 @@ const BOTTOM_LINE_Y: i32 = 249;
 const N_MAX_LEDGER_LINES: u8 = 3;
 const TREBLE_BOTTOM_NOTE: Note = Note { name: NoteName::E, alteration: 0, octave: 4 };
 
+const WHITE: Color = Color::RGB(255, 255, 255);
+
+const LEFT_X: i32 = 420;
+const RIGHT_X: i32 = 800;
+
+pub fn render_staff<T: RenderTarget>(
+    note1: Option<Note>,
+    note2: Option<Note>,
+    sprites: &Sprites,
+    canvas: &mut sdl2::render::Canvas<T>,
+) -> Result<(), String> {
+    canvas.set_draw_color(WHITE);
+    canvas.clear();
+    render_empty_staff(&sprites.staff, canvas)?;
+
+    if let Some(note) = note1 {
+        render_note(note, LEFT_X, sprites, canvas)?;
+    }
+
+    if let Some(note) = note2 {
+        render_note(note, RIGHT_X, sprites, canvas)?;
+    }
+
+    Ok(())
+}
+
 pub fn render_empty_staff<T: RenderTarget>(
     staff: &sdl2::render::Texture,
     canvas: &mut sdl2::render::Canvas<T>,
