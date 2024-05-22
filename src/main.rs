@@ -185,6 +185,16 @@ fn choose_notes(range: &NoteRange) -> (Note, Note) {
     (reference, reference.up(interval))
 }
 
+struct Position {
+    x: u16,
+    y: u16,
+}
+
+struct Dimension {
+    w: u16,
+    h: u16,
+}
+
 fn print_type_of<T>(_: &T) {
     println!("{}", std::any::type_name::<T>())
 }
