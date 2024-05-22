@@ -15,7 +15,6 @@ mod synth;
 mod wavetables;
 
 use std::{
-    path::Path,
     sync::mpsc,
     sync::mpsc::{Receiver, Sender},
     thread,
@@ -32,12 +31,10 @@ use sdl2::{
 
 use crate::{
     interval::{Direction, Interval},
-    listen::listen_for_note_in_thread,
     note_range::NoteRange,
     notes::Note,
-    render::{render_note, render_staff, Sprites},
+    render::Sprites,
     simple_note::SimpleNote,
-    synth::play_notes_in_thread,
 };
 
 struct IntervalTrainer {
@@ -121,7 +118,7 @@ fn main() -> Result<(), String> {
             match playback_rx.try_recv() {
                 Ok(()) => {
                     let detection_duration = Duration::from_millis(1500);
-                    listen_for_note_in_thread(
+                    crate::listen::listen_for_note_in_thread(
                         mystery_note.to_simple(),
                         detection_duration,
                         SAMPLE_RATE,
@@ -151,8 +148,8 @@ fn main() -> Result<(), String> {
 
         canvas.set_draw_color(WHITE);
         canvas.clear();
-        render_staff(&sprites.staff, &mut canvas)?;
-        render_note(cool_note, &sprites, &mut canvas)?;
+        crate::render::render_staff(&sprites.staff, &mut canvas)?;
+        crate::render::render_note(cool_note, &sprites, &mut canvas)?;
         canvas.present();
     }
 
