@@ -6,7 +6,7 @@ use rodio::source::Source;
 use rodio::{OutputStream, OutputStreamHandle, Sink};
 
 use crate::music::note::Note;
-use crate::wavetables::*;
+use crate::synth::wavetables::*;
 
 static SQUARE8: Wavetable = Wavetable::square8();
 

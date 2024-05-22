@@ -10,7 +10,6 @@ mod music;
 mod play_wav;
 mod render;
 mod synth;
-mod wavetables;
 
 use std::{
     sync::mpsc,
