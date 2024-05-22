@@ -61,6 +61,20 @@ impl IntervalTrainer {
         (reference, mystery_note)
     }
 
+    fn listen_for(&self, mystery_note: Note, pitch_detection_tx: Sender<bool>) {
+        let detection_duration = Duration::from_millis(1500);
+        crate::listen::listen_for_note_in_thread(
+            mystery_note.to_simple(),
+            detection_duration,
+            SAMPLE_RATE,
+            pitch_detection_tx.clone(),
+        );
+    }
+
+    fn ding(&self) {
+        crate::play_wav::play_ding_in_thread();
+    }
+
     fn choose_notes(&self) -> (Note, Note) {
         let interval = Interval::get_random_diatonic();
         let direction = Direction::Up;
@@ -147,13 +161,7 @@ fn main() -> Result<(), String> {
             crate::render::render_note(reference, left_x, &sprites, &mut canvas)?;
             match playback_rx.try_recv() {
                 Ok(()) => {
-                    let detection_duration = Duration::from_millis(1500);
-                    crate::listen::listen_for_note_in_thread(
-                        mystery_note.to_simple(),
-                        detection_duration,
-                        SAMPLE_RATE,
-                        pitch_detection_tx.clone(),
-                    );
+                    trainer.listen_for(mystery_note, pitch_detection_tx.clone());
                     trainer.scene = Scene::Listening(reference, mystery_note);
                 }
                 Err(_) => {}
@@ -164,12 +172,10 @@ fn main() -> Result<(), String> {
             crate::render::render_note(reference, left_x, &sprites, &mut canvas)?;
             match pitch_detection_rx.try_recv() {
                 Ok(true) => {
-                    crate::play_wav::play_ding_in_thread();
-                    println!("gg");
+                    trainer.ding();
                     trainer.scene = Scene::Concluding(reference, mystery_note);
                 }
                 Ok(false) => {
-                    println!("womp womp");
                     trainer.scene = Scene::Concluding(reference, mystery_note);
                 }
                 Err(_) => {}
