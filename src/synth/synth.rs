@@ -6,12 +6,12 @@ use rodio::source::Source;
 use rodio::{OutputStream, OutputStreamHandle, Sink};
 
 use crate::music::note::Note;
-use crate::synth::wavetables::*;
+use crate::synth;
 
-static SQUARE8: Wavetable = Wavetable::square8();
+static SQUARE8_WAVETABLE: Wavetable = Wavetable::square8();
 
 pub fn play_notes(n1: Note, n2: Note, note_length: Duration, sample_rate: u16) {
-    let synth = WavetableSynth::new(SQUARE8, sample_rate);
+    let synth = WavetableSynth::new(SQUARE8_WAVETABLE, sample_rate);
     let (_stream, stream_handle) = OutputStream::try_default().unwrap();
 
     // synth needs refactoring to take a Duration instead of a u64
@@ -166,7 +166,7 @@ pub struct Wavetable {
 
 impl Wavetable {
     pub const fn square8() -> Self {
-        Wavetable { plot: &SQUARE_8 }
+        Wavetable { plot: &synth::wavetables::SQUARE_8 }
     }
 
     pub fn at(&self, index: f32) -> f32 {
