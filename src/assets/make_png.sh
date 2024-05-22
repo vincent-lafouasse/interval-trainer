@@ -43,7 +43,7 @@ make_png_with_h() {
 
 main() {
 	make_png_with_w "svg/from_lilypond/treble_staff.svg" 1000
-	make_png_with_h "svg/from_wikipedia/WholeNote.svg" 40
+	make_png_with_h "svg/from_wikipedia/WholeNote.svg" 44
 }
 
 main
