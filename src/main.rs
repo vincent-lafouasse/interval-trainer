@@ -46,6 +46,33 @@ impl IntervalTrainer {
     fn init(range: NoteRange) -> Self {
         Self { scene: Scene::Idle, range }
     }
+
+    fn start_playback(&self, playback_tx: Sender<()>) -> (Note, Note) {
+        let (reference, mystery_note) = self.choose_notes();
+        let note_length = Duration::from_millis(1000);
+        crate::synth::play_notes_in_thread(
+            reference,
+            mystery_note,
+            note_length,
+            SAMPLE_RATE,
+            playback_tx.clone(),
+        );
+
+        (reference, mystery_note)
+    }
+
+    fn choose_notes(&self) -> (Note, Note) {
+        let interval = Interval::get_random_diatonic();
+        let direction = Direction::Up;
+
+        let new_range = match direction {
+            Direction::Up => self.range.crop_top(interval.size_i8()),
+            Direction::Down => self.range.crop_bottom(interval.size_i8()),
+        };
+
+        let reference = new_range.rand();
+        (reference, reference.up(interval))
+    }
 }
 
 #[derive(Default, Copy, Clone, Debug)]
@@ -101,15 +128,7 @@ fn main() -> Result<(), String> {
                         trainer.scene = Scene::Idle;
                     }
                     if let Scene::Idle = trainer.scene {
-                        let (reference, mystery_note) = choose_notes(&trainer.range);
-                        let note_length = Duration::from_millis(1000);
-                        crate::synth::play_notes_in_thread(
-                            reference,
-                            mystery_note,
-                            note_length,
-                            SAMPLE_RATE,
-                            playback_tx.clone(),
-                        );
+                        let (reference, mystery_note) = trainer.start_playback(playback_tx.clone());
                         trainer.scene = Scene::PlayingSound(reference, mystery_note);
                     }
                 }
@@ -166,19 +185,6 @@ fn main() -> Result<(), String> {
     }
 
     Ok(())
-}
-
-fn choose_notes(range: &NoteRange) -> (Note, Note) {
-    let interval = Interval::get_random_diatonic();
-    let direction = Direction::Up;
-
-    let new_range = match direction {
-        Direction::Up => range.crop_top(interval.size_i8()),
-        Direction::Down => range.crop_bottom(interval.size_i8()),
-    };
-
-    let reference = new_range.rand();
-    (reference, reference.up(interval))
 }
 
 fn print_type_of<T>(_: &T) {
