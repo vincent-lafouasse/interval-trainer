@@ -25,6 +25,7 @@ use sdl2::{
     image::{InitFlag, LoadTexture},
     keyboard::Keycode,
     pixels::Color,
+    render::RenderTarget,
 };
 
 use crate::{
@@ -144,14 +145,20 @@ fn main() -> Result<(), String> {
             }
         }
 
-        canvas.set_draw_color(WHITE);
-        canvas.clear();
-        canvas.copy(&empty_treble_staff, None, None)?;
+        render_staff(&empty_treble_staff, &mut canvas)?;
         canvas.present();
     }
 
     Ok(())
 }
+
+fn render_staff<T: RenderTarget>(staff_sprite: &sdl2::render::Texture, canvas: &mut sdl2::render::Canvas<T>) -> Result<(), String> {
+    canvas.set_draw_color(WHITE);
+    canvas.clear();
+    canvas.copy(staff_sprite, None, None)?;
+    Ok(())
+}
+
 fn choose_notes(range: &NoteRange) -> (Note, Note) {
     let interval = Interval::get_random_diatonic();
     let direction = Direction::Up;
