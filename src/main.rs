@@ -94,7 +94,7 @@ fn main() -> Result<(), String> {
 
     let mut trainer = IntervalTrainer::init(NoteRange::tenor_voice());
 
-    let cool_note = Note::parse_from_string("G3")?;
+    let cool_note = Note::parse_from_string("C6")?;
 
     'mainloop: loop {
         for event in sdl_context.event_pump()?.poll_iter() {
