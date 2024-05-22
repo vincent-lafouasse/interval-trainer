@@ -53,7 +53,7 @@ enum Scene {
     #[default]
     Idle,
     PlayingSound(Note, Note),
-    Listening(SimpleNote),
+    Listening(Note, Note),
     Concluding,
 }
 
@@ -114,7 +114,7 @@ fn main() -> Result<(), String> {
             }
         }
 
-        if let Scene::PlayingSound(_, mystery_note) = trainer.scene {
+        if let Scene::PlayingSound(reference, mystery_note) = trainer.scene {
             match playback_rx.try_recv() {
                 Ok(()) => {
                     let detection_duration = Duration::from_millis(1500);
@@ -124,13 +124,13 @@ fn main() -> Result<(), String> {
                         SAMPLE_RATE,
                         pitch_detection_tx.clone(),
                     );
-                    trainer.scene = Scene::Listening(mystery_note.to_simple());
+                    trainer.scene = Scene::Listening(reference, mystery_note);
                 }
                 Err(_) => {}
             }
         }
 
-        if let Scene::Listening(mystery_note) = trainer.scene {
+        if let Scene::Listening(reference, mystery_note) = trainer.scene {
             match pitch_detection_rx.try_recv() {
                 Ok(true) => {
                     crate::play_wav::play_ding_in_thread();
