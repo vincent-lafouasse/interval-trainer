@@ -23,21 +23,15 @@ pub fn render_staff<T: RenderTarget>(
     render_at(pos, staff, canvas)
 }
 
-type StaffPosition = i32;
-
 pub fn render_note<T: RenderTarget>(
     note: Note,
     note_head: &sdl2::render::Texture,
     canvas: &mut sdl2::render::Canvas<T>,
 ) -> Result<(), String> {
-    let staff_position: StaffPosition = Note::diatonic_distance(TREBLE_BOTTOM_NOTE, note).into();
+    let staff_position: i32 = Note::diatonic_distance(TREBLE_BOTTOM_NOTE, note).into();
     let pos = Position { x: 420, y: BOTTOM_LINE_Y - staff_position * HALF_SPACE };
 
     render_at(pos, note_head, canvas)
-}
-
-fn note_position(note: Note) -> StaffPosition {
-    todo!()
 }
 
 pub fn render_at<T: RenderTarget>(
