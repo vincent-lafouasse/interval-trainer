@@ -5,6 +5,7 @@
 //! # A cool ear trainer
 
 mod interval;
+mod interval_trainer;
 mod listen;
 mod note_range;
 mod notes;
@@ -31,79 +32,17 @@ use sdl2::{
 
 use crate::{
     interval::{Direction, Interval},
+    interval_trainer::{IntervalTrainer, Scene},
     note_range::NoteRange,
     notes::Note,
     render::Sprites,
     simple_note::SimpleNote,
 };
 
-struct IntervalTrainer {
-    scene: Scene,
-    range: NoteRange,
-}
-
-impl IntervalTrainer {
-    fn init(range: NoteRange) -> Self {
-        Self { scene: Scene::Idle, range }
-    }
-
-    fn start_playback(&self, playback_tx: Sender<()>) -> (Note, Note) {
-        let (reference, mystery_note) = self.choose_notes();
-        let note_length = Duration::from_millis(1000);
-        crate::synth::play_notes_in_thread(
-            reference,
-            mystery_note,
-            note_length,
-            SAMPLE_RATE,
-            playback_tx.clone(),
-        );
-
-        (reference, mystery_note)
-    }
-
-    fn listen_for(&self, mystery_note: Note, pitch_detection_tx: Sender<bool>) {
-        let detection_duration = Duration::from_millis(1500);
-        crate::listen::listen_for_note_in_thread(
-            mystery_note.to_simple(),
-            detection_duration,
-            SAMPLE_RATE,
-            pitch_detection_tx.clone(),
-        );
-    }
-
-    fn ding(&self) {
-        crate::play_wav::play_ding_in_thread();
-    }
-
-    fn choose_notes(&self) -> (Note, Note) {
-        let interval = Interval::get_random_diatonic();
-        let direction = Direction::Up;
-
-        let new_range = match direction {
-            Direction::Up => self.range.crop_top(interval.size_i8()),
-            Direction::Down => self.range.crop_bottom(interval.size_i8()),
-        };
-
-        let reference = new_range.rand();
-        (reference, reference.up(interval))
-    }
-}
-
-#[derive(Default, Copy, Clone, Debug)]
-enum Scene {
-    #[default]
-    Idle,
-    PlayingSound(Note, Note),
-    Listening(Note, Note),
-    Concluding(Note, Note),
-}
-
 const WHITE: Color = Color::RGB(255, 255, 255);
 
 const WINDOW_WIDTH: u32 = 1000;
 const WINDOW_HEIGHT: u32 = 400;
-
-const SAMPLE_RATE: u16 = 44_100;
 
 fn main() -> Result<(), String> {
     let sdl_context = sdl2::init()?;
