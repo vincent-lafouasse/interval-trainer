@@ -66,6 +66,23 @@ const WINDOW_HEIGHT: u32 = 400;
 
 const SAMPLE_RATE: u16 = 44_100;
 
+struct Sprites<'a> {
+    staff: sdl2::render::Texture<'a>,
+    note_head: sdl2::render::Texture<'a>,
+    ledger_line: sdl2::render::Texture<'a>,
+}
+
+impl<'a> Sprites<'a> {
+    pub fn init<T>(texture_creator: &'a sdl2::render::TextureCreator<T>) -> Result<Self, String> {
+        let png_dir = Path::new("src/assets/png");
+        let treble_staff = texture_creator.load_texture(&png_dir.join("treble_staff.png"))?;
+        let note_head = texture_creator.load_texture(&png_dir.join("WholeNote.png"))?;
+        let ledger_line = texture_creator.load_texture(&png_dir.join("ledger_line.png"))?;
+
+        Ok(Self { staff: treble_staff, note_head, ledger_line })
+    }
+}
+
 fn main() -> Result<(), String> {
     let sdl_context = sdl2::init()?;
     let video_subsystem = sdl_context.video()?;
@@ -84,10 +101,12 @@ fn main() -> Result<(), String> {
         .map_err(|e| e.to_string())?;
 
     let texture_creator = canvas.texture_creator();
+
     let png_dir = Path::new("src/assets/png");
     let treble_staff = texture_creator.load_texture(&png_dir.join("treble_staff.png"))?;
     let note_head = texture_creator.load_texture(&png_dir.join("WholeNote.png"))?;
     let ledger_line = texture_creator.load_texture(&png_dir.join("ledger_line.png"))?;
+    let sprites = Sprites::init(&texture_creator);
 
     let (playback_tx, playback_rx): (Sender<()>, Receiver<()>) = mpsc::channel();
     let (pitch_detection_tx, pitch_detection_rx): (Sender<bool>, Receiver<bool>) = mpsc::channel();
