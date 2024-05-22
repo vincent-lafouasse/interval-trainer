@@ -8,6 +8,7 @@ mod interval;
 mod listen;
 mod note_range;
 mod notes;
+mod play_wav;
 mod render;
 mod simple_note;
 mod synth;
@@ -135,7 +136,9 @@ fn main() -> Result<(), String> {
         if let Scene::Listening(mystery_note) = trainer.scene {
             match pitch_detection_rx.try_recv() {
                 Ok(true) => {
+                    crate::play_wav::play_ding_in_thread();
                     println!("gg");
+                    std::thread::sleep(Duration::from_millis(300));
                     break 'mainloop;
                 }
                 Ok(false) => {
