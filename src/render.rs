@@ -1,3 +1,5 @@
+use std::cmp::Ordering;
+
 use sdl2::{
     event::Event,
     image::{InitFlag, LoadTexture},
@@ -32,7 +34,8 @@ pub fn render_note<T: RenderTarget>(
     let staff_position: i32 = Note::diatonic_distance(TREBLE_BOTTOM_NOTE, note).into();
     let pos = Position { x: 420, y: BOTTOM_LINE_Y - staff_position * HALF_SPACE };
 
-    render_ledger_line(pos.x, -2, ledger_line, canvas)?;
+    render_ledger_line(pos.x, 1, ledger_line, canvas)?;
+    render_ledger_line(pos.x, 2, ledger_line, canvas)?;
     render_at(pos, note_head, canvas)
 }
 
@@ -42,6 +45,11 @@ pub fn render_ledger_line<T: RenderTarget>(
     ledger_line: &sdl2::render::Texture,
     canvas: &mut sdl2::render::Canvas<T>,
 ) -> Result<(), String> {
+    let staff_position: i32 = match staff_position.cmp(&0) {
+        Ordering::Equal => panic!("invalid legder line index: 0"),
+        Ordering::Greater => 8 + 2 * staff_position,
+        Ordering::Less => 2 * staff_position,
+    };
     let pos = Position { x, y: BOTTOM_LINE_Y - staff_position * HALF_SPACE };
     let pos = Position { x: pos.x - 22, y: pos.y + 17 };
 
