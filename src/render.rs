@@ -42,7 +42,7 @@ pub fn render_staff<T: RenderTarget>(
     Ok(())
 }
 
-pub fn render_empty_staff<T: RenderTarget>(
+fn render_empty_staff<T: RenderTarget>(
     staff: &sdl2::render::Texture,
     canvas: &mut sdl2::render::Canvas<T>,
 ) -> Result<(), String> {
@@ -51,7 +51,7 @@ pub fn render_empty_staff<T: RenderTarget>(
     render_texture_at(staff, pos, canvas)
 }
 
-pub fn render_note<T: RenderTarget>(
+fn render_note<T: RenderTarget>(
     note: Note,
     x: i32,
     sprites: &Sprites,
@@ -83,7 +83,7 @@ pub fn render_note<T: RenderTarget>(
     render_texture_at(&sprites.note_head, pos, canvas)
 }
 
-pub fn render_ledger_line<T: RenderTarget>(
+fn render_ledger_line<T: RenderTarget>(
     x: i32,
     staff_position: i32,
     ledger_line: &sdl2::render::Texture,
@@ -100,7 +100,7 @@ pub fn render_ledger_line<T: RenderTarget>(
     render_texture_at(ledger_line, pos, canvas)
 }
 
-pub fn render_texture_at<T: RenderTarget>(
+fn render_texture_at<T: RenderTarget>(
     texture: &sdl2::render::Texture,
     pos: Position,
     canvas: &mut sdl2::render::Canvas<T>,
@@ -126,11 +126,6 @@ impl<'a> Sprites<'a> {
 
         Ok(Self { staff: treble_staff, note_head, ledger_line })
     }
-}
-
-pub enum Side {
-    Right,
-    Left,
 }
 
 pub struct Position {
