@@ -88,7 +88,7 @@ fn main() -> Result<(), String> {
 
     let mut trainer = IntervalTrainer::init(NoteRange::tenor_voice());
 
-    let cool_note = Note::parse_from_string("F3")?;
+    // let cool_note = Note::parse_from_string("F3")?;
 
     'mainloop: loop {
         for event in sdl_context.event_pump()?.poll_iter() {
@@ -113,7 +113,12 @@ fn main() -> Result<(), String> {
             }
         }
 
+        canvas.set_draw_color(WHITE);
+        canvas.clear();
+        crate::render::render_staff(&sprites.staff, &mut canvas)?;
+
         if let Scene::PlayingSound(reference, mystery_note) = trainer.scene {
+            crate::render::render_note(reference, &sprites, &mut canvas)?;
             match playback_rx.try_recv() {
                 Ok(()) => {
                     let detection_duration = Duration::from_millis(1500);
@@ -130,6 +135,7 @@ fn main() -> Result<(), String> {
         }
 
         if let Scene::Listening(reference, mystery_note) = trainer.scene {
+            crate::render::render_note(reference, &sprites, &mut canvas)?;
             match pitch_detection_rx.try_recv() {
                 Ok(true) => {
                     crate::play_wav::play_ding_in_thread();
@@ -143,11 +149,6 @@ fn main() -> Result<(), String> {
                 Err(_) => {}
             }
         }
-
-        canvas.set_draw_color(WHITE);
-        canvas.clear();
-        crate::render::render_staff(&sprites.staff, &mut canvas)?;
-        crate::render::render_note(cool_note, &sprites, &mut canvas)?;
         canvas.present();
     }
 
