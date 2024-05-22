@@ -12,6 +12,8 @@ use crate::music::{
     simple_note::SimpleNote,
 };
 
+use crate::audio;
+
 pub struct IntervalTrainer {
     pub scene: Scene,
     range: NoteRange,
@@ -27,7 +29,7 @@ impl IntervalTrainer {
     pub fn start_playback(&self, playback_tx: Sender<()>) -> (Note, Note) {
         let (reference, mystery_note) = self.choose_notes();
         let note_length = Duration::from_millis(1000);
-        crate::synth::play_notes_in_thread(
+        audio::synth::play_notes_in_thread(
             reference,
             mystery_note,
             note_length,
@@ -40,7 +42,7 @@ impl IntervalTrainer {
 
     pub fn listen_for(&self, mystery_note: Note, pitch_detection_tx: Sender<bool>) {
         let detection_duration = Duration::from_millis(1500);
-        crate::listen::listen_for_note_in_thread(
+        audio::listen::listen_for_note_in_thread(
             mystery_note.to_simple(),
             detection_duration,
             self.sample_rate,
@@ -49,7 +51,7 @@ impl IntervalTrainer {
     }
 
     pub fn ding(&self) {
-        crate::play_wav::play_ding_in_thread();
+        audio::play_wav::play_ding_in_thread();
     }
 
     fn choose_notes(&self) -> (Note, Note) {

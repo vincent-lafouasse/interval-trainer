@@ -4,12 +4,10 @@
 
 //! # A cool ear trainer
 
+mod audio;
 mod interval_trainer;
-mod listen;
 mod music;
-mod play_wav;
 mod render;
-mod synth;
 
 use std::{
     sync::mpsc,
