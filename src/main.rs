@@ -152,7 +152,10 @@ fn main() -> Result<(), String> {
     Ok(())
 }
 
-fn render_staff<T: RenderTarget>(staff_sprite: &sdl2::render::Texture, canvas: &mut sdl2::render::Canvas<T>) -> Result<(), String> {
+fn render_staff<T: RenderTarget>(
+    staff_sprite: &sdl2::render::Texture,
+    canvas: &mut sdl2::render::Canvas<T>,
+) -> Result<(), String> {
     canvas.set_draw_color(WHITE);
     canvas.clear();
     canvas.copy(staff_sprite, None, None)?;
