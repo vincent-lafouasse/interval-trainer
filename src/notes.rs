@@ -40,16 +40,16 @@ impl Note {
         self.to_simple().get_i8() - other.to_simple().get_i8()
     }
 
-    pub fn diatonic_distance_up_from(&self, other: Note) -> i8 {
-        if self.octave == other.octave {
-            return NoteName::diatonic_distance(other.name, self.name);
+    pub fn diatonic_distance(from: Note, to: Note) -> i8 {
+        if to.octave == from.octave {
+            return NoteName::diatonic_distance(from.name, to.name);
         }
-        if self.octave > other.octave {
-            let octave_difference = self.octave - other.octave;
+        if to.octave > from.octave {
+            let octave_difference = to.octave - from.octave;
             return 7 * (octave_difference - 1)
                 + 1
-                + NoteName::diatonic_distance(other.name, NoteName::B)
-                + NoteName::diatonic_distance(NoteName::C, self.name);
+                + NoteName::diatonic_distance(from.name, NoteName::B)
+                + NoteName::diatonic_distance(NoteName::C, to.name);
         }
         todo!()
     }
@@ -189,19 +189,19 @@ mod tests {
 
     #[test]
     fn diatonic_distance_same_octave() {
-        assert_eq!(C4.diatonic_distance_up_from(A4), -5);
-        assert_eq!(A4.diatonic_distance_up_from(C4), 5);
-        assert_eq!(D4.diatonic_distance_up_from(C4), 1);
-        assert_eq!(D4.diatonic_distance_up_from(B4), -5);
+        assert_eq!(Note::diatonic_distance(A4, C4), -5);
+        assert_eq!(Note::diatonic_distance(C4, A4), 5);
+        assert_eq!(Note::diatonic_distance(C4, D4), 1);
+        assert_eq!(Note::diatonic_distance(B4, D4), -5);
     }
 
     #[test]
     fn diatonic_distance_octave_up() {
-        assert_eq!(C5.diatonic_distance_up_from(A4), 2);
-        assert_eq!(A5.diatonic_distance_up_from(C4), 5 + 7);
-        assert_eq!(A6.diatonic_distance_up_from(C4), 5 + 7 + 7);
-        assert_eq!(D5.diatonic_distance_up_from(C4), 1 + 7);
-        assert_eq!(D6.diatonic_distance_up_from(C4), 1 + 7 + 7);
-        assert_eq!(B6.diatonic_distance_up_from(C4), 6 + 7 + 7);
+        assert_eq!(Note::diatonic_distance(A4, C5), 2);
+        assert_eq!(Note::diatonic_distance(C4, A5), 5 + 7);
+        assert_eq!(Note::diatonic_distance(C4, A6), 5 + 7 + 7);
+        assert_eq!(Note::diatonic_distance(C4, D5), 1 + 7);
+        assert_eq!(Note::diatonic_distance(C4, D6), 1 + 7 + 7);
+        assert_eq!(Note::diatonic_distance(C4, B6), 6 + 7 + 7);
     }
 }
