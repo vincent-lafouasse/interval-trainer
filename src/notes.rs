@@ -1,4 +1,5 @@
 use int_enum::IntEnum;
+use std::cmp::Ordering;
 use std::fmt;
 
 use crate::{interval::Interval, simple_note::SimpleNote};
@@ -44,14 +45,19 @@ impl Note {
         if to.octave == from.octave {
             return NoteName::diatonic_distance(from.name, to.name);
         }
-        if to.octave > from.octave {
-            let octave_difference = to.octave - from.octave;
-            return 7 * (octave_difference - 1)
-                + 1
-                + NoteName::diatonic_distance(from.name, NoteName::B)
-                + NoteName::diatonic_distance(NoteName::C, to.name);
+        if to.octave > from.octave {}
+
+        match from.octave.cmp(&to.octave) {
+            Ordering::Equal => NoteName::diatonic_distance(from.name, to.name),
+            Ordering::Greater => {
+                let octave_difference = to.octave - from.octave;
+                7 * (octave_difference - 1)
+                    + 1
+                    + NoteName::diatonic_distance(from.name, NoteName::B)
+                    + NoteName::diatonic_distance(NoteName::C, to.name)
+            }
+            Ordering::Less => -Note::diatonic_distance(to, from),
         }
-        todo!()
     }
 
     pub fn to_simple(self) -> SimpleNote {
