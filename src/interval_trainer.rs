@@ -51,7 +51,7 @@ impl IntervalTrainer {
     }
 
     pub fn ding(&self) {
-        audio::play_wav::play_ding_in_thread();
+        audio::play_sample::play_ding_in_thread();
     }
 
     fn choose_notes(&self) -> (Note, Note) {
