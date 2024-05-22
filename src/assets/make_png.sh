@@ -7,21 +7,25 @@ die() {
 	exit 1
 }
 
-main() {
-	if [ $# -ne 1 ]; then
-		die "Usage: $0 file.svg"
+make_png() {
+	if [ $# -ne 2 ]; then
+		die "Usage: $0 file.svg width"
 	fi
 
 	name="$(basename "$1")"
 
 	if [[ $name != *svg ]] ;
 	then
-		die "Usage: $0 file.svg"
+		die "Usage: $0 file.svg width"
 	fi
 
 	base_name="${name/\.svg/}"    
 
-	inkscape -w 1000 "$1" -o "${TARGET_DIR}/${base_name}".png
+	inkscape -w "$2" "$1" -o "${TARGET_DIR}/${base_name}".png
 }
 
-main "$@"
+main() {
+	make_png "svg/from_lilypond/treble_staff.svg" 1000
+}
+
+main
