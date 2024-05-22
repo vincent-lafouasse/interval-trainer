@@ -8,6 +8,7 @@ use sdl2::{
 
 const HALF_SPACE: i32 = 20;
 const BOTTOM_LINE_Y: i32 = 249;
+const N_MAX_LEDGER_LINES: u8 = 3;
 
 pub fn render_staff<T: RenderTarget>(
     staff: &sdl2::render::Texture,
