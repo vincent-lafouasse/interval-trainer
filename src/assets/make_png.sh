@@ -26,6 +26,7 @@ make_png() {
 
 main() {
 	make_png "svg/from_lilypond/treble_staff.svg" 1000
+	make_png "svg/from_wikipedia/WholeNote.svg" 40
 }
 
 main
