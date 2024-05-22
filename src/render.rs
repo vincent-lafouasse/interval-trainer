@@ -34,6 +34,17 @@ pub fn render_note<T: RenderTarget>(
     render_at(pos, note_head, canvas)
 }
 
+pub fn render_ledger_line<T: RenderTarget>(
+    x: i32,
+    staff_position: i32,
+    ledger_line: &sdl2::render::Texture,
+    canvas: &mut sdl2::render::Canvas<T>,
+) -> Result<(), String> {
+    let pos = Position { x, y: BOTTOM_LINE_Y - staff_position * HALF_SPACE };
+
+    render_at(pos, ledger_line, canvas)
+}
+
 pub fn render_at<T: RenderTarget>(
     pos: Position,
     texture: &sdl2::render::Texture,
