@@ -7,10 +7,12 @@ use sdl2::{
 };
 
 use crate::notes::Note;
+use crate::notes::NoteName;
 
 const HALF_SPACE: i32 = 20;
 const BOTTOM_LINE_Y: i32 = 249;
 const N_MAX_LEDGER_LINES: u8 = 3;
+const TREBLE_BOTTOM_NOTE: Note = Note { name: NoteName::E, alteration: 0, octave: 4 };
 
 pub fn render_staff<T: RenderTarget>(
     staff: &sdl2::render::Texture,
@@ -32,6 +34,10 @@ pub fn render_note<T: RenderTarget>(
     let pos = Position { x: 420, y: BOTTOM_LINE_Y - staff_position * HALF_SPACE };
 
     render_at(pos, note_head, canvas)
+}
+
+fn note_position(note: Note) -> StaffPosition {
+    todo!()
 }
 
 pub fn render_at<T: RenderTarget>(
