@@ -205,4 +205,14 @@ mod tests {
         assert_eq!(Note::diatonic_distance(C4, D6), 1 + 7 + 7);
         assert_eq!(Note::diatonic_distance(C4, B6), 6 + 7 + 7);
     }
+
+    #[test]
+    fn diatonic_distance_octave_down() {
+        assert_eq!(Note::diatonic_distance(C5, A4), -2);
+        assert_eq!(Note::diatonic_distance(C6, A5), -2);
+        assert_eq!(Note::diatonic_distance(C6, A4), -(2 + 7));
+        assert_eq!(Note::diatonic_distance(B6, D5), -(5 + 7));
+        assert_eq!(Note::diatonic_distance(C6, D4), -(6 + 7));
+        assert_eq!(Note::diatonic_distance(B6, C4), -(6 + 14));
+    }
 }
