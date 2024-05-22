@@ -85,10 +85,8 @@ fn main() -> Result<(), String> {
 
     let texture_creator = canvas.texture_creator();
     let png_dir = Path::new("src/assets/png");
-    let treble_staff_path = png_dir.join("treble_staff.png");
-    let notehead_path = png_dir.join("WholeNote.png");
-    let treble_staff = texture_creator.load_texture(&treble_staff_path)?;
-    let note_head = texture_creator.load_texture(&notehead_path)?;
+    let treble_staff = texture_creator.load_texture(&png_dir.join("treble_staff.png"))?;
+    let note_head = texture_creator.load_texture(&png_dir.join("WholeNote.png"))?;
 
     let (playback_tx, playback_rx): (Sender<()>, Receiver<()>) = mpsc::channel();
     let (pitch_detection_tx, pitch_detection_rx): (Sender<bool>, Receiver<bool>) = mpsc::channel();
