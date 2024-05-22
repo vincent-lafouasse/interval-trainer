@@ -12,8 +12,6 @@ use crate::{
     simple_note::SimpleNote,
 };
 
-const SAMPLE_RATE: u16 = 44_100;
-
 pub struct IntervalTrainer {
     pub scene: Scene,
     range: NoteRange,
@@ -22,6 +20,7 @@ pub struct IntervalTrainer {
 
 impl IntervalTrainer {
     pub fn init(range: NoteRange) -> Self {
+        const SAMPLE_RATE: u16 = 44_100;
         Self { scene: Scene::Idle, range, sample_rate: SAMPLE_RATE }
     }
 
