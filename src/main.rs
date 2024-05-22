@@ -96,7 +96,7 @@ fn main() -> Result<(), String> {
             match event {
                 Event::Quit { .. }
                 | Event::KeyDown { keycode: Option::Some(Keycode::Escape), .. } => break 'mainloop,
-                Event::KeyDown { keycode: Option::Some(Keycode::A), .. } => {
+                Event::KeyDown { keycode: Option::Some(Keycode::Space), .. } => {
                     if let Scene::Concluding(_, _) = trainer.scene {
                         trainer.scene = Scene::Idle;
                     }
