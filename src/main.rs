@@ -61,7 +61,7 @@ fn main() -> Result<(), String> {
                     }
                     if let Scene::Idle = trainer.scene {
                         let (reference, mystery_note) = trainer.start_playback(playback_tx.clone());
-                        trainer.scene = Scene::PlayingSound(reference, mystery_note);
+                        trainer.scene = Scene::Concluding(reference, mystery_note);
                     }
                 }
                 _ => {}

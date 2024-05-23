@@ -89,18 +89,22 @@ fn render_alteration<T: RenderTarget>(
     match alteration {
         1 => render_texture_at(
             &sprites.sharp,
-            Position { x: pos.x - 50, y: pos.y - 40 },
+            Position { x: pos.x - 60, y: pos.y - 40 },
             canvas,
         ),
         2 => render_texture_at(
             &sprites.double_sharp,
-            Position { x: pos.x - 50, y: pos.y },
+            Position { x: pos.x - 65, y: pos.y },
             canvas,
         ),
-        -1 => render_texture_at(&sprites.flat, Position { x: pos.x, y: pos.y }, canvas),
+        -1 => render_texture_at(
+            &sprites.flat,
+            Position { x: pos.x - 65, y: pos.y - 50 },
+            canvas,
+        ),
         -2 => render_texture_at(
             &sprites.double_flat,
-            Position { x: pos.x, y: pos.y },
+            Position { x: pos.x - 90, y: pos.y - 50 },
             canvas,
         ),
         0 => Ok(()),
