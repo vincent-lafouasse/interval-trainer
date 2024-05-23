@@ -14,12 +14,11 @@ make_png_with_w() {
 
 	name="$(basename "$1")"
 
-	if [[ $name != *svg ]] ;
-	then
+	if [[ $name != *svg ]]; then
 		die "Usage: $0 file.svg width"
 	fi
 
-	base_name="${name/\.svg/}"    
+	base_name="${name/\.svg/}"
 
 	inkscape -w "$2" "$1" -o "${TARGET_DIR}/${base_name}".png
 }
@@ -31,12 +30,11 @@ make_png_with_h() {
 
 	name="$(basename "$1")"
 
-	if [[ $name != *svg ]] ;
-	then
+	if [[ $name != *svg ]]; then
 		die "Usage: $0 file.svg width"
 	fi
 
-	base_name="${name/\.svg/}"    
+	base_name="${name/\.svg/}"
 
 	inkscape -h "$2" "$1" -o "${TARGET_DIR}/${base_name}".png
 }
@@ -51,6 +49,8 @@ make_png_with_h() {
 # in pts
 NOTE_HEAD_HEIGHT=44
 FLAT_SIGN_HEIGHT=100
+SHARP_SIGN_HEIGHT=120
+DOUBLESHARP_SIGN_HEIGHT=44
 LEDGER_LINE_WIDTH=117
 NOTE_SPACING=124
 
@@ -60,6 +60,8 @@ main() {
 	# make_png_with_h "svg/public_domain/Flat.svg" "$FLAT_SIGN_HEIGHT"
 	# make_png_with_h "svg/public_domain/DoubleFlat.svg" "$FLAT_SIGN_HEIGHT"
 	# make_png_with_w "svg/from_lilypond/ledger_line.svg" 427
+	make_png_with_h "svg/public_domain/Sharp.svg" "$SHARP_SIGN_HEIGHT"
+	make_png_with_h "svg/public_domain/DoubleSharp.svg" "$DOUBLESHARP_SIGN_HEIGHT"
 }
 
 main
