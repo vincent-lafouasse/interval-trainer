@@ -127,16 +127,6 @@ pub struct Position {
     y: i32,
 }
 
-impl Position {
-    fn shift_x(&self, amount: i32) -> Self {
-        Self { x: self.x + amount, y: self.y }
-    }
-
-    fn shift_y(&self, amount: i32) -> Self {
-        Self { x: self.x, y: self.y + amount }
-    }
-}
-
 pub struct Dimension {
     w: u32,
     h: u32,

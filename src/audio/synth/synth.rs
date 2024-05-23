@@ -27,7 +27,7 @@ pub fn play_notes_in_thread(
     signal: Sender<()>,
 ) {
     std::thread::spawn(move || {
-        play_notes(n1, n2, Duration::from_millis(1000), sample_rate);
+        play_notes(n1, n2, note_length, sample_rate);
         signal.send(()).ok();
     });
 }

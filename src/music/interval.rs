@@ -31,6 +31,7 @@ pub enum Quality {
 }
 
 #[derive(Copy, Clone, Debug, PartialEq)]
+#[allow(dead_code)]
 pub enum Direction {
     Up,
     Down,
@@ -39,10 +40,6 @@ pub enum Direction {
 impl Interval {
     pub fn size_i8(&self) -> i8 {
         self.base_interval.size_i8() + self.quality.delta()
-    }
-
-    pub fn size_u8(&self) -> u8 {
-        self.size_i8().try_into().unwrap()
     }
 
     pub fn get_random_diatonic() -> Interval {
@@ -68,6 +65,7 @@ impl Interval {
     }
 }
 
+#[allow(dead_code)]
 impl Direction {
     pub fn rand() -> Self {
         use rand::Rng;
