@@ -74,7 +74,34 @@ fn render_note<T: RenderTarget>(
         0 => {}
     }
 
+    render_alteration(note.alteration, x, staff_position, sprites, canvas)?;
     render_texture_at(&sprites.note_head, pos, canvas)
+}
+
+fn render_alteration<T: RenderTarget>(
+    alteration: i8,
+    x: i32,
+    staff_position: i32,
+    sprites: &Sprites,
+    canvas: &mut sdl2::render::Canvas<T>,
+) -> Result<(), String> {
+    let pos = Position { x, y: BOTTOM_LINE_Y - staff_position * HALF_SPACE };
+    match alteration {
+        1 => render_texture_at(&sprites.sharp, Position { x: pos.x, y: pos.y }, canvas),
+        2 => render_texture_at(
+            &sprites.double_sharp,
+            Position { x: pos.x, y: pos.y },
+            canvas,
+        ),
+        -1 => render_texture_at(&sprites.flat, Position { x: pos.x, y: pos.y }, canvas),
+        -2 => render_texture_at(
+            &sprites.double_flat,
+            Position { x: pos.x, y: pos.y },
+            canvas,
+        ),
+        0 => Ok(()),
+        _ => Err(String::from("no triple alterations allowed")),
+    }
 }
 
 fn render_ledger_line<T: RenderTarget>(
