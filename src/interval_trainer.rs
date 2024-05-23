@@ -21,10 +21,7 @@ impl IntervalTrainer {
     }
 
     pub fn start_playback(&self, playback_tx: Sender<()>) -> (Note, Note) {
-        //let (reference, mystery_note) = self.choose_notes();
-        use crate::music::note::NoteName;
-        let reference = Note { name: NoteName::A, alteration: -2, octave: 4 };
-        let mystery_note = Note { name: NoteName::A, alteration: 2, octave: 4 };
+        let (reference, mystery_note) = self.choose_notes();
         let note_length = Duration::from_millis(1000);
         audio::synth::play_notes_in_thread(
             reference,
