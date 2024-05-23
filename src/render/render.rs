@@ -87,10 +87,14 @@ fn render_alteration<T: RenderTarget>(
 ) -> Result<(), String> {
     let pos = Position { x, y: BOTTOM_LINE_Y - staff_position * HALF_SPACE };
     match alteration {
-        1 => render_texture_at(&sprites.sharp, Position { x: pos.x, y: pos.y }, canvas),
+        1 => render_texture_at(
+            &sprites.sharp,
+            Position { x: pos.x - 50, y: pos.y - 40 },
+            canvas,
+        ),
         2 => render_texture_at(
             &sprites.double_sharp,
-            Position { x: pos.x, y: pos.y },
+            Position { x: pos.x - 50, y: pos.y },
             canvas,
         ),
         -1 => render_texture_at(&sprites.flat, Position { x: pos.x, y: pos.y }, canvas),
