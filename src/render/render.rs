@@ -109,6 +109,10 @@ pub struct Sprites<'a> {
     pub staff: sdl2::render::Texture<'a>,
     pub note_head: sdl2::render::Texture<'a>,
     pub ledger_line: sdl2::render::Texture<'a>,
+    pub sharp: sdl2::render::Texture<'a>,
+    pub flat: sdl2::render::Texture<'a>,
+    pub double_sharp: sdl2::render::Texture<'a>,
+    pub double_flat: sdl2::render::Texture<'a>,
 }
 
 const PNG_DIR: &str = "src/assets/png";
@@ -126,8 +130,20 @@ impl<'a> Sprites<'a> {
         let treble_staff = texture_creator.load_texture(&png_dir.join(TREBLE_STAFF_PATH))?;
         let note_head = texture_creator.load_texture(&png_dir.join(NOTEHEAD_PATH))?;
         let ledger_line = texture_creator.load_texture(&png_dir.join(LEDGER_LINE_PATH))?;
+        let sharp = texture_creator.load_texture(&png_dir.join(SHARP_PATH))?;
+        let flat = texture_creator.load_texture(&png_dir.join(FLAT_PATH))?;
+        let double_sharp = texture_creator.load_texture(&png_dir.join(DOUBLESHARP_PATH))?;
+        let double_flat = texture_creator.load_texture(&png_dir.join(DOUBLEFLAT_PATH))?;
 
-        Ok(Self { staff: treble_staff, note_head, ledger_line })
+        Ok(Self {
+            staff: treble_staff,
+            note_head,
+            ledger_line,
+            sharp,
+            flat,
+            double_sharp,
+            double_flat,
+        })
     }
 }
 
