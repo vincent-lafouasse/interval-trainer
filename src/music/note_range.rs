@@ -63,7 +63,7 @@ impl NoteRange {
     }
 
     pub fn treble_staff() -> Self {
-        Self::from_str("E3", "F6").unwrap()
+        Self::from_str("E3", "A5").unwrap()
     }
 }
 
