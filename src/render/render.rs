@@ -111,12 +111,21 @@ pub struct Sprites<'a> {
     pub ledger_line: sdl2::render::Texture<'a>,
 }
 
+const PNG_DIR: &str = "src/assets/png";
+const TREBLE_STAFF_PATH: &str = "treble_staff.png";
+const NOTEHEAD_PATH: &str = "WholeNote.png";
+const LEDGER_LINE_PATH: &str = "ledger_line.png";
+const SHARP_PATH: &str = "Sharp.png";
+const FLAT_PATH: &str = "Flat.png";
+const DOUBLESHARP_PATH: &str = "DoubleSharp.png";
+const DOUBLEFLAT_PATH: &str = "DoubleFlat.png";
+
 impl<'a> Sprites<'a> {
     pub fn init<T>(texture_creator: &'a sdl2::render::TextureCreator<T>) -> Result<Self, String> {
-        let png_dir = Path::new("src/assets/png");
-        let treble_staff = texture_creator.load_texture(&png_dir.join("treble_staff.png"))?;
-        let note_head = texture_creator.load_texture(&png_dir.join("WholeNote.png"))?;
-        let ledger_line = texture_creator.load_texture(&png_dir.join("ledger_line.png"))?;
+        let png_dir = Path::new(PNG_DIR);
+        let treble_staff = texture_creator.load_texture(&png_dir.join(TREBLE_STAFF_PATH))?;
+        let note_head = texture_creator.load_texture(&png_dir.join(NOTEHEAD_PATH))?;
+        let ledger_line = texture_creator.load_texture(&png_dir.join(LEDGER_LINE_PATH))?;
 
         Ok(Self { staff: treble_staff, note_head, ledger_line })
     }
