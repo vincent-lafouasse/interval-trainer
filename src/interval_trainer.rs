@@ -1,15 +1,9 @@
-use std::{
-    sync::mpsc,
-    sync::mpsc::{Receiver, Sender},
-    thread,
-    time::Duration,
-};
+use std::{sync::mpsc::Sender, time::Duration};
 
 use crate::music::{
     interval::{Direction, Interval},
     note::Note,
     note_range::NoteRange,
-    simple_note::SimpleNote,
 };
 
 use crate::audio;

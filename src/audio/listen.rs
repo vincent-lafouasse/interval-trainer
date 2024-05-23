@@ -8,7 +8,7 @@ use cpal::{
 
 use crate::music::simple_note::SimpleNote;
 use pitch_detection::detector::{mcleod::McLeodDetector, PitchDetector};
-use std::sync::{atomic::AtomicU64, atomic::Ordering, mpsc, Arc};
+use std::sync::{atomic::AtomicU64, atomic::Ordering, Arc};
 
 pub fn listen_for_note_in_thread(
     target_note: SimpleNote,

@@ -1,13 +1,7 @@
 use std::cmp::Ordering;
 use std::path::Path;
 
-use sdl2::{
-    event::Event,
-    image::{InitFlag, LoadTexture},
-    keyboard::Keycode,
-    pixels::Color,
-    render::RenderTarget,
-};
+use sdl2::{image::LoadTexture, pixels::Color, render::RenderTarget};
 
 use crate::music::note::{Note, NoteName};
 

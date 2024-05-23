@@ -1,4 +1,3 @@
-#![allow(unused_imports)]
 #![allow(dead_code)]
 #![allow(unused_variables)]
 
@@ -12,26 +11,13 @@ mod render;
 use std::{
     sync::mpsc,
     sync::mpsc::{Receiver, Sender},
-    thread,
-    time::Duration,
 };
 
-use sdl2::{
-    event::Event,
-    image::{InitFlag, LoadTexture},
-    keyboard::Keycode,
-    pixels::Color,
-    render::RenderTarget,
-};
+use sdl2::{event::Event, image::InitFlag, keyboard::Keycode};
 
 use crate::{
     interval_trainer::{IntervalTrainer, Scene},
-    music::{
-        interval::{Direction, Interval},
-        note::Note,
-        note_range::NoteRange,
-        simple_note::SimpleNote,
-    },
+    music::note_range::NoteRange,
     render::Sprites,
 };
 
