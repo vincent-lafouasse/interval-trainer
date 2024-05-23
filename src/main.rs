@@ -76,14 +76,31 @@ fn main() -> Result<(), String> {
             render::render_staff(Some(reference), None, &sprites, &mut canvas)?;
             match playback_rx.try_recv() {
                 Ok(()) => {
-                    trainer.listen_for(mystery_note, pitch_detection_tx.clone());
-                    trainer.scene = Scene::Listening(reference, mystery_note);
+                    trainer.listen_for(reference, pitch_detection_tx.clone());
+                    trainer.scene = Scene::Listening1(reference, mystery_note);
                 }
                 Err(_) => {}
             }
         }
 
-        if let Scene::Listening(reference, mystery_note) = trainer.scene {
+        if let Scene::Listening1(reference, mystery_note) = trainer.scene {
+            render::render_staff(Some(reference), None, &sprites, &mut canvas)?;
+            match pitch_detection_rx.try_recv() {
+                Ok(true) => {
+                    trainer.ding();
+                    trainer.listen_for(mystery_note, pitch_detection_tx.clone());
+                    trainer.scene = Scene::Listening2(reference, mystery_note);
+                }
+                Ok(false) => {
+                    trainer.bad_ding();
+                    trainer.listen_for(mystery_note, pitch_detection_tx.clone());
+                    trainer.scene = Scene::Listening2(reference, mystery_note);
+                }
+                Err(_) => {}
+            }
+        }
+
+        if let Scene::Listening2(reference, mystery_note) = trainer.scene {
             render::render_staff(Some(reference), None, &sprites, &mut canvas)?;
             match pitch_detection_rx.try_recv() {
                 Ok(true) => {
@@ -91,7 +108,6 @@ fn main() -> Result<(), String> {
                     trainer.scene = Scene::Concluding(reference, mystery_note);
                 }
                 Ok(false) => {
-                    // bad indeed, it crashes everything
                     trainer.bad_ding();
                     trainer.scene = Scene::Concluding(reference, mystery_note);
                 }

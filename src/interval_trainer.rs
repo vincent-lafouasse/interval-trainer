@@ -67,6 +67,7 @@ pub enum Scene {
     #[default]
     Idle,
     PlayingSound(Note, Note),
-    Listening(Note, Note),
+    Listening1(Note, Note),
+    Listening2(Note, Note),
     Concluding(Note, Note),
 }
