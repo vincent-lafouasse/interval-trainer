@@ -74,12 +74,9 @@ fn main() -> Result<(), String> {
 
         if let Scene::PlayingSound(reference, mystery_note) = trainer.scene {
             render::render_staff(Some(reference), None, &sprites, &mut canvas)?;
-            match playback_rx.try_recv() {
-                Ok(()) => {
-                    trainer.listen_for(reference, pitch_detection_tx.clone());
-                    trainer.scene = Scene::Listening1(reference, mystery_note);
-                }
-                Err(_) => {}
+            if let Ok(()) = playback_rx.try_recv() {
+                trainer.listen_for(reference, pitch_detection_tx.clone());
+                trainer.scene = Scene::Listening1(reference, mystery_note);
             }
         }
 
