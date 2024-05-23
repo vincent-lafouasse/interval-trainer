@@ -1,10 +1,6 @@
 use std::{sync::mpsc::Sender, time::Duration};
 
-use crate::music::{
-    interval::{Direction, Interval},
-    note::Note,
-    note_range::NoteRange,
-};
+use crate::music::{Direction, Interval, Note, NoteRange};
 
 use crate::audio;
 

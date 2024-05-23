@@ -16,7 +16,7 @@ use sdl2::{event::Event, image::InitFlag, keyboard::Keycode};
 
 use crate::{
     interval_trainer::{IntervalTrainer, Scene},
-    music::note_range::NoteRange,
+    music::NoteRange,
     render::Sprites,
 };
 

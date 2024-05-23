@@ -6,7 +6,7 @@ use cpal::{
     Device, Host, StreamConfig,
 };
 
-use crate::music::simple_note::SimpleNote;
+use crate::music::SimpleNote;
 use pitch_detection::detector::{mcleod::McLeodDetector, PitchDetector};
 use std::sync::{atomic::AtomicU64, atomic::Ordering, Arc};
 

@@ -3,7 +3,7 @@ use std::path::Path;
 
 use sdl2::{image::LoadTexture, pixels::Color, render::RenderTarget};
 
-use crate::music::note::{Note, NoteName};
+use crate::music::{Note, NoteName};
 
 const HALF_SPACE: i32 = 20;
 const BOTTOM_LINE_Y: i32 = 249;
