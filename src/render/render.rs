@@ -12,8 +12,8 @@ const TREBLE_BOTTOM_NOTE: Note = Note { name: NoteName::E, alteration: 0, octave
 
 const WHITE: Color = Color::RGB(255, 255, 255);
 
-const LEFT_X: i32 = 420;
-const RIGHT_X: i32 = 800;
+const LEFT_X: i32 = 400;
+const RIGHT_X: i32 = 750;
 
 pub fn render_staff<T: RenderTarget>(
     note1: Option<Note>,
