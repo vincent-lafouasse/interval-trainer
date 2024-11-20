@@ -10,6 +10,8 @@ use crate::music::Note;
 
 static SQUARE8_WAVETABLE: Wavetable = Wavetable::square8();
 
+const GAIN: f32 = 0.7;
+
 pub fn play_notes(n1: Note, n2: Note, note_length: Duration, sample_rate: u16) {
     let synth = WavetableSynth::new(SQUARE8_WAVETABLE, sample_rate);
     let (_stream, stream_handle) = OutputStream::try_default().unwrap();
@@ -54,7 +56,8 @@ impl WavetableSynth {
             let start_tick = Instant::now();
 
             sink.set_volume(
-                self.vca
+                GAIN * self
+                    .vca
                     .get(Instant::now().duration_since(note_start), note_length),
             );
 
