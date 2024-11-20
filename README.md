@@ -6,7 +6,7 @@ Yeah yeah you can shred the pentatonic scale, but can you play what I just playe
 
 ## How to build
 
-- Install Rust using `rustup`, as [recommended by the Rust Foundation](https://www.rust-lang.org/tools/install).
+- Install Rust using `rustup` as [recommended by the Rust Foundation](https://www.rust-lang.org/tools/install).
 - Run the command `cargo build` at the root of the repository.
 
 ## Usage
