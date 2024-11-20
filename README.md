@@ -9,7 +9,19 @@ Train your ears to recognize musical intervals
 
 ## Usage
 
-- Run the command `cargo run` in the root of the repository. It should open the game in a new window.
+- Run the command `cargo run` in the root of the repository.
+- The game should open in a new window.
+![Empty staff](aux/figures/empty_staff.png?raw=true)
+
+- Press Space to start a new exercise.
+- The game will play 2 notes and display sheet music only for the first note
+![One note](aux/figures/one_note.png?raw=true)
+
+- Play the first note on your instrument. (you should hear a ding if you played the right note)
+- Play the second note on your instrument.
+![Two notes](aux/figures/two_notes.png?raw=true)
+
+- Press Space to play again
 
 ## License 
 ```
