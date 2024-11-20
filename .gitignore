@@ -6,7 +6,6 @@
 **/**.eps
 
 .DS_Store
-**/aux/
 **/target/
 **/__pycache__/
 
