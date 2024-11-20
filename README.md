@@ -19,8 +19,9 @@ Yeah yeah you can shred the pentatonic scale, but can you play what I just playe
 - The game will play 2 notes and display sheet music only for the first note
 ![One note](aux/figures/one_note.png?raw=true)
 
-- Play the first note on your instrument. (you should hear a ding if you played the right note)
-- Play the second note on your instrument.
+- Play the first note on your instrument (in any octave). (you should hear a ding if you played the right note)
+- Play the second note on your instrument (in any octave).
+- You should hear a second ding and the game will display the second note.
 ![Two notes](aux/figures/two_notes.png?raw=true)
 
 - Press Space to play again
