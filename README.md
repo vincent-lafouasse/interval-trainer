@@ -7,11 +7,11 @@ Yeah yeah you can shred the pentatonic scale, but can you play what I just playe
 ## How to build
 
 - Install Rust using `rustup`, as [recommended by the Rust Foundation](https://www.rust-lang.org/tools/install).
-- Run the command `cargo build` in the root of the repository.
+- Run the command `cargo build` at the root of the repository.
 
 ## Usage
 
-- Run the command `cargo run` in the root of the repository.
+- Run the command `cargo run` at the root of the repository.
 - The game should open in a new window.
 ![Empty staff](aux/figures/empty_staff.png?raw=true)
 
