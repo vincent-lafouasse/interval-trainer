@@ -1,5 +1,7 @@
 # The Amazing Interval Trainer
 
+![cicd](https://github.com/vincent-lafouasse/interval-trainer/actions/workflows/rust.yml/badge.svg)
+
 Train your ears to recognize musical intervals
 
 Yeah yeah you can shred the pentatonic scale, but can you play what I just played?
