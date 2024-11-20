@@ -2,6 +2,8 @@
 
 Train your ears to recognize musical intervals
 
+Yeah yeah you can shred the pentatonic scale, but can you play what I just played?
+
 ## How to build
 
 - Install Rust using `rustup`, as [recommended by the Rust Foundation](https://www.rust-lang.org/tools/install).
